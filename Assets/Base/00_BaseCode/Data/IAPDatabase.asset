@@ -1,0 +1,668 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39c26592a49d51d499507d3593cbdfa8, type: 3}
+  m_Name: IAPDatabase
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -5435255387823749147, guid: fe42c8b526e77e54ab91d0590272d9e8, type: 3}
+    - {fileID: -6205461316961850552, guid: fe42c8b526e77e54ab91d0590272d9e8, type: 3}
+    - {fileID: 21300000, guid: 11afe4dd6864d7847afa3e14922b5b3e, type: 3}
+    - {fileID: 21300000, guid: 4ca0dd4a0b132db4c9e5e7f164b7d2c7, type: 3}
+    - {fileID: 21300000, guid: e2611d2b291e3374a979553a9a11c752, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: lstPacksInapp
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[IAPPack, Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 7
+    - Name: 
+      Entry: 7
+      Data: 1|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: NoAds
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.noads
+    - Name: itemsResult
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[GiftType, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 0.99$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: NoAds
+    - Name: icon
+      Entry: 10
+      Data: 0
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: OneHourUnlimitedHeart
+    - Name: type
+      Entry: 3
+      Data: 1
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.onehourunlimitedheart
+    - Name: itemsResult
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 6|System.Collections.Generic.EnumEqualityComparer`1[[GiftType, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 3
+      Data: 3600
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 0.99$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: OneHourUnlimitedHeart
+    - Name: icon
+      Entry: 10
+      Data: 1
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: 1000Gold
+    - Name: type
+      Entry: 3
+      Data: 2
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.goldpack1
+    - Name: itemsResult
+      Entry: 7
+      Data: 8|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 9|System.Collections.Generic.EnumEqualityComparer`1[[GiftType, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 1000
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 1.77$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: 1000Gold
+    - Name: icon
+      Entry: 10
+      Data: 2
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: 5000Gold
+    - Name: type
+      Entry: 3
+      Data: 3
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.goldpack2
+    - Name: itemsResult
+      Entry: 7
+      Data: 11|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 9
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 5000
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 7.03$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: 5000Gold
+    - Name: icon
+      Entry: 10
+      Data: 2
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: 10000Gold
+    - Name: type
+      Entry: 3
+      Data: 4
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.goldpack3
+    - Name: itemsResult
+      Entry: 7
+      Data: 13|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 9
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 10000
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 12.93$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: 10000Gold
+    - Name: icon
+      Entry: 10
+      Data: 2
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: Newbie_Pack
+    - Name: type
+      Entry: 3
+      Data: 5
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.newbiepack
+    - Name: itemsResult
+      Entry: 7
+      Data: 15|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 9
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 1500
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 3
+      Data: 900
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 6
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 1.77$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: Newbie_Pack
+    - Name: icon
+      Entry: 10
+      Data: 3
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|IAPPack, Assembly-CSharp
+    - Name: namePack
+      Entry: 1
+      Data: NoAdsPack
+    - Name: type
+      Entry: 3
+      Data: 6
+    - Name: productType
+      Entry: 3
+      Data: 0
+    - Name: typeBuy
+      Entry: 3
+      Data: 0
+    - Name: shortID
+      Entry: 1
+      Data: com.gks.cake.sort.noadspack
+    - Name: itemsResult
+      Entry: 7
+      Data: 17|System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 9
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 3
+      Data: 4500
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 6
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: defaultPrice
+      Entry: 1
+      Data: 5.85$
+    - Name: price
+      Entry: 3
+      Data: 0
+    - Name: tittle
+      Entry: 1
+      Data: NoAdsPack
+    - Name: icon
+      Entry: 10
+      Data: 4
+    - Name: isSale
+      Entry: 5
+      Data: false
+    - Name: idSale
+      Entry: 6
+      Data: 
+    - Name: percentSale
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: lstPacksNotInapp
+      Entry: 7
+      Data: 18|System.Collections.Generic.List`1[[IAPPack, Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
