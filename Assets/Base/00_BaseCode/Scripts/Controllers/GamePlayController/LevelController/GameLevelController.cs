@@ -15,7 +15,6 @@ public class GameLevelController : MonoBehaviour
 
     private void Start()
     {
-        UseProfile.Reshuffle = true;
         GenerateLevel();
     }
 

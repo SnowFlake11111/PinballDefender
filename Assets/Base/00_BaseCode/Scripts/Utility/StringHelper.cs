@@ -4,18 +4,11 @@ using UnityEngine;
 
 public static class StringHelper
 {
-    public const string RETRY_SHUFFLE = "retry_shuffle";
-    public const string BOUGHT_DECORATIONS = "bought_decorations";
-    public const string CHEF_STARTING_POS = "chef_starting_pos";
     public const string TIME_SINCE_LAST_EXIT = "time_since_last_exit";
     public const string REMAINING_COUNTER_SINCE_SINCE_LAST_EXIT = "remaining_counter_since_last_exit";
     public const string CURRENT_COUNTER = "current_counter";   
     public const string MAX_HEART = "max_heart";
     public const string STAR = "star";
-    public const string GET_HEART_ON_STARTUP = "get_heart_on_startup";
-    public const string DELETE_TWO_MISTAKES = "delete_two_mistakes";
-    public const string RESHUFFLE_CAKE = "reshuffle_cake";
-    public const string INSTANT_ORDER = "instant_order";
     public const string REMAINING_TIME_FOR_HEART_COOLDOWN = "remaining_time_for_heart_cooldown";
     public const string REMAINING_TIME_FOR_UNLIMITED_HEART = "remaining_time_for_unlimited_heart";
     public const string REMAINING_TIME_FOR_ADS_COOLDOWN_UNLIMITED_HEART = "remaining_time_for_ads_cooldown_unlimited_heart";

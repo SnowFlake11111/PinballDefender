@@ -59,17 +59,17 @@ public class GiftDatabase : SerializedScriptableObject
                 break;
             case GiftType.Booster_Delete:
                 Debug.LogError("BOOSTER_DELETE GAINED");
-                UseProfile.DeleteTwoMistakes += amount;
+                //UseProfile.DeleteTwoMistakes += amount;
                 giftRewardShows.Add(new GiftRewardShow() { amount = amount, type = GiftType.Booster_Delete });
                 break;
             case GiftType.Booster_Reshuffle:
                 Debug.LogError("BOOSTER_RESHUFFLE GAINED");
-                UseProfile.ReshuffleCake += amount;
+                //UseProfile.ReshuffleCake += amount;
                 giftRewardShows.Add(new GiftRewardShow() { amount = amount, type = GiftType.Booster_Reshuffle });
                 break;
             case GiftType.Booster_Instant:
                 Debug.LogError("BOOSTER_INSTANT GAINED");
-                UseProfile.InstantOrder += amount;
+                //UseProfile.InstantOrder += amount;
                 giftRewardShows.Add(new GiftRewardShow() { amount = amount, type = GiftType.Booster_Instant });
                 break;
             

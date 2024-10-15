@@ -23,50 +23,11 @@ public class UseProfile : MonoBehaviour
     {
         get
         {
-            return PlayerPrefs.GetInt(StringHelper.CURRENT_LEVEL);
+            return PlayerPrefs.GetInt(StringHelper.CURRENT_LEVEL, 0);
         }
         set
         {
             PlayerPrefs.SetInt(StringHelper.CURRENT_LEVEL, value);
-            PlayerPrefs.Save();
-        }
-    }
-
-    public static bool Reshuffle
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.RETRY_SHUFFLE, 0) == 1;
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.RETRY_SHUFFLE, value ? 1 : 0);
-            PlayerPrefs.Save();
-        }
-    }
-
-    public static string BoughtDecorations
-    {
-        get
-        {
-            return PlayerPrefs.GetString(StringHelper.BOUGHT_DECORATIONS);
-        }
-        set
-        {
-            PlayerPrefs.SetString(StringHelper.BOUGHT_DECORATIONS, value);
-            PlayerPrefs.Save();
-        }
-    }
-
-    public static int ChefStartingPos
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.CHEF_STARTING_POS, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.CHEF_STARTING_POS , value);
             PlayerPrefs.Save();
         }
     }
@@ -172,48 +133,6 @@ public class UseProfile : MonoBehaviour
             PlayerPrefs.SetInt(StringHelper.STAR, value);
             PlayerPrefs.Save();
             EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.CHANGE_STAR);
-        }
-    }
-
-    public static int DeleteTwoMistakes
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.DELETE_TWO_MISTAKES);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.DELETE_TWO_MISTAKES, value);
-            PlayerPrefs.Save();
-            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.BOOSTER_COUNT_CHANGED);
-        }
-    }
-
-    public static int ReshuffleCake
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.RESHUFFLE_CAKE);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.RESHUFFLE_CAKE, value);
-            PlayerPrefs.Save();
-            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.BOOSTER_COUNT_CHANGED);
-        }
-    }
-
-    public static int InstantOrder
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.INSTANT_ORDER);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.INSTANT_ORDER, value);
-            PlayerPrefs.Save();
-            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.BOOSTER_COUNT_CHANGED);
         }
     }
 
