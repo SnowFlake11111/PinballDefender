@@ -9,6 +9,9 @@ public class GameWall : MonoBehaviour
     [SerializeField] bool allowBallBounce = true;
     [SerializeField] int bounceCost = 1;
 
+    [Space]
+    [Header("Will this wall delete unit upon detecting one")]
+    [SerializeField] bool endOfFieldWall = false;
     #endregion
 
     #region Private Variables
@@ -18,6 +21,9 @@ public class GameWall : MonoBehaviour
     #endregion
 
     #region Functions
+    //----------Public----------
+
+    //**** Ball Bounce Section ****
     public bool GetBouncePermission()
     {
         return allowBallBounce;
@@ -26,6 +32,18 @@ public class GameWall : MonoBehaviour
     public int GetBounceCost()
     {
         return bounceCost;
+    }
+
+    //----------Private----------
+    #endregion
+
+    #region Collision Functions
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<GameUnitBase>() != null)
+        {
+            other.GetComponent<GameUnitBase>().InstantDeath();
+        }
     }
     #endregion
 }

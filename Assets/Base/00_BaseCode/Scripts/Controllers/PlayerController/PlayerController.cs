@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     #region Public Variables
     [Header("IMPORTANT - Used to identify player's side")]
     [ValueDropdown("PlayerIdList")]
-    public int playerId;
+    //[OnValueChanged("SetPlayerId")]
+    public string playerName;
 
     [Space]
     [Header("FOR MULTIPLAYER MODE - DEFENDER")]
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Private Variables
+    int playerId = 0;
     [SerializeField] int playerDamage = 10;
     int maxAmmo;
     int currentAmmo;
@@ -35,25 +37,19 @@ public class PlayerController : MonoBehaviour
     Tweener rotateGun;
 
     Ball tempBallRef;
+
+    //[SerializeField] List<Ball> ballList = new List<Ball>();
+    //[SerializeField] List<GameUnit> alliesList = new List<GameUnit>();
     #endregion
 
     #region Buffs Timer
     float doubleDamageBuffTimer = 0;
     #endregion
 
-    #region Dropdown Values Lists
-    IEnumerable PlayerIdList()
-    {
-        for (int i = 1; i <= 2; i++)
-        {
-            yield return i;
-        }
-    }
-    #endregion
-
     #region Start, Update
     private void Start()
     {
+        SetPlayerId();
         RotateHandler();
     }
 
@@ -73,7 +69,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Functions
-    //Public
+    //----------Public----------
     public void Shoot()
     {
         if (autoResumeRotation != null)
@@ -88,7 +84,9 @@ public class PlayerController : MonoBehaviour
         tempBallRef.transform.localEulerAngles = ballSpawnPoint.transform.eulerAngles;
 
         tempBallRef.ShootBall(ballSpawnPoint.transform.forward);
-        tempBallRef.SetOwner(playerId);
+        tempBallRef.SetOwner(playerId, this);
+
+        //Debug.LogError(playerId);
 
         if (doubleDamageBuffTimer > 0)
         {
@@ -98,10 +96,18 @@ public class PlayerController : MonoBehaviour
         {
             tempBallRef.SetDamage(playerDamage);
         }
-        
-    }
 
-    //Private
+        tempBallRef.SetBounceLimit(5);
+        
+        //Việc giữ các quả bóng trong một list là để đảm bảo việc giữ cho các va chạm giữa các quả bóng của người chơi sẽ bỏ qua va chạm đối với quân cùng phe
+        //UPDATE: Đã đổi sang sử dụng Collision Layer
+    }
+    //To Do: Create a function that handle spawning unit
+
+
+
+
+    //----------Private----------
     void RotateHandler()
     {
         rotateGun = transform.DOLocalRotate(new Vector3(0, 80f, 0), 100f).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(delegate
@@ -127,8 +133,31 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(resumeRotationTimer);
         rotateGun.Play();
     }
+
+    //----------Odin Functions----------
+    IEnumerable PlayerIdList()
+    {
+        for (int i = 7; i <= 8; i++)
+        {
+            yield return LayerMask.LayerToName(i);
+        }
+    }
+
+    void SetPlayerId()
+    {
+        playerId = LayerMask.NameToLayer(playerName);       
+    }
     #endregion
 
     #region Buff Handler
     #endregion
 }
+
+/*
+ * Danh sách Layer:
+ * 6: Director
+ * 7: Player_1
+ * 8: Player_2
+ * 
+ * NOTE: 3 layer này đã được thiết lập để không xử lý vật lý (như va chạm collider) đối với các object có cùng layer với chúng
+ */

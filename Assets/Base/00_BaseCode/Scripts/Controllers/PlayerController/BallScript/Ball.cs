@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,8 +12,10 @@ public class Ball : MonoBehaviour
     Vector3 lastVelocity;
     Vector3 bounceDirection;
 
-    int ownerId = 0;
-    int bounceLimit = 5;
+    PlayerController owner;
+
+    [SerializeField] int ownerId = 0;
+    int bounceLimit = 0;
     int ballDamage = 0;
 
     float velocityStrength;
@@ -21,7 +24,7 @@ public class Ball : MonoBehaviour
     #region Functions
     public void ShootBall(Vector3 shootDirection)
     {
-        GetComponent<Rigidbody>().AddForce(transform.forward * 200);
+        GetComponent<Rigidbody>().AddForce(transform.forward * 300);
     }
 
     //Gán sát thương cho bóng
@@ -30,10 +33,18 @@ public class Ball : MonoBehaviour
         ballDamage = damage;
     }
 
+    //Gán số lần nảy cho bóng
+    public void SetBounceLimit(int bounce)
+    {
+        bounceLimit = bounce;
+    }
+
     //Gán id của người bắn quả bóng này vào id người sở hữu của quả bóng này, id sẽ được sử dụng để kiểm tra va chạm với quân địch và đồng đội
-    public void SetOwner(int id)
+    public void SetOwner(int id, PlayerController ballOwner)
     {
         ownerId = id;
+        owner = ballOwner;
+        gameObject.layer = id;
     }
     #endregion
 
@@ -44,10 +55,15 @@ public class Ball : MonoBehaviour
     }
     #endregion
 
+    #region Functions
+    //----------Public----------
+    //----------Private----------
+    #endregion
+
     #region Collision Functions
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.GetComponent<GameUnit>() != null)
+        if (collision.collider.GetComponent<GameUnitBase>() != null)
         {
             HitUnit(collision);
         }
@@ -55,45 +71,25 @@ public class Ball : MonoBehaviour
         {
             HitWall(collision);
         }
-        else if (collision.collider.GetComponent<Ball>() != null)
-        {
-            HitBall(collision);
-        }
     }
 
     void HitUnit(Collision unit)
     {
         //Ý tưởng ở đây là kiểm tra xem unit va phải có là đồng đội hay không, nếu là đồng đội thì sẽ không gây sát thương, nếu không phải thì ngược lại
-        if (unit.collider.GetComponent<GameUnit>().GetOwnerId() != ownerId)
-        {
-            unit.collider.GetComponent<GameUnit>().TakeDamage(ballDamage);
+        //UPDATE: Sau khi áp dụng việc sử dụng danh sách đồng đội và danh sách bóng bắn ra thì không cần phải sử dụng ownerId để kiểm tra phe nữa mà bóng sẽ tự bỏ qua va chạm đối với các unit cùng phe
+        //UPDATE 2: Đã đổi sang sử dụng Collision Layer
+        unit.collider.GetComponent<GameUnitBase>().TakeDamage(ballDamage);
 
-            if (unit.collider.GetComponent<GameUnit>().GetBouncePermission())
-            {
-                if (bounceLimit - unit.collider.GetComponent<GameUnit>().GetBounceCost() <= 0)
-                {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    bounceLimit -= unit.collider.GetComponent<GameUnit>().GetBounceCost();
-                    BounceBall(unit);
-                }
-            }
-        }
-        else
+        if (unit.collider.GetComponent<GameUnitBase>().GetBouncePermission())
         {
-            if (unit.collider.GetComponent<GameUnit>().GetBouncePermission())
+            if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
             {
-                if (bounceLimit - unit.collider.GetComponent<GameUnit>().GetBounceCost() <= 0)
-                {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    bounceLimit -= unit.collider.GetComponent<GameUnit>().GetBounceCost();
-                    BounceBall(unit);
-                }
+                Destroy(gameObject);
+            }
+            else
+            {
+                bounceLimit -= unit.collider.GetComponent<GameUnitBase>().GetBounceCost();
+                BounceBall(unit);
             }
         }
     }
@@ -115,20 +111,6 @@ public class Ball : MonoBehaviour
         }
     }
 
-    void HitBall(Collision ball)
-    {
-        //Do là tất cả các object trong game không sử dụng IsTrigger, nên là sẽ thường xuyên xảy ra trường hợp bóng va vào nhau, hàm này sẽ xử lý việc đó
-        if (bounceLimit - 1 <= 0)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            bounceLimit--;
-            BounceBall(ball);
-        }
-    }
-
     void BounceBall(Collision collision)
     {
         velocityStrength = lastVelocity.magnitude;
@@ -138,3 +120,12 @@ public class Ball : MonoBehaviour
     }
     #endregion
 }
+
+/*
+ * Danh sách Layer:
+ * 6: Director
+ * 7: Player_1
+ * 8: Player_2
+ * 
+ * NOTE: 3 layer này đã được thiết lập để không xử lý vật lý (như va chạm collider) đối với các object có cùng layer với chúng
+ */
