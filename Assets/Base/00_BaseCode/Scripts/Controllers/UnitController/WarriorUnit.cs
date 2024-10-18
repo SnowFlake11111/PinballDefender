@@ -24,6 +24,8 @@ public class WarriorUnit : GameUnitBase
     bool attackEnemy = false;
     bool attackGate = false;
 
+    [SerializeField] GateController gate;
+
     Coroutine attackEnemyAction;
     #endregion
 
@@ -37,10 +39,10 @@ public class WarriorUnit : GameUnitBase
 
     private void Update()
     {
-        if (enemyFound)
+        if (enemyFound || gateFound)
         {
             //To Do: Attack Script
-            AttackEnemy();
+            ActivateAttackPhase();
         }
     }
     #endregion
@@ -48,7 +50,7 @@ public class WarriorUnit : GameUnitBase
     #region Functions
     //----------Public----------
     //----------Private----------
-    void AttackEnemy()
+    void ActivateAttackPhase()
     {
         if (!attackEnemy)
         {
@@ -65,17 +67,37 @@ public class WarriorUnit : GameUnitBase
         yield return new WaitForSeconds(attackDelayTimer);
         if (enemyFound)
         {
-            GetClosestEnemy();
-            currentTarget.TakeDamageFromUnit(this, realAttackDamage);
-            CheckForTarget();
-            if (enemyFound)
-            {
-                attackEnemyAction = StartCoroutine(AttackThinking());
-            }
-            else
-            {
-                attackEnemy = false;
-            }
+            DealDamage();
+        }
+        else if (gateFound)
+        {
+            DealDamageToGate();
+        }
+        else
+        {
+            attackEnemy = false;
+        }
+    }
+
+    void DealDamage()
+    {
+        GetClosestEnemy();
+        currentTarget.TakeDamageFromUnit(this, realAttackDamage);
+        ContinueAttackingOrNot();
+    }
+
+    void DealDamageToGate()
+    {
+        enemyGate.TakeDamage(this, realAttackDamage);
+        ContinueAttackingOrNot();
+    }
+
+    void ContinueAttackingOrNot()
+    {
+        CheckForTarget();
+        if (enemyFound || gateFound)
+        {
+            attackEnemyAction = StartCoroutine(AttackThinking());
         }
         else
         {

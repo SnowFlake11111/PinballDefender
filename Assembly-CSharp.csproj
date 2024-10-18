@@ -264,6 +264,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x509\DistributionPointName.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\HeartbeatExtension.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\RescalingPanels\RescalePanel.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\GateController\GateController.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Datas\LevelDataForUI.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\signers\ECDsaSigner.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\AbstractTlsPeer.cs" />
@@ -1289,6 +1290,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\encodings\Pkcs1Encoding.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\DirectorController\GameDirector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders\Legacy\Variants\TCP2_Desktop_RimOutline_OutlineBlending.shader" />

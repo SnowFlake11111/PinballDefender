@@ -29,16 +29,16 @@ public class GameUnitBase : MonoBehaviour
     [Space]
     [Header("Targets List")]
     public List<GameUnitBase> targets = new List<GameUnitBase>();
+
+    [Space]
+    [Header("Enemy Gate")]
+    public GateController enemyGate;
     #endregion
 
     #region Private Variables
     [Header("IMPORTANT - allow bounce or not")]
     [SerializeField] bool allowBallBounce = true;
     [SerializeField] int bounceCost = 1;
-
-    [Space]
-    [Header("Is Unit ALIVE Or DEAD")]
-    bool isDead = false;
     #endregion
 
     #region Start, Update
@@ -71,20 +71,12 @@ public class GameUnitBase : MonoBehaviour
         if (targets.Count > 0)
         {
             enemyFound = true;
-
-            if (GetComponent<UnitMovement>() != null)
-            {
-                GetComponent<UnitMovement>().StopMoving();
-            }
+            ChangeMovementStatus();
         }
         else
         {
             enemyFound = false;
-
-            if (GetComponent<UnitMovement>() != null)
-            {
-                GetComponent<UnitMovement>().StartMoving();
-            }
+            GateDetected();
         }
     }
 
@@ -103,9 +95,50 @@ public class GameUnitBase : MonoBehaviour
         CheckForTarget();
     }
 
-    public void GateDetected(bool status)
+    //**** Detecting Enemy's Gate Section ****
+    public void RegisterEnemyGate(GateController gate)
     {
-        gateFound = status;
+        enemyGate = gate;
+        GateDetected();
+    }
+
+    public void RemoveEnemyGate()
+    {
+        enemyGate = null;
+        GateDetected();
+    }
+
+    public void GateDetected()
+    {
+        if (enemyGate != null)
+        {
+            gateFound = true;
+        }
+        else
+        {
+            gateFound = false;
+        }
+
+        ChangeMovementStatus();
+    }
+
+    //**** Movement Control ****
+    public void ChangeMovementStatus()
+    {
+        if (enemyFound || gateFound)
+        {
+            if (GetComponent<UnitMovement>() != null)
+            {
+                GetComponent<UnitMovement>().StopMoving();
+            }
+        }
+        else
+        {
+            if (GetComponent<UnitMovement>() != null)
+            {
+                GetComponent<UnitMovement>().StartMoving();
+            }
+        }
     }
 
     //**** Damage Taken Section ****
@@ -164,6 +197,11 @@ public class GameUnitBase : MonoBehaviour
             {
                 attacker.RemoveTarget(this);
             }
+        }
+
+        if (enemyGate != null)
+        {
+            enemyGate.RemoveAttacker(this);
         }
     }
 

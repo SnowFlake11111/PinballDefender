@@ -26,13 +26,26 @@ public class AttackZone : MonoBehaviour
             unitBase.RegisterTarget(other.GetComponent<GameUnitBase>());
             //Debug.LogError(unitBase.name + " Found a target");
         }
+        else if (other.GetComponent<GateController>() != null)
+        {
+            unitBase.RegisterEnemyGate(other.GetComponent<GateController>());
+        }
 
-        //To Do: Register Gate for unit
+        //To Do: Register Gate for unit [done]
     }
 
     private void OnTriggerExit(Collider other)
     {
         //To Do: This one is likely to be called on Gate alone when player pushes enemies away
+        if (other.GetComponent<GameUnitBase>() != null)
+        {
+            unitBase.RemoveTarget(other.GetComponent<GameUnitBase>());
+            //Debug.LogError(unitBase.name + " Found a target");
+        }
+        else if (other.GetComponent<GateController>() != null)
+        {
+            unitBase.RemoveEnemyGate();
+        }
     }
     #endregion
 }
