@@ -32,7 +32,6 @@ public class WarriorUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        //To Do: Turn this into Init() later on
         SetHealth(100);
         realAttackDamage = baseAttackDamage;
     }

@@ -39,6 +39,9 @@ public class GameUnitBase : MonoBehaviour
     [Header("IMPORTANT - allow bounce or not")]
     [SerializeField] bool allowBallBounce = true;
     [SerializeField] int bounceCost = 1;
+
+    GameDirector gameDirector;
+    bool spawnedByDirector = false;
     #endregion
 
     #region Start, Update
@@ -47,6 +50,19 @@ public class GameUnitBase : MonoBehaviour
     #region Functions
     //IMPORTANT: Vì script này được sử dụng làm base nên tất cả các function được đặt public để cho các script kế thừa có thể sử dụng chúng
     //----------Public----------
+    //**** Unit Owner Section ****
+    public void SpawnedByDirector(GameDirector director)
+    {
+        gameDirector = director;
+        gameObject.layer = 6;
+        spawnedByDirector = true;
+    }
+
+    public void SpawnedByPlayer()
+    {
+        //To Do: Let player register unit's layer so unity can handle the physics interaction
+    }
+
     //**** Health Control Section ****
     public void SetHealth(int health)
     {
@@ -144,7 +160,7 @@ public class GameUnitBase : MonoBehaviour
     //**** Damage Taken Section ****
     public void TakeDamage(int damage)
     {
-        if (damage > hitPoint)
+        if (damage >= hitPoint)
         {
             AnnounceDeath();
             Destroy(gameObject);
@@ -202,6 +218,11 @@ public class GameUnitBase : MonoBehaviour
         if (enemyGate != null)
         {
             enemyGate.RemoveAttacker(this);
+        }
+
+        if (spawnedByDirector)
+        {
+            gameDirector.RemoveFallenUnit(this);
         }
     }
 

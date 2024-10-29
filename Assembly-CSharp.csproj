@@ -706,6 +706,7 @@
     <Compile Include="Assets\MyTools\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\WarriorUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\Extensions\KeyValuePairList.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\FieldController\FieldLane.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\misc\VerisignCzagExtension.cs" />
     <Compile Include="Assets\Base\3Party\Joker2X\Localize\Scripts\Internal\EditorCoroutine.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\SignatureAndHashAlgorithm.cs" />
@@ -1044,6 +1045,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsHandshakeHash.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP224K1Field.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\util\date\DateTimeUtilities.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\DirectorController\GameDirector.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsKeyExchange.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SignalR\JsonEncoders\IJsonEncoder.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\ECFieldElement.cs" />
@@ -1290,7 +1292,6 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\encodings\Pkcs1Encoding.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
-    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\DirectorController\GameDirector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders\Legacy\Variants\TCP2_Desktop_RimOutline_OutlineBlending.shader" />

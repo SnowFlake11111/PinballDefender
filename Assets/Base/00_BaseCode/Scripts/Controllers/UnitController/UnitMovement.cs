@@ -24,6 +24,9 @@ public class UnitMovement : MonoBehaviour
     float realSpeed = 0;
 
     bool allowedMoving = false;
+
+    FieldLane currentLane;
+    List<FieldLane> possibleLanes = new List<FieldLane>();
     #endregion
 
     #region Start, Update
@@ -77,6 +80,24 @@ public class UnitMovement : MonoBehaviour
     {
         transform.position += transform.forward * realSpeed * Time.deltaTime;
         //To Do: Finish zigzag movement after lanes on field are finished
+    }
+
+    void GetCurrentLane()
+    {
+        currentLane = null;
+        possibleLanes.Clear();
+
+        RaycastHit laneFound;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out laneFound, Mathf.Infinity, 1 << LayerMask.NameToLayer("FieldLane")))
+        {
+            if (laneFound.collider.GetComponent<FieldLane>() != null)
+            {
+                currentLane = laneFound.collider.GetComponent<FieldLane>();
+            }
+        }
+
+
     }
 
     IEnumerator ChangeLane()
