@@ -32,7 +32,7 @@ public class WarriorUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        SetHealth(100);
+        //SetHealth(100);
         realAttackDamage = baseAttackDamage;
     }
 
@@ -48,22 +48,35 @@ public class WarriorUnit : GameUnitBase
 
     #region Functions
     //----------Public----------
+    public void ContinueAttackingOrNot()
+    {
+        CheckForTarget();
+        if (enemyFound || gateFound)
+        {
+            AttackThinking();
+        }
+        else
+        {
+            attackEnemy = false;
+            animatorBase.SetBool("Attack", false);
+        }
+    }
+
     //----------Private----------
     void ActivateAttackPhase()
     {
         if (!attackEnemy)
         {
-            attackEnemyAction = StartCoroutine(AttackThinking());
+            AttackThinking();
             attackEnemy = true;
         }
     }
 
-    IEnumerator AttackThinking()
+    void AttackThinking()
     {
         //Since this unit only has basic attack, just attack -> wait -> repeat
         //To Do: Attack function [done]
         //To Do: Change these Attack function into called during attack animation of the unit
-        yield return new WaitForSeconds(attackDelayTimer);
         if (enemyFound)
         {
             DealDamage();
@@ -81,31 +94,18 @@ public class WarriorUnit : GameUnitBase
     void DealDamage()
     {
         GetClosestEnemy();
-        currentTarget.TakeDamageFromUnit(this, realAttackDamage);
-        ContinueAttackingOrNot();
+        InitiateAttackAnimation();
     }
 
     void DealDamageToGate()
     {
-        enemyGate.TakeDamage(this, realAttackDamage);
-        ContinueAttackingOrNot();
-    }
-
-    void ContinueAttackingOrNot()
-    {
-        CheckForTarget();
-        if (enemyFound || gateFound)
-        {
-            attackEnemyAction = StartCoroutine(AttackThinking());
-        }
-        else
-        {
-            attackEnemy = false;
-        }
+        InitiateAttackAnimation();
     }
 
     void GetClosestEnemy()
     {
+        //The logic is simple, check all targets then compare distance with the pre-determined 'distance' variable, if the new distance is smaller than the 'distance' variable then take that target as the chosen target for attack and take the new distance number as the new 'distance' variable. Repeat this process till the list is empty
+
         if (targets.Count > 1)
         {
             GameUnitBase closestTarget = null;
@@ -126,6 +126,26 @@ public class WarriorUnit : GameUnitBase
         {
             currentTarget = targets[0];
         }
+    }
+    //----------Animation Functions----------
+    public void AttackEnemy()
+    {
+        if (gateFound)
+        {
+            enemyGate.TakeDamage(this, realAttackDamage);
+        }
+        else
+        {
+            currentTarget.TakeDamageFromUnit(this, realAttackDamage);
+        }
+
+        ContinueAttackingOrNot();
+        //ContinueAttackingOrNot();
+    }
+
+    void InitiateAttackAnimation()
+    {
+        animatorBase.SetBool("Attack", true);
     }
     //----------Odin Functions----------
     #endregion

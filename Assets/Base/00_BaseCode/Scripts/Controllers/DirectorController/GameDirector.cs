@@ -85,6 +85,14 @@ public class GameDirector : SerializedMonoBehaviour
                 spawnedUnit.transform.position = chosenLane.spawnPointB.transform.position;
             }
 
+            if (spawnedUnit.GetComponent<UnitMovement>() != null)
+            {
+                if (spawnedUnit.GetComponent<UnitMovement>().zigzag)
+                {
+                    spawnedUnit.GetComponent<UnitMovement>().SetLane(chosenLane);
+                }
+            }
+
             spawnedUnit.SpawnedByDirector(this);
 
             spawnedUnits.Add(spawnedUnit);
@@ -216,6 +224,11 @@ public class GameDirector : SerializedMonoBehaviour
         else if (minSpawnAtOnce > maxSpawnAtOnce)
         {
             Debug.LogError("Max Spawn Rate must be higher than Min Spawn Rate");
+            return;
+        }
+        else if (minSpawnAtOnce >= 5 || maxSpawnAtOnce >= 5)
+        {
+            Debug.LogError("Can only spawn up to 5 units at once");
             return;
         }
         else

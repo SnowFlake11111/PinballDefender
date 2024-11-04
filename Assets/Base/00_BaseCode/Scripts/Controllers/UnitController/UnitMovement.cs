@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,9 +13,14 @@ public class UnitMovement : MonoBehaviour
     [OnValueChanged("MinimumMovementChoice_ZigZag")]
     public bool zigzag = false;
 
+    [Space]
     [Header("IMPORTANT - Movement BASE speed")]
     public float movementSpeedBase = 0;
 
+    [Space]
+    public Animator animatorBase;
+
+    [Space]
     [HideIf("GetCondition")]
     [LabelWidth(300)]
     public float laneChangeFrequencyInSeconds = 0;
@@ -23,10 +29,14 @@ public class UnitMovement : MonoBehaviour
     #region Private Variables
     float realSpeed = 0;
 
-    bool allowedMoving = false;
+    bool allowedMoving = true;
 
     FieldLane currentLane;
+    FieldLane newLane;
+
     List<FieldLane> possibleLanes = new List<FieldLane>();
+
+    Coroutine changeLaneThinking;
     #endregion
 
     #region Start, Update
@@ -34,7 +44,21 @@ public class UnitMovement : MonoBehaviour
     {
         //To Do: set this to Init() later on
         realSpeed = movementSpeedBase;
-        allowedMoving = true;
+
+        //To Do: make this less amateurish at some point
+        if (allowedMoving)
+        {
+            animatorBase.SetBool("Move", true);
+        }
+        else
+        {
+            animatorBase.SetBool("Move", false);
+        }
+
+        if (zigzag)
+        {
+            changeLaneThinking = StartCoroutine(ChangeLane());
+        }
     }
     private void Update()
     {
@@ -59,6 +83,7 @@ public class UnitMovement : MonoBehaviour
         if (!allowedMoving)
         {
             allowedMoving = true;
+            animatorBase.SetBool("Move", true);
         }
     }
 
@@ -67,9 +92,15 @@ public class UnitMovement : MonoBehaviour
         if (allowedMoving)
         {
             allowedMoving = false;
+            animatorBase.SetBool("Move", false);
         }
     }
 
+    public void SetLane(FieldLane lane)
+    {
+        currentLane = lane;
+        possibleLanes = lane.GetNeighbourLanes();
+    }
     //----------Private----------
     void MoveStraight()
     {
@@ -79,31 +110,21 @@ public class UnitMovement : MonoBehaviour
     void MoveZigZag()
     {
         transform.position += transform.forward * realSpeed * Time.deltaTime;
-        //To Do: Finish zigzag movement after lanes on field are finished
-    }
-
-    void GetCurrentLane()
-    {
-        currentLane = null;
-        possibleLanes.Clear();
-
-        RaycastHit laneFound;
-
-        if (Physics.Raycast(transform.position, Vector3.down, out laneFound, Mathf.Infinity, 1 << LayerMask.NameToLayer("FieldLane")))
-        {
-            if (laneFound.collider.GetComponent<FieldLane>() != null)
-            {
-                currentLane = laneFound.collider.GetComponent<FieldLane>();
-            }
-        }
-
-
+        //To Do: Finish zigzag movement after lanes on field are finished (done)
     }
 
     IEnumerator ChangeLane()
     {
         yield return new WaitForSeconds(laneChangeFrequencyInSeconds);
+        newLane = possibleLanes[Random.Range(0, possibleLanes.Count)];
 
+        transform.DOMoveX(newLane.transform.position.x, 0.5f)
+            .OnComplete(delegate
+            {
+                currentLane = newLane;
+                possibleLanes = newLane.GetNeighbourLanes();
+                changeLaneThinking = StartCoroutine(ChangeLane());
+            });
     }
 
     //----------Odin Functions----------

@@ -13,6 +13,10 @@ public class AttackZone : MonoBehaviour
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        gameObject.layer = unitBase.gameObject.layer;
+    }
     #endregion
 
     #region Functions

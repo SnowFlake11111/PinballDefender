@@ -71,6 +71,10 @@ public class Ball : MonoBehaviour
         {
             HitWall(collision);
         }
+        else if (collision.collider.GetComponent<Ball>() != null)
+        {
+            BounceBall(collision);
+        }
     }
 
     void HitUnit(Collision unit)

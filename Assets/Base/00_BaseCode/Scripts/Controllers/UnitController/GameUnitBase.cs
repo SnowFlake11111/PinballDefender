@@ -11,8 +11,8 @@ public class GameUnitBase : MonoBehaviour
     public int hitPoint = 0;
 
     [Space]
-    [Header("UNIT OWNER ID")]
-    public int ownerId = 0;
+    [Header("UNIT ANIMATOR")]
+    public Animator animatorBase;
 
     [Space]
     [Header("Enemy Detection Status")]
@@ -33,6 +33,11 @@ public class GameUnitBase : MonoBehaviour
     [Space]
     [Header("Enemy Gate")]
     public GateController enemyGate;
+
+    [Space]
+    [Header("Alt color for side identification")]
+    public Material altColor;
+    public SkinnedMeshRenderer mainBodyColor;
     #endregion
 
     #region Private Variables
@@ -45,6 +50,13 @@ public class GameUnitBase : MonoBehaviour
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        if (gameObject.layer != 7)
+        {
+            mainBodyColor.material = altColor;
+        }
+    }
     #endregion
 
     #region Functions
@@ -141,6 +153,11 @@ public class GameUnitBase : MonoBehaviour
     //**** Movement Control ****
     public void ChangeMovementStatus()
     {
+        if (hitPoint <= 0)
+        {
+            return;
+        }
+
         if (enemyFound || gateFound)
         {
             if (GetComponent<UnitMovement>() != null)
@@ -163,7 +180,8 @@ public class GameUnitBase : MonoBehaviour
         if (damage >= hitPoint)
         {
             AnnounceDeath();
-            Destroy(gameObject);
+            DeathAnimation();
+
             //To do: Add function to register the kill for the owner of the ball that killed this unit
         }
         else
@@ -179,7 +197,8 @@ public class GameUnitBase : MonoBehaviour
         if (damage > hitPoint)
         {
             AnnounceDeath();
-            Destroy(gameObject);
+            DeathAnimation();
+
             //To do: Add function to register the kill for the owner of the ball that killed this unit
         }
         else
@@ -202,11 +221,33 @@ public class GameUnitBase : MonoBehaviour
     {
         //This function is strictly used for end of the field walls only
         AnnounceDeath();
+        DeathAnimation();
+        
+    }
+
+    public void DeathAnimation()
+    {
+        if (GetComponent<UnitMovement>() != null)
+        {
+            GetComponent<UnitMovement>().StopMoving();
+        }
+
+        animatorBase.SetBool("Attack", false);
+        animatorBase.SetBool("Death", true);
+    }
+
+    public void FinishDeathAnimation()
+    {
         Destroy(gameObject);
     }
 
     public void AnnounceDeath()
     {
+        if (GetComponent<BoxCollider>() != null)
+        {
+            GetComponent<BoxCollider>().enabled = false;
+        }
+
         foreach(GameUnitBase attacker in attackers)
         {
             if (attacker != null)
@@ -228,11 +269,6 @@ public class GameUnitBase : MonoBehaviour
 
 
     //**** Ball Bounce Section ****
-    public int GetOwnerId()
-    {
-        return ownerId;
-    }
-
     public bool GetBouncePermission()
     {
         return allowBallBounce;
@@ -246,3 +282,12 @@ public class GameUnitBase : MonoBehaviour
     //----------Private----------
     #endregion
 }
+
+/*
+ * Danh sách Layer:
+ * 6: Director
+ * 7: Player_1
+ * 8: Player_2
+ * 
+ * NOTE: 3 layer này đã được thiết lập để không xử lý vật lý (như va chạm collider) đối với các object có cùng layer với chúng
+ */
