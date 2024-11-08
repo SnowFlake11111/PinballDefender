@@ -18,6 +18,8 @@ public class UnitMovement : MonoBehaviour
     public float movementSpeedBase = 0;
 
     [Space]
+    [Header("IMPORTANT - The unit")]
+    public GameUnitBase controllingUnit;
     public Animator animatorBase;
 
     [Space]
@@ -94,6 +96,11 @@ public class UnitMovement : MonoBehaviour
             allowedMoving = false;
             animatorBase.SetBool("Move", false);
         }
+    }
+
+    public void DeathState()
+    {
+        allowedMoving = false;
     }
 
     public void SetLane(FieldLane lane)

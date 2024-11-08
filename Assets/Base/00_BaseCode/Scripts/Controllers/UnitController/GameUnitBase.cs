@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -38,12 +39,21 @@ public class GameUnitBase : MonoBehaviour
     [Header("Alt color for side identification")]
     public Material altColor;
     public SkinnedMeshRenderer mainBodyColor;
+
+    [Space]
+    [Header("IMPORTANT - Spawning info")]
+    public int spawnCost = 0;
+    public bool isBossOrMiniboss = false;
     #endregion
 
     #region Private Variables
     [Header("IMPORTANT - allow bounce or not")]
     [SerializeField] bool allowBallBounce = true;
     [SerializeField] int bounceCost = 1;
+
+    [Space]
+    [Header("Berserker unit only (or any unit in the future with fast movement animation)")]
+    [SerializeField] bool hasFastMovementAnimation = false;
 
     GameDirector gameDirector;
     bool spawnedByDirector = false;
@@ -229,16 +239,20 @@ public class GameUnitBase : MonoBehaviour
     {
         if (GetComponent<UnitMovement>() != null)
         {
-            GetComponent<UnitMovement>().StopMoving();
+            GetComponent<UnitMovement>().DeathState();
         }
 
-        animatorBase.SetBool("Attack", false);
-        animatorBase.SetBool("Death", true);
+        animatorBase.Play("Death");
     }
 
     public void FinishDeathAnimation()
     {
-        Destroy(gameObject);
+        transform.DOMoveY(transform.position.y - 5f, 1f)
+            .SetEase(Ease.Linear)
+            .OnComplete(delegate
+            {
+                Destroy(gameObject);
+            });
     }
 
     public void AnnounceDeath()

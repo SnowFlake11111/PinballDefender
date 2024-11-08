@@ -118,7 +118,7 @@ public class Ball : MonoBehaviour
     void BounceBall(Collision collision)
     {
         velocityStrength = lastVelocity.magnitude;
-        bounceDirection = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
+        bounceDirection = Vector3.Reflect(lastVelocity.normalized, collision.GetContact(0).normal);
 
         GetComponent<Rigidbody>().velocity = bounceDirection * Mathf.Max(velocityStrength, 0);
     }

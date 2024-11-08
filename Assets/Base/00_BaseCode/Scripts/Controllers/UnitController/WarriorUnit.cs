@@ -8,10 +8,6 @@ public class WarriorUnit : GameUnitBase
     [Space]
     [Header("Base Attack Damage")]
     public int baseAttackDamage = 0;
-    
-    [Space]
-    [Header("Attack Speed")]
-    public float attackDelayTimer = 0;
 
     [Space]
     [Header("Current Target")]
@@ -19,51 +15,15 @@ public class WarriorUnit : GameUnitBase
     #endregion
 
     #region Private Variables
-    int realAttackDamage = 0;
-
     bool attackEnemy = false;
-    bool attackGate = false;
-
-    [SerializeField] GateController gate;
-
-    Coroutine attackEnemyAction;
     #endregion
 
     #region Start, Update
-    private void Start()
-    {
-        //SetHealth(100);
-        realAttackDamage = baseAttackDamage;
-    }
-
-    private void Update()
-    {
-        if (enemyFound || gateFound)
-        {
-            //To Do: Attack Script
-            ActivateAttackPhase();
-        }
-    }
     #endregion
 
     #region Functions
     //----------Public----------
-    public void ContinueAttackingOrNot()
-    {
-        CheckForTarget();
-        if (enemyFound || gateFound)
-        {
-            AttackThinking();
-        }
-        else
-        {
-            attackEnemy = false;
-            animatorBase.SetBool("Attack", false);
-        }
-    }
-
-    //----------Private----------
-    void ActivateAttackPhase()
+    public void ActivateAttackPhase()
     {
         if (!attackEnemy)
         {
@@ -71,12 +31,12 @@ public class WarriorUnit : GameUnitBase
             attackEnemy = true;
         }
     }
-
+    //----------Private----------
     void AttackThinking()
     {
         //Since this unit only has basic attack, just attack -> wait -> repeat
         //To Do: Attack function [done]
-        //To Do: Change these Attack function into called during attack animation of the unit
+        //To Do: Change these Attack function into called during attack animation of the unit [done]
         if (enemyFound)
         {
             DealDamage();
@@ -100,6 +60,20 @@ public class WarriorUnit : GameUnitBase
     void DealDamageToGate()
     {
         InitiateAttackAnimation();
+    }
+
+    void ContinueAttackingOrNot()
+    {
+        CheckForTarget();
+        if (enemyFound || gateFound)
+        {
+            AttackThinking();
+        }
+        else
+        {
+            attackEnemy = false;
+            StopAttackAnimation();
+        }
     }
 
     void GetClosestEnemy()
@@ -130,22 +104,35 @@ public class WarriorUnit : GameUnitBase
     //----------Animation Functions----------
     public void AttackEnemy()
     {
+        //To Do: Handle Attack Up buff
+
         if (gateFound)
         {
-            enemyGate.TakeDamage(this, realAttackDamage);
+            enemyGate.TakeDamage(this, baseAttackDamage);
         }
-        else
+        else if (enemyFound)
         {
-            currentTarget.TakeDamageFromUnit(this, realAttackDamage);
+            currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
         }
 
         ContinueAttackingOrNot();
-        //ContinueAttackingOrNot();
+    }
+
+    void StopAttackAnimation()
+    {
+        if (animatorBase.GetBool("Attack"))
+        {
+            animatorBase.SetBool("Attack", false);
+        }
+        
     }
 
     void InitiateAttackAnimation()
     {
-        animatorBase.SetBool("Attack", true);
+        if (!animatorBase.GetBool("Attack"))
+        {
+            animatorBase.SetBool("Attack", true);
+        }
     }
     //----------Odin Functions----------
     #endregion

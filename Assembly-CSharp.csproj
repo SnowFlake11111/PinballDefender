@@ -109,6 +109,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\security\GeneralSecurityException.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\KeyGenerationParameters.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SignalR\Enums.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\BerserkerUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\WebSocket\WebSocketResponse.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SignalRCore\HubConnection.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\UI_MagneticInfiniteScroll.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\engines\RC4Engine.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\Gradient.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\BoxController\BaseScene.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\RangerUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\DesEdeParameters.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x9\DHValidationParms.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsServerContextImpl.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\MusicManager\MusicManagerGameBase.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\HTTPRange.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\field\IFiniteField.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\DemonUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\DerOctetString.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\Asn1Sequence.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Layout\CardUI\2D Cards\CardStack2D.cs" />
@@ -206,9 +209,11 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SocketIO\Transports\ITransport.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\TooltipTrigger.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\Chacha20Poly1305.cs" />
-    <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\RsaKeyParameters.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\KingUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\IAsn1ApplicationSpecificParser.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\SelectionBox\SelectionBox.cs" />
+    <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\RsaKeyParameters.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\ProjectileExplosion.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\ParametersWithIV.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\ToolTips\BoundTooltip\BoundTooltipTrigger.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\DerGeneralizedTime.cs" />
@@ -227,6 +232,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SocketIO\SocketManager.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x509\X509CertificateStructure.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\NullDigest.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\BloodMageUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP160R2Point.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\UICircle.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\PlayerController\PlayerController.cs" />
@@ -311,12 +317,14 @@
     <Compile Include="Assets\Base\00_BaseCode\Scripts\GSocket\Messages\MessageData.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\ScaleTransision.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\Examples\SignalR\Authentication Providers\SampleCookieAuthentication.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\HealerUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecT283R1Point.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Effects\UIFlippable.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\WebSocket\WebSocket.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsSigner.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\raw\Nat320.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\DerUniversalString.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\UnitProjectile.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SignalR\Transports\PollingTransport.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1Field.cs" />
     <Compile Include="Assets\Base\3Party\Adjust\Unity\Adjust.cs" />
@@ -620,6 +628,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\HTTPManager.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Primitives\DiamondGraph.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IMac.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\MageUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\DerBMPString.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\HomeScene\RankTabButton.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\Caching\HTTPCacheMaintananceParams.cs" />
@@ -729,6 +738,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\PlatformSupport\IO\Directory.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\IapController\ShopBox\IAPItem.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\util\collections\EnumerableProxy.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\UnitScriptLinker.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\ICipherParameters.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\engines\Salsa20Engine.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\ByteQueueStream.cs" />
@@ -862,8 +872,9 @@
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\MultiTouchScrollRect.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsExtensionsUtilities.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\LongDigest.cs" />
-    <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IBlockResult.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\EnforcerUnit.cs" />
     <Compile Include="Assets\Base\3Party\Joker2X\Localize\Scripts\Internal\Localization.cs" />
+    <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IBlockResult.cs" />
     <Compile Include="Assets\Base\3Party\Adjust\iOS\AdjustiOS.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Utilities\ReturnKeyTriggersButton.cs" />
     <Compile Include="Assets\Base\00_BaseCode\Scripts\Utility\Yielders.cs" />
@@ -1012,6 +1023,7 @@
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x9\X9ECParameters.cs" />
     <Compile Include="Assets\com.unity.uiextensions\Runtime\Scripts\Controls\ColorPicker\ColorPickerControl.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\raw\Nat448.cs" />
+    <Compile Include="Assets\Base\00_BaseCode\Scripts\Controllers\UnitController\MonsterUnit.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\macs\CfbBlockCipherMac.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\ocsp\ResponseBytes.cs" />
     <Compile Include="Assets\Base\3Party\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\pkcs\ContentInfo.cs" />
@@ -1324,6 +1336,7 @@
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders Generated\Examples\SG2\Detail Texture Simple.shader" />
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders\Standard PBS\TCP2_PBS_Main.cginc" />
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders\Legacy\Variants\TCP2_Desktop_Reflection_Rim.shader" />
+    <None Include="Assets\Shaders\Blend_CenterGlow.shader" />
     <None Include="Assets\Demigiant\DemiLib\Core\DemiLib.dll" />
     <None Include="Assets\Base\FacebookSDK\Plugins\Windows\x86\LibFBGPlatform.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
@@ -1352,6 +1365,7 @@
     <None Include="Assets\Base\FacebookSDK\Plugins\Windows\LibFBGManaged.dll" />
     <None Include="Assets\Demigiant\DOTween\DOTween50.xml" />
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders Generated\Examples\Default\HSV.shader" />
+    <None Include="Assets\Shaders\Add_CenterGlow.shader" />
     <None Include="Assets\Base\FacebookSDK\Plugins\Windows\x64\tinyxml2.dll" />
     <None Include="Assets\IMPORT_ASSETS\JMO Assets\Toony Colors Pro\Shaders Generated\Examples\Default\Old School.shader" />
     <None Include="Assets\com.unity.uiextensions\Runtime\Resources\Shaders\UILinearDodge.shader" />
