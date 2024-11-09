@@ -31,8 +31,8 @@ public class RangerUnit : GameUnitBase
     {
         if (!attackEnemy)
         {
-            AttackThinking();
             attackEnemy = true;
+            AttackThinking();
         }
     }
 

@@ -54,6 +54,7 @@ public class AttackZone : SerializedMonoBehaviour
                 break;
             case 3:
                 //Mage
+                mage.ActivateAttackPhase();
                 break;
             case 4:
                 //Enforcer
@@ -185,12 +186,18 @@ public class AttackZone : SerializedMonoBehaviour
         //To Do: This one is likely to be called on Gate alone when player pushes enemies away
         if (other.GetComponent<GameUnitBase>() != null)
         {
-            unitBase.RemoveTarget(other.GetComponent<GameUnitBase>());
-            //Debug.LogError(unitBase.name + " Found a target");
+            if (other.GetComponent<BoxCollider>().enabled)
+            {
+                unitBase.RemoveTarget(other.GetComponent<GameUnitBase>());
+                //Debug.LogError(unitBase.name + " Found a target");
+            }
         }
         else if (other.GetComponent<GateController>() != null)
         {
-            unitBase.RemoveEnemyGate();
+            if (other.GetComponent<BoxCollider>().enabled)
+            {
+                unitBase.RemoveEnemyGate();
+            }
         }
     }
     #endregion

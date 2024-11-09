@@ -1,10 +1,10 @@
 ﻿using DG.Tweening;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
-public class GameUnitBase : MonoBehaviour
+public class GameUnitBase : SerializedMonoBehaviour
 {
     #region Public Variables
     [Header("UNIT HEALTH")]
@@ -14,6 +14,10 @@ public class GameUnitBase : MonoBehaviour
     [Space]
     [Header("UNIT ANIMATOR")]
     public Animator animatorBase;
+
+    [Space]
+    [Header("UNIT COLLIDERBOX")]
+    public BoxCollider unitColliderBox;
 
     [Space]
     [Header("Enemy Detection Status")]
@@ -53,10 +57,12 @@ public class GameUnitBase : MonoBehaviour
 
     [Space]
     [Header("Berserker unit only (or any unit in the future with fast movement animation)")]
+    [LabelWidth(200)]
     [SerializeField] bool hasFastMovementAnimation = false;
 
     GameDirector gameDirector;
     bool spawnedByDirector = false;
+    bool unitIsDead = false;
     #endregion
 
     #region Start, Update
@@ -65,6 +71,11 @@ public class GameUnitBase : MonoBehaviour
         if (gameObject.layer != 7)
         {
             mainBodyColor.material = altColor;
+        }
+
+        if (GetComponent<UnitMovement>() != null)
+        {
+            GetComponent<UnitMovement>().Init();
         }
     }
     #endregion
@@ -165,6 +176,7 @@ public class GameUnitBase : MonoBehaviour
     {
         if (hitPoint <= 0)
         {
+            AnnounceDeath();
             return;
         }
 
@@ -190,7 +202,6 @@ public class GameUnitBase : MonoBehaviour
         if (damage >= hitPoint)
         {
             AnnounceDeath();
-            DeathAnimation();
 
             //To do: Add function to register the kill for the owner of the ball that killed this unit
         }
@@ -207,7 +218,6 @@ public class GameUnitBase : MonoBehaviour
         if (damage > hitPoint)
         {
             AnnounceDeath();
-            DeathAnimation();
 
             //To do: Add function to register the kill for the owner of the ball that killed this unit
         }
@@ -231,8 +241,6 @@ public class GameUnitBase : MonoBehaviour
     {
         //This function is strictly used for end of the field walls only
         AnnounceDeath();
-        DeathAnimation();
-        
     }
 
     public void DeathAnimation()
@@ -257,9 +265,18 @@ public class GameUnitBase : MonoBehaviour
 
     public void AnnounceDeath()
     {
-        if (GetComponent<BoxCollider>() != null)
+        if (!unitIsDead)
         {
-            GetComponent<BoxCollider>().enabled = false;
+            unitIsDead = true;
+        }
+        else
+        {
+            return;
+        }
+
+        if (unitColliderBox != null)
+        {
+            unitColliderBox.enabled = false;
         }
 
         foreach(GameUnitBase attacker in attackers)
@@ -279,6 +296,8 @@ public class GameUnitBase : MonoBehaviour
         {
             gameDirector.RemoveFallenUnit(this);
         }
+
+        DeathAnimation();
     }
 
 

@@ -31,7 +31,7 @@ public class UnitMovement : MonoBehaviour
     #region Private Variables
     float realSpeed = 0;
 
-    bool allowedMoving = true;
+    [SerializeField]bool allowedMoving = true;
 
     FieldLane currentLane;
     FieldLane newLane;
@@ -42,26 +42,7 @@ public class UnitMovement : MonoBehaviour
     #endregion
 
     #region Start, Update
-    private void Start()
-    {
-        //To Do: set this to Init() later on
-        realSpeed = movementSpeedBase;
 
-        //To Do: make this less amateurish at some point
-        if (allowedMoving)
-        {
-            animatorBase.SetBool("Move", true);
-        }
-        else
-        {
-            animatorBase.SetBool("Move", false);
-        }
-
-        if (zigzag)
-        {
-            changeLaneThinking = StartCoroutine(ChangeLane());
-        }
-    }
     private void Update()
     {
         if (allowedMoving)
@@ -80,6 +61,24 @@ public class UnitMovement : MonoBehaviour
 
     #region Functions
     //----------Public----------
+    public void Init()
+    {
+        realSpeed = movementSpeedBase;
+        if (allowedMoving)
+        {
+            animatorBase.SetBool("Move", true);
+        }
+        else
+        {
+            animatorBase.SetBool("Move", false);
+        }
+
+        if (zigzag)
+        {
+            changeLaneThinking = StartCoroutine(ChangeLane());
+        }
+    }
+
     public void StartMoving()
     {
         if (!allowedMoving)

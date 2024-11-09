@@ -27,8 +27,8 @@ public class WarriorUnit : GameUnitBase
     {
         if (!attackEnemy)
         {
-            AttackThinking();
             attackEnemy = true;
+            AttackThinking();
         }
     }
     //----------Private----------

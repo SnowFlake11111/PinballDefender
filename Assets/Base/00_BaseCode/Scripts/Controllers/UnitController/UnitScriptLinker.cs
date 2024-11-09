@@ -50,6 +50,14 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         }
     }
 
+    public void MageCast()
+    {
+        if (mage != null)
+        {
+            mage.CastEnergyBall();
+        }
+    }
+
     //----------Skills----------
 
 

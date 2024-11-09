@@ -7,18 +7,19 @@ public class UnitProjectile : SerializedMonoBehaviour
 {
     #region Public Variables
     [Header("IMPORTANT - Projectile life time")]
-    public int projectileLifeTime = 0;
+    public float projectileLifeTime = 0;
 
     [Space]
     [Header("IMPORTANT - Projectile fly speed")]
-    public int projectileSpeed = 0;
+    public float projectileSpeed = 0;
 
     [Space]
     [Header("Projectile owner")]
     public GameUnitBase projectileOwner;
 
     [Space]
-    [Header("Switch to determine which unit the projectile gonna pull data from - Odin will handle this")]
+    [Header("Switch to determine which unit the projectile gonna pull data from")]
+    [Title("The unit will initiate the check itself")]
     public MageUnit mage;
     public DemonUnit demon;
     public HealerUnit healer;
@@ -37,6 +38,7 @@ public class UnitProjectile : SerializedMonoBehaviour
     #region Private Variables
     int damage = 0;
     ProjectileExplosion tempExplosionReference;
+    Coroutine selfDestructSequence;
     #endregion
 
     #region Start, Update
@@ -51,16 +53,20 @@ public class UnitProjectile : SerializedMonoBehaviour
 
     #region Functions
     //----------Public----------
-    public void SetCollisionLayer(int id)
+    public void InitiateProjectile(GameUnitBase projectileOwner, int layer)
     {
-        gameObject.layer = id;
+        this.projectileOwner = projectileOwner;
+        gameObject.layer = layer;
+        UnitChecker();
+        selfDestructSequence = StartCoroutine(SelfDestruct());
     }
     //----------Private----------
     void Explode(Vector3 collisionPoint)
     {
         tempExplosionReference = Instantiate(explosion, collisionPoint, Quaternion.identity);
-        tempExplosionReference.gameObject.layer = gameObject.layer;
+        tempExplosionReference.InitiateExplosion(projectileOwner, gameObject.layer, damage);
 
+        StopCoroutine(selfDestructSequence);
         Destroy(gameObject);
     }
 
@@ -82,7 +88,7 @@ public class UnitProjectile : SerializedMonoBehaviour
     {
         if (mage != null)
         {
-
+            damage = mage.GetExplosionDamage();
         }
         else if (demon != null)
         {
@@ -98,9 +104,13 @@ public class UnitProjectile : SerializedMonoBehaviour
         }
     }
 
+    IEnumerator SelfDestruct()
+    {
+        yield return new WaitForSeconds(projectileLifeTime);
+        Destroy(gameObject);
+    }
 
     //----------Odin's Functions----------
-    [Button]
     void UnitChecker()
     {
         if (projectileOwner == null)
@@ -152,26 +162,27 @@ public class UnitProjectile : SerializedMonoBehaviour
     #endregion
 
     #region Collision Functions
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (doesItExplode)
         {
-            if (collision.collider.GetComponent<GameUnitBase>() != null || collision.collider.GetComponent<GateController>() != null)
+            if (other.GetComponent<GameUnitBase>() != null || other.GetComponent<GateController>() != null)
             {
-                Explode(collision.GetContact(0).point);
+                GetDamageFromOwner();
+                Explode(transform.position);
             }
         }
         else
         {
             GetDamageFromOwner();
 
-            if (collision.collider.GetComponent<GameUnitBase>() != null)
+            if (other.GetComponent<GameUnitBase>() != null)
             {
-                collision.collider.GetComponent<GameUnitBase>().TakeDamageFromUnit(projectileOwner, damage);
+                DealDamageOnContactToUnit(other.GetComponent<GameUnitBase>());
             }
-            else if (collision.collider.GetComponent<GateController>() != null)
+            else if (other.GetComponent<GateController>() != null)
             {
-                collision.collider.GetComponent<GateController>().TakeDamage(projectileOwner, damage);
+                DealDamageOnContactToGate(other.GetComponent<GateController>());
             }
         }
     }
