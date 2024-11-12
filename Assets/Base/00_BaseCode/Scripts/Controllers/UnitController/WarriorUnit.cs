@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,17 +6,15 @@ using UnityEngine;
 public class WarriorUnit : GameUnitBase
 {
     #region Public Variables
-    [Space]
+    [BoxGroup("Warrior Stats", centerLabel: true)]
     [Header("Base Attack Damage")]
     public int baseAttackDamage = 0;
-
-    [Space]
-    [Header("Current Target")]
-    public GameUnitBase currentTarget;
     #endregion
 
     #region Private Variables
     bool attackEnemy = false;
+
+    GameUnitBase currentTarget;
     #endregion
 
     #region Start, Update
@@ -104,15 +103,30 @@ public class WarriorUnit : GameUnitBase
     //----------Animation Functions----------
     public void AttackEnemy()
     {
-        //To Do: Handle Attack Up buff
+        //To Do: Handle Attack Up buff [done]
 
         if (gateFound)
         {
-            enemyGate.TakeDamage(this, baseAttackDamage);
+            if (IsAttackUpActive())
+            {
+                enemyGate.TakeDamage(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));
+            }
+            else
+            {
+                enemyGate.TakeDamage(this, baseAttackDamage);
+            }
         }
         else if (enemyFound)
         {
-            currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
+            if (IsAttackUpActive())
+            {
+                currentTarget.TakeDamageFromUnit(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));
+            }
+            else
+            {
+                currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
+            }
+            
         }
 
         ContinueAttackingOrNot();

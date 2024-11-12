@@ -23,7 +23,7 @@ public class UnitMovement : MonoBehaviour
     public Animator animatorBase;
 
     [Space]
-    [HideIf("GetCondition")]
+    [ShowIf("GetCondition")]
     [LabelWidth(300)]
     public float laneChangeFrequencyInSeconds = 0;
     #endregion
@@ -39,6 +39,8 @@ public class UnitMovement : MonoBehaviour
     List<FieldLane> possibleLanes = new List<FieldLane>();
 
     Coroutine changeLaneThinking;
+
+    Tweener changeLaneInProgress;
     #endregion
 
     #region Start, Update
@@ -84,6 +86,10 @@ public class UnitMovement : MonoBehaviour
         if (!allowedMoving)
         {
             allowedMoving = true;
+            if (zigzag)
+            {
+                changeLaneThinking = StartCoroutine(ChangeLane());
+            }
             animatorBase.SetBool("Move", true);
         }
     }
@@ -93,8 +99,32 @@ public class UnitMovement : MonoBehaviour
         if (allowedMoving)
         {
             allowedMoving = false;
+            if (zigzag)
+            {
+                StopCoroutine(changeLaneThinking);
+            }
             animatorBase.SetBool("Move", false);
         }
+    }
+
+    public void ActivateRallyBuff()
+    {
+        realSpeed += movementSpeedBase * 0.3f;
+    }
+
+    public void DisableRallyBuff()
+    {
+        realSpeed -= movementSpeedBase * 0.3f;
+    }
+
+    public void ActivateEnrageSpeedBuff()
+    {
+        realSpeed += movementSpeedBase * 0.2f;
+    }
+
+    public void DisableEnrageSpeedBuff()
+    {
+        realSpeed -= movementSpeedBase * 0.2f;
     }
 
     public void DeathState()
@@ -124,11 +154,14 @@ public class UnitMovement : MonoBehaviour
         yield return new WaitForSeconds(laneChangeFrequencyInSeconds);
         newLane = possibleLanes[Random.Range(0, possibleLanes.Count)];
 
-        transform.DOMoveX(newLane.transform.position.x, 0.5f)
+        changeLaneInProgress = transform.DOMoveX(newLane.transform.position.x, 0.5f)
+            .SetEase(Ease.Linear)
             .OnComplete(delegate
             {
                 currentLane = newLane;
                 possibleLanes = newLane.GetNeighbourLanes();
+
+                changeLaneInProgress = null;
                 changeLaneThinking = StartCoroutine(ChangeLane());
             });
     }
@@ -160,7 +193,7 @@ public class UnitMovement : MonoBehaviour
 
     bool GetCondition()
     {
-        return zigzag ? false : true;
+        return zigzag ? true : false;
     }
     #endregion
 }

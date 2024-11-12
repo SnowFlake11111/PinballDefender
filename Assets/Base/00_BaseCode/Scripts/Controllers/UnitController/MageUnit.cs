@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,17 +6,21 @@ using UnityEngine;
 public class MageUnit : GameUnitBase
 {
     #region Public Variables
+    [BoxGroup("Mage Stats", centerLabel: true)]
     [Header("Projectile Explosion damage")]
     public int explosionDamage = 0;
 
+    [BoxGroup("Mage Stats")]
     [Space]
     [Header("Shoot effect")]
     public ParticleSystem shootEffect;
 
+    [BoxGroup("Mage Stats")]
     [Space]
     [Header("IMPORTANT - Projectile reference")]
     public UnitProjectile energyball;
 
+    [BoxGroup("Mage Stats")]
     [Space]
     [Header("IMPORTANT - Projectile spawn point")]
     public GameObject projectileSpawnPoint;
@@ -44,7 +49,15 @@ public class MageUnit : GameUnitBase
     public int GetExplosionDamage()
     {
         //Note: this function is for the explosion to get the data, if Attack Up buff is active, this is where it take effect
-        return explosionDamage;
+        if (IsAttackUpActive())
+        {
+            return explosionDamage + Mathf.FloorToInt(explosionDamage * 0.2f);
+        }
+        else
+        {
+            return explosionDamage;
+        }
+        
     }
     //----------Private----------
     void AttackThinking()

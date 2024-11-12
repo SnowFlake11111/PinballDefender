@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,20 @@ using UnityEngine;
 public class RangerUnit : GameUnitBase
 {
     #region Public Variables
-    [Space]
+    [BoxGroup("Ranger Stats", centerLabel: true)]
     [Header("Base Attack Damage")]
     public int baseAttackDamage = 0;
 
+    [BoxGroup("Ranger Stats")]
     [Space]
     [Header("Shoot Effect")]
     public ParticleSystem shootEffect;
-
-    [Space]
-    [Header("Current Target")]
-    public GameUnitBase currentTarget;
     #endregion
 
     #region Private Variables
     bool attackEnemy = false;
+
+    GameUnitBase currentTarget;
     #endregion
 
     #region Start, Update
@@ -107,21 +107,33 @@ public class RangerUnit : GameUnitBase
     //----------Animation Functions----------
     public void ShootEnemy()
     {
-        //To Do: Handle Attack Up buff
-
         if (gateFound)
         {
-            shootEffect.Play();
-            enemyGate.TakeDamage(this, baseAttackDamage);
+            if (IsAttackUpActive())
+            {
+                enemyGate.TakeDamage(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));
+            }
+            else
+            {
+                enemyGate.TakeDamage(this, baseAttackDamage);
+            }
         }
         else if (enemyFound)
         {
-            shootEffect.Play();
-            currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
+            if (IsAttackUpActive())
+            {
+                currentTarget.TakeDamageFromUnit(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));
+            }
+            else
+            {
+                currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
+            }
+
         }
+        currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
 
         ContinueAttackingOrNot();
-        //To do: Play an effect for when the unit shoot
+        //To do: Play an effect for when the unit shoot [done]
     }
 
     void StopAttackAnimation()

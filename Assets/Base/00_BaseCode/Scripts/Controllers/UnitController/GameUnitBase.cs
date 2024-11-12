@@ -1,8 +1,10 @@
 ﻿using DG.Tweening;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUnitBase : SerializedMonoBehaviour
 {
@@ -10,6 +12,8 @@ public class GameUnitBase : SerializedMonoBehaviour
     [Header("UNIT HEALTH")]
     public int maxHitPoint = 0;
     public int hitPoint = 0;
+    public Image healthBar;
+    public Image healthBarDelay;
 
     [Space]
     [Header("UNIT ANIMATOR")]
@@ -18,6 +22,10 @@ public class GameUnitBase : SerializedMonoBehaviour
     [Space]
     [Header("UNIT COLLIDERBOX")]
     public BoxCollider unitColliderBox;
+
+    [Space]
+    [Header("UNIT MOVEMENT SCRIPT (can be empty)")]
+    public UnitMovement unitMovement;
 
     [Space]
     [Header("Enemy Detection Status")]
@@ -48,6 +56,27 @@ public class GameUnitBase : SerializedMonoBehaviour
     [Header("IMPORTANT - Spawning info")]
     public int spawnCost = 0;
     public bool isBossOrMiniboss = false;
+
+    [ShowIf("HpEventSwitches")]
+    public bool stunAt66PercentHp = false;
+    [ShowIf("HpEventSwitches")]
+    public bool stunAt50PercentHp = false;
+    [ShowIf("HpEventSwitches")]
+    public bool stunAt33PercentHp = false;
+
+    [Space]
+    [Header("BERSERKER ONLY")]
+    public bool canEnrage = false;
+    [ShowIf("EnrageHpTrigger")]
+    public float enrageAtOrBelow = 0;
+
+    [Space]
+    [Header("IMPORTANT - Buff Icons")]
+    public GameObject buffsHolder;
+    public Image attackUpIcon;
+    public Image defenseUpIcon;
+    public Image rallyIcon;
+    public Image rageIcon;
     #endregion
 
     #region Private Variables
@@ -55,27 +84,63 @@ public class GameUnitBase : SerializedMonoBehaviour
     [SerializeField] bool allowBallBounce = true;
     [SerializeField] int bounceCost = 1;
 
-    [Space]
-    [Header("Berserker unit only (or any unit in the future with fast movement animation)")]
-    [LabelWidth(200)]
-    [SerializeField] bool hasFastMovementAnimation = false;
-
     GameDirector gameDirector;
     bool spawnedByDirector = false;
     bool unitIsDead = false;
+
+    Coroutine attackUpTimer;
+    Coroutine defenseUpTimer;
+    Coroutine rallyTimer;
+
+    Image attackUpActive;
+    Image defenseUpActive;
+    Image rallyActive;
+    Image rageActive;
+
+    float currentHealthPercent
+    {
+        get
+        {
+            return hitPoint / (float)maxHitPoint;
+        }
+    }
+
+    Tweener healthBarMainChange;
+    Tweener healthBarDelayChange;
+
+    bool stunnedAt66 = false;
+    bool stunnedAt50 = false;
+    bool stunnedAt33 = false;
+
+    //----------Buffs timer-----------
+    float defenseUp = 0;
+    float attackUp = 0;
+    float rally = 0;
+
+    //----------Berserker buff----------
+    bool rage = false;
+    #endregion
+
+    #region Event Handler
+    public event Action HpAt66Percent;
+    public event Action HpAt50Percent;
+    public event Action HpAt33Percent;
+    public event Action HpAt0Percent;
     #endregion
 
     #region Start, Update
-    private void Start()
+    //To Do: Once the system is complete, remove Start
+    public void Start()
     {
         if (gameObject.layer != 7)
         {
             mainBodyColor.material = altColor;
+            healthBar.color = new Color(255 / 255, 30 / 255, 30 / 255);
         }
 
-        if (GetComponent<UnitMovement>() != null)
+        if (unitMovement != null)
         {
-            GetComponent<UnitMovement>().Init();
+            unitMovement.Init();
         }
     }
     #endregion
@@ -83,6 +148,21 @@ public class GameUnitBase : SerializedMonoBehaviour
     #region Functions
     //IMPORTANT: Vì script này được sử dụng làm base nên tất cả các function được đặt public để cho các script kế thừa có thể sử dụng chúng
     //----------Public----------
+    //**** Unit Initialize ****
+    public void InitUnit()
+    {
+        if (gameObject.layer != 7)
+        {
+            mainBodyColor.material = altColor;
+            healthBar.color = new Color(255 / 255, 30 / 255, 30 / 255);
+        }
+
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
+
     //**** Unit Owner Section ****
     public void SpawnedByDirector(GameDirector director)
     {
@@ -97,11 +177,6 @@ public class GameUnitBase : SerializedMonoBehaviour
     }
 
     //**** Health Control Section ****
-    public void SetHealth(int health)
-    {
-        maxHitPoint = health;
-        hitPoint = health;
-    }
     public void GainHealth(int health)
     {
         if (hitPoint + health >= maxHitPoint)
@@ -111,6 +186,123 @@ public class GameUnitBase : SerializedMonoBehaviour
         else
         {
             hitPoint += health;
+        }
+
+        UpdateHealthBar(true);
+    }
+
+    public void UpdateHealthBar()
+    {
+        if (healthBarMainChange != null)
+        {
+            healthBarMainChange.ChangeEndValue(currentHealthPercent);
+        }
+        else
+        {
+            healthBarMainChange = healthBar.DOFillAmount(currentHealthPercent, 0.5f)
+                .SetAutoKill(true)
+                .OnStart(delegate
+                {
+                    healthBarMainChange = null;
+                    if (healthBarDelayChange != null)
+                    {
+                        healthBarDelayChange.ChangeEndValue(currentHealthPercent);
+                    }
+                    else
+                    {
+                        healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
+                        .SetDelay(1)
+                        .SetAutoKill(true)
+                        .OnComplete(delegate
+                        {
+                            healthBarDelayChange = null;
+                        });
+                    }
+                });
+        }
+    }
+
+    public void UpdateHealthBar(bool gainHealth)
+    {
+        if (healthBarMainChange != null)
+        {
+            healthBarMainChange.ChangeEndValue(currentHealthPercent);
+        }
+        else
+        {
+            healthBarMainChange = healthBar.DOFillAmount(currentHealthPercent, 0.5f)
+                .SetAutoKill(true)
+                .OnStart(delegate
+                {
+                    healthBarMainChange = null;
+                    if (healthBarDelayChange != null)
+                    {
+                        healthBarDelayChange.ChangeEndValue(currentHealthPercent);
+                    }
+                    else
+                    {
+                        healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
+                        .SetAutoKill(true)
+                        .OnComplete(delegate
+                        {
+                            healthBarDelayChange = null;
+                        });
+                    }
+                });
+        }
+    }
+
+    public void HealthEvents()
+    {
+        if (canEnrage)
+        {
+            if (currentHealthPercent <= enrageAtOrBelow && !rage)
+            {
+                ActivateRage();
+            }
+            else if (currentHealthPercent > enrageAtOrBelow && rage)
+            {
+                DeactivateRage();
+            }
+        }
+
+        if (stunAt66PercentHp)
+        {
+            if (currentHealthPercent <= 66f && !stunnedAt66)
+            {
+                stunnedAt66 = true;
+                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
+                    .OnComplete(delegate
+                    {
+                        CheckForTarget();
+                    });
+            }
+        }
+
+        if (stunAt66PercentHp)
+        {
+            if (currentHealthPercent <= 50f && !stunnedAt66)
+            {
+                stunnedAt50 = true;
+                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
+                    .OnComplete(delegate
+                    {
+                        CheckForTarget();
+                    });
+            }
+        }
+
+        if (stunAt66PercentHp)
+        {
+            if (currentHealthPercent <= 33f && !stunnedAt66)
+            {
+                stunnedAt33 = true;
+                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
+                    .OnComplete(delegate
+                    {
+                        CheckForTarget();
+                    });
+            }
         }
     }
 
@@ -182,16 +374,16 @@ public class GameUnitBase : SerializedMonoBehaviour
 
         if (enemyFound || gateFound)
         {
-            if (GetComponent<UnitMovement>() != null)
+            if (unitMovement != null)
             {
-                GetComponent<UnitMovement>().StopMoving();
+                unitMovement.StopMoving();
             }
         }
         else
         {
-            if (GetComponent<UnitMovement>() != null)
+            if (unitMovement != null)
             {
-                GetComponent<UnitMovement>().StartMoving();
+                unitMovement.StartMoving();
             }
         }
     }
@@ -199,32 +391,72 @@ public class GameUnitBase : SerializedMonoBehaviour
     //**** Damage Taken Section ****
     public void TakeDamage(int damage)
     {
-        if (damage >= hitPoint)
+        if (defenseUp > 0)
         {
-            AnnounceDeath();
+            if ((damage / 2) >= hitPoint)
+            {
+                hitPoint = 0;
+                AnnounceDeath();
 
-            //To do: Add function to register the kill for the owner of the ball that killed this unit
+                //To do: Add function to register the kill for the owner of the ball that killed this unit
+            }
+            else
+            {
+                hitPoint -= damage / 2;
+            }
         }
         else
         {
-            hitPoint -= damage;
+            if (damage >= hitPoint)
+            {
+                hitPoint = 0;
+                AnnounceDeath();
+
+                //To do: Add function to register the kill for the owner of the ball that killed this unit
+            }
+            else
+            {
+                hitPoint -= damage;              
+            }
         }
+
+        UpdateHealthBar();
     }
 
     public void TakeDamageFromUnit(GameUnitBase attacker, int damage)
     {
         RegisterAttacker(attacker);
 
-        if (damage > hitPoint)
+        if (defenseUp > 0)
         {
-            AnnounceDeath();
+            if ((damage / 2) > hitPoint)
+            {
+                hitPoint = 0;
+                AnnounceDeath();
 
-            //To do: Add function to register the kill for the owner of the ball that killed this unit
+                //To do: Add function to register the kill for the owner of the ball that killed this unit
+            }
+            else
+            {
+                hitPoint -= damage / 2;
+            }
         }
         else
-        { 
-            hitPoint -= damage;
+        {
+            if (damage > hitPoint)
+            {
+                hitPoint = 0;
+                AnnounceDeath();
+
+                //To do: Add function to register the kill for the owner of the ball that killed this unit
+            }
+            else
+            {
+                hitPoint -= damage;               
+            }
         }
+
+        UpdateHealthBar();
     }
 
     public void RegisterAttacker(GameUnitBase attacker)
@@ -245,9 +477,9 @@ public class GameUnitBase : SerializedMonoBehaviour
 
     public void DeathAnimation()
     {
-        if (GetComponent<UnitMovement>() != null)
+        if (unitMovement != null)
         {
-            GetComponent<UnitMovement>().DeathState();
+            unitMovement.DeathState();
         }
 
         animatorBase.Play("Death");
@@ -268,6 +500,10 @@ public class GameUnitBase : SerializedMonoBehaviour
         if (!unitIsDead)
         {
             unitIsDead = true;
+            if (HpAt0Percent != null)
+            {
+                HpAt0Percent.Invoke();
+            }
         }
         else
         {
@@ -312,7 +548,175 @@ public class GameUnitBase : SerializedMonoBehaviour
         return bounceCost;
     }
 
+    //**** Buffs Section ****
+    public bool IsAttackUpActive()
+    {
+        if (attackUp > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool IsDefenseUpActive()
+    {
+        if (defenseUp > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool IsRallyActive()
+    {
+        if (rally > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool IsRageActive()
+    {
+        return rage;
+    }
+
+    public void GrantAttackUp(float duration)
+    {
+        attackUp = duration;
+        if (attackUpTimer == null)
+        {
+            attackUpActive = Instantiate(attackUpIcon, buffsHolder.transform);
+            attackUpTimer = StartCoroutine(AttackUpDuration());
+        }
+    }
+
+    public void GrantDefenseUp(float duration)
+    {
+        defenseUp = duration;
+        if (defenseUpTimer == null)
+        {
+            defenseUpActive = Instantiate(defenseUpIcon, buffsHolder.transform);
+            defenseUpTimer = StartCoroutine(DefenseUpDuration());
+        }
+    }
+
+    public void GrantRally(float duration)
+    {
+        rally = duration;
+        if (rallyTimer == null)
+        {
+            if (unitMovement != null)
+            {
+                unitMovement.ActivateRallyBuff();
+            }
+
+            rallyActive = Instantiate(rallyIcon, buffsHolder.transform);
+            rallyTimer = StartCoroutine(RallyDuration());
+        }
+    }
+
+    public void ActivateRage()
+    {
+        rage = true;
+        rageActive = Instantiate(rageIcon, buffsHolder.transform);
+        if (unitMovement != null)
+        {
+            unitMovement.ActivateEnrageSpeedBuff();
+        }
+        animatorBase.speed = 1.2f;
+    }
+
+    public void DeactivateRage()
+    {
+        rage = false;
+        Destroy(rageActive.gameObject);
+        if (unitMovement != null)
+        {
+            unitMovement.DisableEnrageSpeedBuff();
+        }
+        animatorBase.speed = 1;
+    }
+
+    IEnumerator AttackUpDuration()
+    {
+        while (attackUp > 0)
+        {
+            yield return new WaitForSeconds(1);
+            attackUp--;
+        }
+
+        attackUpTimer = null;
+        Destroy(attackUpActive.gameObject);
+    }
+
+    IEnumerator DefenseUpDuration()
+    {
+        while (defenseUp > 0)
+        {
+            yield return new WaitForSeconds(1);
+            defenseUp--;
+        }
+
+        defenseUpTimer = null;
+        Destroy(defenseUpActive.gameObject);
+    }
+
+    IEnumerator RallyDuration()
+    {
+        while (rally > 0)
+        {
+            yield return new WaitForSeconds(1);
+            rally--;
+        }
+
+        if (unitMovement != null)
+        {
+            unitMovement.DisableRallyBuff();
+        }
+        rallyTimer = null;
+        Destroy(rallyActive.gameObject);
+    }
+
     //----------Private----------
+    //----------Odin Functions----------
+    bool HpEventSwitches()
+    {
+        if (isBossOrMiniboss)
+        {
+            return true;
+        }
+        else
+        {
+            stunAt66PercentHp = false;
+            stunAt50PercentHp = false;
+            stunAt33PercentHp = false;
+
+            return false;
+        }
+    }
+
+    bool EnrageHpTrigger()
+    {
+        if (canEnrage)
+        {
+            return true;
+        }
+        else
+        {
+            enrageAtOrBelow = 0;
+            return false;
+        }
+    }
     #endregion
 }
 

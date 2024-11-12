@@ -58,6 +58,7 @@ public class AttackZone : SerializedMonoBehaviour
                 break;
             case 4:
                 //Enforcer
+                enforcer.ActivateAttackPhase();
                 break;
             case 5:
                 //Demon

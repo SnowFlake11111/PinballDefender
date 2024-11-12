@@ -36,26 +36,22 @@ public class UnitScriptLinker : SerializedMonoBehaviour
     //----------Attack----------
     public void WarriorAttack()
     {
-        if (warrior != null)
-        {
-            warrior.AttackEnemy();
-        }
+        warrior.AttackEnemy();
     }
 
     public void RangerAttack()
     {
-        if (ranger != null)
-        {
-            ranger.ShootEnemy();
-        }
+        ranger.ShootEnemy();
     }
 
     public void MageCast()
     {
-        if (mage != null)
-        {
-            mage.CastEnergyBall();
-        }
+        mage.CastEnergyBall();
+    }
+
+    public void EnforcerSlash()
+    {
+        enforcer.SlashEnemy();
     }
 
     //----------Skills----------
