@@ -42,8 +42,10 @@ public class EnforcerUnit : GameUnitBase
     private void Start()
     {
         base.Start();
-        HpAt0Percent += StopAutoSkill;
+        deathEvent.AddListener(StopAutoSkill);
         StartAutoSkill();
+
+        buffZone.InitBuffZone(gameObject.layer);
     }
     #endregion
 

@@ -10,6 +10,7 @@ public class UnitBuffZone : SerializedMonoBehaviour
     public bool attackUp = false;
     public bool defenseUp = false;
     public bool rally = false;
+    public bool heal = false;
 
     [ShowIf("AttackUpWillBeGranted")]
     [Space]
@@ -20,6 +21,13 @@ public class UnitBuffZone : SerializedMonoBehaviour
     [ShowIf("RallyWillBeGranted")]
     [Space]
     public float rallyDuration = 0;
+    [ShowIf("HealingWillBeGranted")]
+    [Space]
+    public float healMaxHealthPercent = 0;
+
+    [Space]
+    [Header("Allow this zone to buff its owner ?")]
+    public bool allowSelfBuff = false;
 
     [Space]
     [Header("Unit that control this buff zone")]
@@ -48,7 +56,15 @@ public class UnitBuffZone : SerializedMonoBehaviour
         }
         else
         {
-
+            //Giải thích: vì game đã được điều chỉnh phần collision cho các object có chung layer sẽ không tương tác với nhau, nên để mà các buff zone này có thể buff được đồng đội (và bản thân nếu được phép) thì layer của buff zone phải trùng với phe địch, như thế zone sẽ tương tác với đồng đội mà không tương tác với địch
+            if (GamePlayController.Instance.gameLevelController.currentLevel.DoesStageHaveDirector())
+            {
+                gameObject.layer = 6;
+            }
+            else
+            {
+                gameObject.layer = 8;
+            }
         }
     }
 
@@ -56,7 +72,11 @@ public class UnitBuffZone : SerializedMonoBehaviour
     {
         buffEffect.Play();
         triggerColliderSphere.enabled = true;
-        GrantBuff(controlUnit);
+
+        if (allowSelfBuff)
+        {
+            GrantBuff(controlUnit);
+        }
 
         if (buffZoneTimerHandler != null)
         {
@@ -79,6 +99,10 @@ public class UnitBuffZone : SerializedMonoBehaviour
         else if (rally)
         {
             ally.GrantRally(rallyDuration);
+        }
+        else if (heal)
+        {
+            ally.GainHealthPercent(healMaxHealthPercent / 100);
         }
     }
 
@@ -125,6 +149,19 @@ public class UnitBuffZone : SerializedMonoBehaviour
         else
         {
             rallyDuration = 0;
+            return false;
+        }
+    }
+
+    bool HealingWillBeGranted()
+    {
+        if (heal)
+        {
+            return true;
+        }
+        else
+        {
+            healMaxHealthPercent = 0;
             return false;
         }
     }

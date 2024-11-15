@@ -71,6 +71,10 @@ public class Ball : MonoBehaviour
         {
             HitWall(collision);
         }
+        else if (collision.collider.GetComponent<UnitHittableProjectile>() != null)
+        {
+            HitProjectile(collision);
+        }
         else if (collision.collider.GetComponent<Ball>() != null)
         {
             BounceBall(collision);
@@ -111,6 +115,24 @@ public class Ball : MonoBehaviour
             {
                 bounceLimit -= wall.collider.GetComponent<GameWall>().GetBounceCost();
                 BounceBall(wall);
+            }
+        }
+    }
+
+    void HitProjectile(Collision projectile)
+    {
+        projectile.collider.GetComponent<UnitHittableProjectile>().TakeDamage(ballDamage);
+
+        if (projectile.collider.GetComponent<UnitHittableProjectile>().GetBouncePermission())
+        {
+            if (bounceLimit - projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost() <= 0)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                bounceLimit -= projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost();
+                BounceBall(projectile);
             }
         }
     }

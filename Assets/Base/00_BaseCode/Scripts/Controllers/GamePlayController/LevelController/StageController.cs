@@ -1,18 +1,44 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageController : MonoBehaviour
+public class StageController : SerializedMonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region Public Variables
+    [Header("Stage ID")]
+    public int stageId = 0;
+
+    [Space]
+    [Header("Map Lanes")]
+    public List<FieldLane> laneList = new List<FieldLane>();
+
+    [Space]
+    [Header("Game Director (can be left empty)")]
+    public GameDirector gameDirector;
+    #endregion
+
+    #region Private Variables
+    #endregion
+
+    #region Functions
+    //----------Public----------
+    public List<FieldLane> GetMapLanes()
     {
-        
+        return laneList;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool DoesStageHaveDirector()
     {
-        
+        if (gameDirector != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
+    //----------Private----------
+    #endregion
 }

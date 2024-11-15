@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ToonyColorsPro.ShaderGenerator.Enums;
 
 public class UnitProjectile : SerializedMonoBehaviour
 {
@@ -26,11 +27,10 @@ public class UnitProjectile : SerializedMonoBehaviour
     public BloodMageUnit bloodMage;
 
     [Space]
-    [Header("If the projectile explode, check this box")]
+    [Header("If the projectile explode and deal damage, check this box")]
     public bool doesItExplode = false;
 
     [Space]
-    [HideIf("DoesItExplode")]
     [Header("IMPORTANT - Explosion reference must not be empty")]
     public ProjectileExplosion explosion;
     #endregion
@@ -60,11 +60,20 @@ public class UnitProjectile : SerializedMonoBehaviour
         UnitChecker();
         selfDestructSequence = StartCoroutine(SelfDestruct());
     }
-    //----------Private----------
-    void Explode(Vector3 collisionPoint)
+    //----------Private, Protected----------
+    protected void Explode()
     {
-        tempExplosionReference = Instantiate(explosion, collisionPoint, Quaternion.identity);
+        tempExplosionReference = Instantiate(explosion, transform.position, Quaternion.identity);
         tempExplosionReference.InitiateExplosion(projectileOwner, gameObject.layer, damage);
+
+        StopCoroutine(selfDestructSequence);
+        Destroy(gameObject);
+    }
+
+    protected void HarmlessExplode()
+    {
+        tempExplosionReference = Instantiate(explosion, transform.position, Quaternion.identity);
+        tempExplosionReference.InitiateHarmlessExplosion();
 
         StopCoroutine(selfDestructSequence);
         Destroy(gameObject);
@@ -92,7 +101,7 @@ public class UnitProjectile : SerializedMonoBehaviour
         }
         else if (demon != null)
         {
-
+            damage = demon.GetFireballDamage();
         }
         else if (healer != null)
         {
@@ -107,6 +116,7 @@ public class UnitProjectile : SerializedMonoBehaviour
     IEnumerator SelfDestruct()
     {
         yield return new WaitForSeconds(projectileLifeTime);
+        HarmlessExplode();
         Destroy(gameObject);
     }
 
@@ -146,19 +156,6 @@ public class UnitProjectile : SerializedMonoBehaviour
         }
     }
 
-    bool DoesItExplode()
-    {
-        if (doesItExplode)
-        {
-            return false;
-        }
-        else
-        {
-            explosion = null;
-            return true;
-        }
-    }
-
     #endregion
 
     #region Collision Functions
@@ -169,7 +166,7 @@ public class UnitProjectile : SerializedMonoBehaviour
             if (other.GetComponent<GameUnitBase>() != null || other.GetComponent<GateController>() != null)
             {
                 GetDamageFromOwner();
-                Explode(transform.position);
+                Explode();
             }
         }
         else
@@ -178,11 +175,40 @@ public class UnitProjectile : SerializedMonoBehaviour
 
             if (other.GetComponent<GameUnitBase>() != null)
             {
+                HarmlessExplode();
                 DealDamageOnContactToUnit(other.GetComponent<GameUnitBase>());
             }
             else if (other.GetComponent<GateController>() != null)
             {
+                HarmlessExplode();
                 DealDamageOnContactToGate(other.GetComponent<GateController>());
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (doesItExplode)
+        {
+            if (collision.collider.GetComponent<GameUnitBase>() != null || collision.collider.GetComponent<GateController>() != null)
+            {
+                GetDamageFromOwner();
+                Explode();
+            }
+        }
+        else
+        {
+            GetDamageFromOwner();
+
+            if (collision.collider.GetComponent<GameUnitBase>() != null)
+            {
+                HarmlessExplode();
+                DealDamageOnContactToUnit(collision.collider.GetComponent<GameUnitBase>());
+            }
+            else if (collision.collider.GetComponent<GateController>() != null)
+            {
+                HarmlessExplode();
+                DealDamageOnContactToGate(collision.collider.GetComponent<GateController>());
             }
         }
     }

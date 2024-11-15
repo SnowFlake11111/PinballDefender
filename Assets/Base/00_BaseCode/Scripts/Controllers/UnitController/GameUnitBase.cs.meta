@@ -3,7 +3,20 @@ guid: fb845fb009f14224fb60fce7ebb4d38f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - healthBar: {instanceID: 0}
+  - healthBarDelay: {instanceID: 0}
+  - animatorBase: {instanceID: 0}
+  - unitColliderBox: {instanceID: 0}
+  - unitMovement: {instanceID: 0}
+  - enemyGate: {instanceID: 0}
+  - altColor: {instanceID: 0}
+  - mainBodyColor: {instanceID: 0}
+  - buffsHolder: {instanceID: 0}
+  - attackUpIcon: {fileID: 3839998837262025351, guid: c862df2c35394664ab3f6ec39334a367, type: 3}
+  - defenseUpIcon: {fileID: 6198332616846811287, guid: e314a50e1b560334ea6d0a45110990c3, type: 3}
+  - rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
+  - rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -54,8 +54,15 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         enforcer.SlashEnemy();
     }
 
-    //----------Skills----------
+    public void DemonSlash()
+    {
+        demon.DemonicSlash();
+    }
 
+    public void DemonCast()
+    {
+        demon.DemonicFireball();
+    }
 
     //----------Death----------
     public void Death()

@@ -31,7 +31,9 @@ public class UnitMovement : MonoBehaviour
     #region Private Variables
     float realSpeed = 0;
 
-    [SerializeField]bool allowedMoving = true;
+    bool allowedMoving = true;
+    bool rallyIsActive = false;
+    bool rageIsActive = false;
 
     FieldLane currentLane;
     FieldLane newLane;
@@ -109,22 +111,42 @@ public class UnitMovement : MonoBehaviour
 
     public void ActivateRallyBuff()
     {
+        rallyIsActive = true;
         realSpeed += movementSpeedBase * 0.3f;
     }
 
     public void DisableRallyBuff()
     {
-        realSpeed -= movementSpeedBase * 0.3f;
+        rallyIsActive = false;
+
+        if (!rallyIsActive && !rageIsActive)
+        {
+            realSpeed = movementSpeedBase;
+        }
+        else
+        {
+            realSpeed -= movementSpeedBase * 0.3f;
+        }
     }
 
     public void ActivateEnrageSpeedBuff()
     {
+        rageIsActive = true;
         realSpeed += movementSpeedBase * 0.2f;
     }
 
     public void DisableEnrageSpeedBuff()
     {
-        realSpeed -= movementSpeedBase * 0.2f;
+        rageIsActive = false;
+        
+        if (!rallyIsActive && !rageIsActive)
+        {
+            realSpeed = movementSpeedBase;
+        }
+        else
+        {
+            realSpeed -= movementSpeedBase * 0.2f;
+        }       
     }
 
     public void DeathState()

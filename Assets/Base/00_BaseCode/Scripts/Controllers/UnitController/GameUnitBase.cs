@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GameUnitBase : SerializedMonoBehaviour
@@ -122,10 +123,12 @@ public class GameUnitBase : SerializedMonoBehaviour
     #endregion
 
     #region Event Handler
-    public event Action HpAt66Percent;
-    public event Action HpAt50Percent;
-    public event Action HpAt33Percent;
-    public event Action HpAt0Percent;
+    [NonSerialized]
+    public UnityEvent stunEventWithoutValue = new UnityEvent();
+    [NonSerialized]
+    public UnityEvent<int> stunEventWithValue = new UnityEvent<int>();
+    [NonSerialized]
+    public UnityEvent deathEvent = new UnityEvent();
     #endregion
 
     #region Start, Update
@@ -177,15 +180,15 @@ public class GameUnitBase : SerializedMonoBehaviour
     }
 
     //**** Health Control Section ****
-    public void GainHealth(int health)
+    public void GainHealthPercent(float healPercent)
     {
-        if (hitPoint + health >= maxHitPoint)
+        if (hitPoint + Mathf.FloorToInt(maxHitPoint * healPercent) >= maxHitPoint)
         {
             hitPoint = maxHitPoint;
         }
         else
         {
-            hitPoint += health;
+            hitPoint += Mathf.FloorToInt(maxHitPoint * healPercent);
         }
 
         UpdateHealthBar(true);
@@ -220,6 +223,8 @@ public class GameUnitBase : SerializedMonoBehaviour
                     }
                 });
         }
+
+        HealthEvents();
     }
 
     public void UpdateHealthBar(bool gainHealth)
@@ -250,6 +255,8 @@ public class GameUnitBase : SerializedMonoBehaviour
                     }
                 });
         }
+
+        HealthEvents();
     }
 
     public void HealthEvents()
@@ -268,40 +275,52 @@ public class GameUnitBase : SerializedMonoBehaviour
 
         if (stunAt66PercentHp)
         {
-            if (currentHealthPercent <= 66f && !stunnedAt66)
+            if (currentHealthPercent <= 0.66f && !stunnedAt66)
             {
                 stunnedAt66 = true;
-                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
-                    .OnComplete(delegate
-                    {
-                        CheckForTarget();
-                    });
+                if (stunEventWithValue != null)
+                {
+                    stunEventWithValue.Invoke(66);
+                }
+                
+                if (stunEventWithoutValue != null)
+                {
+                    stunEventWithoutValue.Invoke();
+                }
             }
         }
 
-        if (stunAt66PercentHp)
+        if (stunAt50PercentHp)
         {
-            if (currentHealthPercent <= 50f && !stunnedAt66)
+            if (currentHealthPercent <= 0.5f && !stunnedAt50)
             {
                 stunnedAt50 = true;
-                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
-                    .OnComplete(delegate
-                    {
-                        CheckForTarget();
-                    });
+                if (stunEventWithValue != null)
+                {
+                    stunEventWithValue.Invoke(50);
+                }
+
+                if (stunEventWithoutValue != null)
+                {
+                    stunEventWithoutValue.Invoke();
+                }
             }
         }
 
-        if (stunAt66PercentHp)
+        if (stunAt33PercentHp)
         {
-            if (currentHealthPercent <= 33f && !stunnedAt66)
+            if (currentHealthPercent <= 0.33f && !stunnedAt33)
             {
                 stunnedAt33 = true;
-                transform.DOLocalMoveZ(-transform.forward.z, 0.5f)
-                    .OnComplete(delegate
-                    {
-                        CheckForTarget();
-                    });
+                if (stunEventWithValue != null)
+                {
+                    stunEventWithValue.Invoke(33);
+                }
+
+                if (stunEventWithoutValue != null)
+                {
+                    stunEventWithoutValue.Invoke();
+                }
             }
         }
     }
@@ -500,9 +519,9 @@ public class GameUnitBase : SerializedMonoBehaviour
         if (!unitIsDead)
         {
             unitIsDead = true;
-            if (HpAt0Percent != null)
+            if (deathEvent != null)
             {
-                HpAt0Percent.Invoke();
+                deathEvent.Invoke();
             }
         }
         else

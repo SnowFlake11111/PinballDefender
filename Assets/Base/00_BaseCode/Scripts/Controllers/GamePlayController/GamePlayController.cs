@@ -19,6 +19,7 @@ public class GamePlayController : Singleton<GamePlayController>
 {
     public PlayerContain playerContain;
     public GameScene gameScene;
+    public GameLevelController gameLevelController;
     
 
     protected override void OnAwake()
@@ -35,15 +36,15 @@ public class GamePlayController : Singleton<GamePlayController>
         
     }
 
-    private void OnEnable()
-    {
-        ChangeBannerStateInGamePlay(false);
-    }
+    //private void OnEnable()
+    //{
+    //    ChangeBannerStateInGamePlay(false);
+    //}
 
-    private void OnDisable()
-    {
-        ChangeBannerStateInGamePlay(true);
-    }
+    //private void OnDisable()
+    //{
+    //    ChangeBannerStateInGamePlay(true);
+    //}
 
     void ChangeBannerStateInGamePlay(bool turnBannerOn)
     {

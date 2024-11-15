@@ -33,6 +33,18 @@ public class ProjectileExplosion : MonoBehaviour
 
         StartCoroutine(SelfDestruct());
     }
+
+    public void InitiateHarmlessExplosion()
+    {
+        if (GetComponent<SphereCollider>() != null)
+        {
+            GetComponent<SphereCollider>().enabled = false;
+        }
+
+        lingerTimer = explosionEffect.main.duration + explosionEffect.main.startLifetime.constantMax;
+
+        StartCoroutine(SelfDestruct());
+    }
     //----------Private----------
     IEnumerator SelfDestruct()
     {

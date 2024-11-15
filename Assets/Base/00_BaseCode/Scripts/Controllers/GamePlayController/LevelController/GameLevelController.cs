@@ -5,12 +5,11 @@ using UnityEngine;
 public class GameLevelController : MonoBehaviour
 {
     #region Public Variables
-    //public List<LevelController> levels = new List<LevelController>();
-    //public LevelController currentLevel;
+    public List<StageController> levels = new List<StageController>();
+    public StageController currentLevel;
     #endregion
 
     #region Private Variables
-    Quaternion levelLocalRotation;
     #endregion
 
     private void Start()
