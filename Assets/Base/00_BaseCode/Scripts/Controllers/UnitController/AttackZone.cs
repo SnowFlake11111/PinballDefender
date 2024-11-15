@@ -61,11 +61,12 @@ public class AttackZone : SerializedMonoBehaviour
                 enforcer.ActivateAttackPhase();
                 break;
             case 5:
-                demon.ActivateAttackPhase();
                 //Demon
+                demon.ActivateAttackPhase();               
                 break;
             case 6:
                 //Monster
+                monster.ActivateAttackPhase();
                 break;
             case 7:
                 //Healer

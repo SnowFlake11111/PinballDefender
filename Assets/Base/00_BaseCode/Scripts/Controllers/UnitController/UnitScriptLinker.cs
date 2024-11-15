@@ -64,6 +64,11 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         demon.DemonicFireball();
     }
 
+    public void MonsterDoubleAttack()
+    {
+        monster.DoubleAttack();
+    }
+
     //----------Death----------
     public void Death()
     {
