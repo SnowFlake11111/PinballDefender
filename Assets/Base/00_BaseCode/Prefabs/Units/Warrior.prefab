@@ -810,7 +810,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1736446253146994900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0.625}
   m_LocalScale: {x: 1, y: 1, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1736446253643440435}
@@ -1337,6 +1337,7 @@ MonoBehaviour:
   healthBarDelay: {fileID: 3654039868286029279}
   animatorBase: {fileID: 1736446252846881466}
   unitColliderBox: {fileID: 1736446253643440439}
+  unitMovement: {fileID: 1736446253643440437}
   enemyFound: 0
   gateFound: 0
   attackers: []
@@ -1346,6 +1347,11 @@ MonoBehaviour:
   mainBodyColor: {fileID: 1736446253570858015}
   spawnCost: 0
   isBossOrMiniboss: 0
+  stunAt66PercentHp: 0
+  stunAt50PercentHp: 0
+  stunAt33PercentHp: 0
+  canEnrage: 0
+  enrageAtOrBelow: 0
   buffsHolder: {fileID: 104911662733322}
   attackUpIcon: {fileID: 3839998837262025351, guid: c862df2c35394664ab3f6ec39334a367, type: 3}
   defenseUpIcon: {fileID: 6198332616846811287, guid: e314a50e1b560334ea6d0a45110990c3, type: 3}

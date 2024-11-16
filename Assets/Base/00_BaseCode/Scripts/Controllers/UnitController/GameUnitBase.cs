@@ -198,7 +198,7 @@ public class GameUnitBase : SerializedMonoBehaviour
     {
         if (healthBarMainChange != null)
         {
-            healthBarMainChange.ChangeEndValue(currentHealthPercent);
+            healthBarMainChange.ChangeEndValue(currentHealthPercent, true);
         }
         else
         {
@@ -209,7 +209,7 @@ public class GameUnitBase : SerializedMonoBehaviour
                     healthBarMainChange = null;
                     if (healthBarDelayChange != null)
                     {
-                        healthBarDelayChange.ChangeEndValue(currentHealthPercent);
+                        healthBarDelayChange.ChangeEndValue(currentHealthPercent, true);
                     }
                     else
                     {
@@ -231,7 +231,7 @@ public class GameUnitBase : SerializedMonoBehaviour
     {
         if (healthBarMainChange != null)
         {
-            healthBarMainChange.ChangeEndValue(currentHealthPercent);
+            healthBarMainChange.ChangeEndValue(currentHealthPercent, true);
         }
         else
         {
@@ -242,7 +242,7 @@ public class GameUnitBase : SerializedMonoBehaviour
                     healthBarMainChange = null;
                     if (healthBarDelayChange != null)
                     {
-                        healthBarDelayChange.ChangeEndValue(currentHealthPercent);
+                        healthBarDelayChange.ChangeEndValue(currentHealthPercent, true);
                     }
                     else
                     {
@@ -263,11 +263,11 @@ public class GameUnitBase : SerializedMonoBehaviour
     {
         if (canEnrage)
         {
-            if (currentHealthPercent <= enrageAtOrBelow && !rage)
+            if (currentHealthPercent <= enrageAtOrBelow / 100 && !rage)
             {
                 ActivateRage();
             }
-            else if (currentHealthPercent > enrageAtOrBelow && rage)
+            else if (currentHealthPercent > enrageAtOrBelow / 100 && rage)
             {
                 DeactivateRage();
             }
@@ -652,7 +652,7 @@ public class GameUnitBase : SerializedMonoBehaviour
         {
             unitMovement.ActivateEnrageSpeedBuff();
         }
-        animatorBase.speed = 1.2f;
+        animatorBase.speed = 1.5f;
     }
 
     public void DeactivateRage()

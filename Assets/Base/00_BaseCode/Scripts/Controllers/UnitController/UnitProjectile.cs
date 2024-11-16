@@ -105,7 +105,7 @@ public class UnitProjectile : SerializedMonoBehaviour
         }
         else if (healer != null)
         {
-
+            damage = healer.GetEnergyballDamage();
         }
         else if (bloodMage != null)
         {

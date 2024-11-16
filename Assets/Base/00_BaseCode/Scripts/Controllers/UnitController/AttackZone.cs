@@ -70,9 +70,11 @@ public class AttackZone : SerializedMonoBehaviour
                 break;
             case 7:
                 //Healer
+                healer.ActivateAttackPhase();
                 break;
             case 8:
                 //Berserker
+                berserker.ActivateAttackPhase();
                 break;
             case 9:
                 //Blood Mage

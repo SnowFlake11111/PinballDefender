@@ -1624,7 +1624,7 @@ GameObject:
   - component: {fileID: 5223563776982181825}
   - component: {fileID: 5223563776982181826}
   - component: {fileID: 5223563776982181827}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Enforcer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1721,7 +1721,6 @@ MonoBehaviour:
   controllingUnit: {fileID: 5223563776982181824}
   animatorBase: {fileID: 7027526780443422812}
   laneChangeFrequencyInSeconds: 0
-  allowedMoving: 1
 --- !u!65 &5223563776982181826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1911,9 +1910,12 @@ MonoBehaviour:
   attackUp: 0
   defenseUp: 1
   rally: 0
+  heal: 0
   attackUpDuration: 0
   defenseUpDuration: 3
   rallyDuration: 0
+  healMaxHealthPercent: 0
+  allowSelfBuff: 1
   controlUnit: {fileID: 5223563776982181824}
   buffEffect: {fileID: 6497858887194285478}
   triggerColliderSphere: {fileID: 5223563777317258734}

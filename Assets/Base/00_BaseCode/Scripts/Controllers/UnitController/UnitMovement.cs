@@ -132,7 +132,7 @@ public class UnitMovement : MonoBehaviour
     public void ActivateEnrageSpeedBuff()
     {
         rageIsActive = true;
-        realSpeed += movementSpeedBase * 0.2f;
+        realSpeed += movementSpeedBase * 0.5f;
     }
 
     public void DisableEnrageSpeedBuff()
@@ -145,7 +145,7 @@ public class UnitMovement : MonoBehaviour
         }
         else
         {
-            realSpeed -= movementSpeedBase * 0.2f;
+            realSpeed -= movementSpeedBase * 0.5f;
         }       
     }
 

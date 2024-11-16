@@ -18,7 +18,7 @@ public class MageUnit : GameUnitBase
     [BoxGroup("Mage Stats")]
     [Space]
     [Header("IMPORTANT - Projectile reference")]
-    public UnitProjectile energyball;
+    public UnitProjectile fireball;
 
     [BoxGroup("Mage Stats")]
     [Space]
@@ -29,7 +29,7 @@ public class MageUnit : GameUnitBase
     #region Private Variables
     bool attackEnemy = false;
 
-    UnitProjectile tempEnergyball;
+    UnitProjectile tempFireball;
     #endregion
 
     #region Start, Update
@@ -91,15 +91,15 @@ public class MageUnit : GameUnitBase
         }
     }
     //----------Animation Functions----------
-    public void CastEnergyBall()
+    public void CastFireball()
     {
         if (enemyFound || gateFound)
         {
             shootEffect.Play();
 
-            tempEnergyball = Instantiate(energyball, projectileSpawnPoint.transform.position, Quaternion.identity);
-            tempEnergyball.transform.rotation = projectileSpawnPoint.transform.rotation;
-            tempEnergyball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
+            tempFireball = Instantiate(fireball, projectileSpawnPoint.transform.position, Quaternion.identity);
+            tempFireball.transform.rotation = projectileSpawnPoint.transform.rotation;
+            tempFireball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
         }
 
         ContinueAttackingOrNot();

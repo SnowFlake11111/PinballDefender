@@ -19154,7 +19154,6 @@ MonoBehaviour:
   healer: {fileID: 0}
   bloodMage: {fileID: 0}
   doesItExplode: 1
-  harmlessExplosion: {fileID: 0}
   explosion: {fileID: 2410043465412993704, guid: 5ec67cba904754f4b9bd2c11bee4db9e, type: 3}
 --- !u!135 &7780517771350157050
 SphereCollider:

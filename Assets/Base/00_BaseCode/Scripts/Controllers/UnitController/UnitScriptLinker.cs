@@ -46,7 +46,7 @@ public class UnitScriptLinker : SerializedMonoBehaviour
 
     public void MageCast()
     {
-        mage.CastEnergyBall();
+        mage.CastFireball();
     }
 
     public void EnforcerSlash()
@@ -67,6 +67,16 @@ public class UnitScriptLinker : SerializedMonoBehaviour
     public void MonsterDoubleAttack()
     {
         monster.DoubleAttack();
+    }
+
+    public void HealerCast()
+    {
+        healer.CastEnergyBall();
+    }
+
+    public void BerserkerAttack()
+    {
+        berserker.AttackEnemy();
     }
 
     //----------Death----------

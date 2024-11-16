@@ -6021,13 +6021,13 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
+  m_UseCustomVertexStreams: 1
   m_EnableGPUInstancing: 0
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
-  m_VertexStreams: 0001030405
+  m_VertexStreams: 000304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -10823,13 +10823,13 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
+  m_UseCustomVertexStreams: 1
   m_EnableGPUInstancing: 0
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
-  m_VertexStreams: 0001030405
+  m_VertexStreams: 000304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -11084,6 +11084,7 @@ MonoBehaviour:
   healthBarDelay: {fileID: 5112570112972269511}
   animatorBase: {fileID: 2555628606801211100}
   unitColliderBox: {fileID: 1370873217236652593}
+  unitMovement: {fileID: 2860459505801351236}
   enemyFound: 0
   gateFound: 0
   attackers: []
@@ -11093,6 +11094,11 @@ MonoBehaviour:
   mainBodyColor: {fileID: 7241430083846277947}
   spawnCost: 0
   isBossOrMiniboss: 0
+  stunAt66PercentHp: 0
+  stunAt50PercentHp: 0
+  stunAt33PercentHp: 0
+  canEnrage: 0
+  enrageAtOrBelow: 0
   buffsHolder: {fileID: 678467465870826417}
   attackUpIcon: {fileID: 3839998837262025351, guid: c862df2c35394664ab3f6ec39334a367, type: 3}
   defenseUpIcon: {fileID: 6198332616846811287, guid: e314a50e1b560334ea6d0a45110990c3, type: 3}
@@ -11102,7 +11108,7 @@ MonoBehaviour:
   bounceCost: 1
   explosionDamage: 20
   shootEffect: {fileID: 5745270354398248042}
-  energyball: {fileID: 3937649144085794789, guid: d70408ca7534ebf488cf4e0dca02e217, type: 3}
+  fireball: {fileID: 3937649144085794789, guid: d70408ca7534ebf488cf4e0dca02e217, type: 3}
   projectileSpawnPoint: {fileID: 2075723360731208005}
 --- !u!114 &2860459505801351236
 MonoBehaviour:
