@@ -79,6 +79,11 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         berserker.AttackEnemy();
     }
 
+    public void BloodMageCast()
+    {
+        bloodMage.CastDarkFireball();
+    }
+
     //----------Death----------
     public void Death()
     {

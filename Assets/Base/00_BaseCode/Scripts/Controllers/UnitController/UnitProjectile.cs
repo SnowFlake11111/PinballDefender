@@ -15,6 +15,10 @@ public class UnitProjectile : SerializedMonoBehaviour
     public float projectileSpeed = 0;
 
     [Space]
+    [Header("Has additional effect for caster ? (Currently Bloodmage only)")]
+    public bool additionalEffects = false;
+
+    [Space]
     [Header("Projectile owner")]
     public GameUnitBase projectileOwner;
 
@@ -109,7 +113,27 @@ public class UnitProjectile : SerializedMonoBehaviour
         }
         else if (bloodMage != null)
         {
+            damage = bloodMage.GetExplosionDamage();
+        }
+    }
 
+    void AdditionalEffectOnHit()
+    {
+        if (mage != null)
+        {
+
+        }
+        else if (demon != null)
+        {
+
+        }
+        else if (healer != null)
+        {
+
+        }
+        else if (bloodMage != null)
+        {
+            bloodMage.ActivateBloodMagePower();
         }
     }
 
@@ -165,6 +189,11 @@ public class UnitProjectile : SerializedMonoBehaviour
         {
             if (other.GetComponent<GameUnitBase>() != null || other.GetComponent<GateController>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+
                 GetDamageFromOwner();
                 Explode();
             }
@@ -175,11 +204,21 @@ public class UnitProjectile : SerializedMonoBehaviour
 
             if (other.GetComponent<GameUnitBase>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+
                 HarmlessExplode();
                 DealDamageOnContactToUnit(other.GetComponent<GameUnitBase>());
             }
             else if (other.GetComponent<GateController>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+
                 HarmlessExplode();
                 DealDamageOnContactToGate(other.GetComponent<GateController>());
             }
@@ -192,21 +231,38 @@ public class UnitProjectile : SerializedMonoBehaviour
         {
             if (collision.collider.GetComponent<GameUnitBase>() != null || collision.collider.GetComponent<GateController>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+                
                 GetDamageFromOwner();
                 Explode();
             }
         }
         else
         {
-            GetDamageFromOwner();
-
             if (collision.collider.GetComponent<GameUnitBase>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+
+                GetDamageFromOwner();
+
                 HarmlessExplode();
                 DealDamageOnContactToUnit(collision.collider.GetComponent<GameUnitBase>());
             }
             else if (collision.collider.GetComponent<GateController>() != null)
             {
+                if (additionalEffects)
+                {
+                    AdditionalEffectOnHit();
+                }
+
+                GetDamageFromOwner();
+
                 HarmlessExplode();
                 DealDamageOnContactToGate(collision.collider.GetComponent<GateController>());
             }

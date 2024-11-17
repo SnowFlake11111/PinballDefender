@@ -78,6 +78,7 @@ public class AttackZone : SerializedMonoBehaviour
                 break;
             case 9:
                 //Blood Mage
+                bloodMage.ActivateAttackPhase();
                 break;
             case 10:
                 //King

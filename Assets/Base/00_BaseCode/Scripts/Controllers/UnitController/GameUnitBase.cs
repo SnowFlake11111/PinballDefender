@@ -488,6 +488,18 @@ public class GameUnitBase : SerializedMonoBehaviour
     }
 
     //**** Unit's Death Section ****
+    public bool IsThisUnitDead()
+    {
+        if(unitIsDead)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void InstantDeath()
     {
         //This function is strictly used for end of the field walls only
@@ -499,6 +511,11 @@ public class GameUnitBase : SerializedMonoBehaviour
         if (unitMovement != null)
         {
             unitMovement.DeathState();
+        }
+
+        if (animatorBase.speed != 1)
+        {
+            animatorBase.speed = 1;
         }
 
         animatorBase.Play("Death");
