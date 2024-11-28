@@ -12,16 +12,16 @@ public class EnforcerUnit : GameUnitBase
 
     [BoxGroup("Enforcer Stats")]
     [Space]
-    [Header("Defense Up Skill cooldown")]
+    [Header("Defensezone cooldown")]
     public float defenseUpCooldown = 0;
 
     [BoxGroup("Enforcer Stats")]
-    [Header("Defense Up Skill cooldown")]
+    [Header("Defensezone linger time")]
     public float zoneLingerTime = 0;
 
     [BoxGroup("Enforcer Stats")]
     [Space]
-    [Header("Shield Up Buff Controller")]
+    [Header("Shieldzone Controller")]
     public UnitBuffZone buffZone;
 
     [BoxGroup("Enforcer Stats")]
@@ -41,7 +41,12 @@ public class EnforcerUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        base.Start();
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+
         deathEvent.AddListener(StopAutoSkill);
         StartAutoSkill();
 
@@ -147,8 +152,8 @@ public class EnforcerUnit : GameUnitBase
     //----------Animation Functions----------
     public void SlashEnemy()
     {
-        if (gateFound)
-        {
+        if (gateFound && enemyGate != null)
+        { 
             if (IsAttackUpActive())
             {
                 enemyGate.TakeDamage(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));
@@ -158,7 +163,7 @@ public class EnforcerUnit : GameUnitBase
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
         }
-        else if (enemyFound)
+        else if (enemyFound && currentTarget != null)
         {
             if (IsAttackUpActive())
             {

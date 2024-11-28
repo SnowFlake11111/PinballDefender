@@ -53,7 +53,12 @@ public class HealerUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        base.Start();
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+
         deathEvent.AddListener(StopAutoSkill);
         StartAutoSkill();
 

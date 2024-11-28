@@ -18,6 +18,14 @@ public class WarriorUnit : GameUnitBase
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
     #endregion
 
     #region Functions
@@ -105,7 +113,7 @@ public class WarriorUnit : GameUnitBase
     {
         //To Do: Handle Attack Up buff [done]
 
-        if (gateFound)
+        if (gateFound && enemyGate != null)
         {
             if (IsAttackUpActive())
             {
@@ -116,8 +124,14 @@ public class WarriorUnit : GameUnitBase
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
         }
-        else if (enemyFound)
+        else if (enemyFound && currentTarget != null)
         {
+            if (currentTarget == null)
+            {
+                ContinueAttackingOrNot();
+                return;
+            }
+
             if (IsAttackUpActive())
             {
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage + Mathf.FloorToInt(baseAttackDamage * 0.2f));

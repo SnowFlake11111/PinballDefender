@@ -6,6 +6,8 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     #region Public Variables
+    [Header("Self destruct timer")]
+    public float selfDestructAfter = 0;
     #endregion
 
     #region Private Variables
@@ -14,17 +16,21 @@ public class Ball : MonoBehaviour
 
     PlayerController owner;
 
-    [SerializeField] int ownerId = 0;
+    int ownerId = 0;
     int bounceLimit = 0;
     int ballDamage = 0;
 
     float velocityStrength;
+    float currentScoreMultiply = 0;
+    float originalSelfDestructTimer = 0;
     #endregion
 
     #region Functions
     public void ShootBall(Vector3 shootDirection)
     {
         GetComponent<Rigidbody>().AddForce(transform.forward * 300);
+        originalSelfDestructTimer = selfDestructAfter;
+        StartCoroutine(SelfDestructSequence());
     }
 
     //Gán sát thương cho bóng
@@ -45,6 +51,11 @@ public class Ball : MonoBehaviour
         ownerId = id;
         owner = ballOwner;
         gameObject.layer = id;
+    }
+
+    public void AllowGatheringScore()
+    {
+
     }
     #endregion
 
@@ -86,36 +97,30 @@ public class Ball : MonoBehaviour
         //Ý tưởng ở đây là kiểm tra xem unit va phải có là đồng đội hay không, nếu là đồng đội thì sẽ không gây sát thương, nếu không phải thì ngược lại
         //UPDATE: Sau khi áp dụng việc sử dụng danh sách đồng đội và danh sách bóng bắn ra thì không cần phải sử dụng ownerId để kiểm tra phe nữa mà bóng sẽ tự bỏ qua va chạm đối với các unit cùng phe
         //UPDATE 2: Đã đổi sang sử dụng Collision Layer
-        unit.collider.GetComponent<GameUnitBase>().TakeDamage(ballDamage);
+        unit.collider.GetComponent<GameUnitBase>().TakeDamage(owner, ballDamage);
 
-        if (unit.collider.GetComponent<GameUnitBase>().GetBouncePermission())
+        if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
         {
-            if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                bounceLimit -= unit.collider.GetComponent<GameUnitBase>().GetBounceCost();
-                BounceBall(unit);
-            }
+            Destroy(gameObject);
+        }
+        else
+        {
+            bounceLimit -= unit.collider.GetComponent<GameUnitBase>().GetBounceCost();
+            BounceBall(unit);
         }
     }
 
     void HitWall(Collision wall)
     {
         //Đối với các chướng ngại vật thì bản thân chúng không thuộc về ai cả, nên va chạm sẽ luôn được xử lý
-        if (wall.collider.GetComponent<GameWall>().GetBouncePermission())
+        if (bounceLimit - wall.collider.GetComponent<GameWall>().GetBounceCost() <= 0)
         {
-            if (bounceLimit - wall.collider.GetComponent<GameWall>().GetBounceCost() <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                bounceLimit -= wall.collider.GetComponent<GameWall>().GetBounceCost();
-                BounceBall(wall);
-            }
+            Destroy(gameObject);
+        }
+        else
+        {
+            bounceLimit -= wall.collider.GetComponent<GameWall>().GetBounceCost();
+            BounceBall(wall);
         }
     }
 
@@ -123,17 +128,14 @@ public class Ball : MonoBehaviour
     {
         projectile.collider.GetComponent<UnitHittableProjectile>().TakeDamage(ballDamage);
 
-        if (projectile.collider.GetComponent<UnitHittableProjectile>().GetBouncePermission())
+        if (bounceLimit - projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost() <= 0)
         {
-            if (bounceLimit - projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost() <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                bounceLimit -= projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost();
-                BounceBall(projectile);
-            }
+            Destroy(gameObject);
+        }
+        else
+        {
+            bounceLimit -= projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost();
+            BounceBall(projectile);
         }
     }
 
@@ -143,6 +145,18 @@ public class Ball : MonoBehaviour
         bounceDirection = Vector3.Reflect(lastVelocity.normalized, collision.GetContact(0).normal);
 
         GetComponent<Rigidbody>().velocity = bounceDirection * Mathf.Max(velocityStrength, 0);
+        selfDestructAfter = originalSelfDestructTimer;
+    }
+
+    IEnumerator SelfDestructSequence()
+    {
+        while (selfDestructAfter > 0)
+        {
+            yield return new WaitForSeconds(1);
+            selfDestructAfter--;
+        }
+
+        Destroy(gameObject);
     }
     #endregion
 }

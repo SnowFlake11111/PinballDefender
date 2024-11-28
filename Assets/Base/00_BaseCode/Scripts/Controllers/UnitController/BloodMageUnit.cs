@@ -51,7 +51,12 @@ public class BloodMageUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        base.Start();
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+
         sharepowerZone.InitBuffZone(gameObject.layer);
     }
     #endregion

@@ -1,20 +1,28 @@
 ﻿using DG.Tweening;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : SerializedMonoBehaviour
 {
     #region Public Variables
     [Header("IMPORTANT - Used to identify player's side")]
-    [ValueDropdown("PlayerIdList")]
-    //[OnValueChanged("SetPlayerId")]
+    [ValueDropdown("PlayerNameList")]
+    [OnValueChanged("SetPlayerId")]
     public string playerName;
+    [ValueDropdown("PlayerIdList")]
+    [OnValueChanged("SetPlayerName")]
+    public int playerId = 0;
 
     [Space]
-    [Header("FOR MULTIPLAYER MODE - DEFENDER")]
+    [Header("Allow Spawning units ?")]
     public bool allowUnitSpawning = false;
+
+    [Space]
+    [Header("Gun model")]
+    public GameObject gunModel;
 
     [Space]
     [Header("MISC REFERENCES")]
@@ -25,21 +33,28 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Private Variables
-    int playerId = 0;
-    [SerializeField] int playerDamage = 10;
-    int maxAmmo;
-    int currentAmmo;
+    int playerDamage = 10;
+    int playerScore = 0;
+    int maxAmmo = 5;
+    int currentAmmo = 5;
+    int currentCredits = 0;
+    int maxCredits = 300;
+    int creditsGainedOverTime = 25;
 
-    float resumeRotationTimer = 0.25f;
+    float resumeRotationTimer = 0.5f;
 
     Coroutine autoResumeRotation;
 
     Tweener rotateGun;
+    Tweener gunShootEffect;
+    Tweener finishGunShootEffect;
 
     Ball tempBallRef;
 
-    //[SerializeField] List<Ball> ballList = new List<Ball>();
-    //[SerializeField] List<GameUnit> alliesList = new List<GameUnit>();
+    Vector3 ogModelPosition;
+
+    GameUnitBase tempSpawnedUnitReference;
+    List<GameUnitBase> spawnedUnits = new List<GameUnitBase>();
     #endregion
 
     #region Buffs Timer
@@ -47,38 +62,29 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Start, Update
-    private void Start()
+    private void OnDestroy()
     {
-        SetPlayerId();
-        RotateHandler();
+        gunShootEffect.Kill();
     }
+    #endregion
 
-    private void Update()
-    {
-        InputHandler();
-    }
-
+    #region Functions
+    //----------Public----------
     public void Init()
     {
+        RotateHandler();
+
+        ogModelPosition = gunModel.transform.localPosition;
+
         if (allowUnitSpawning)
         {
             //To do
             //Unit Spawn function
         }
     }
-    #endregion
 
-    #region Functions
-    //----------Public----------
     public void Shoot()
     {
-        if (autoResumeRotation != null)
-        {
-            StopCoroutine(autoResumeRotation);
-        }
-            
-        autoResumeRotation = StartCoroutine(ResumeRotationTimer());
-
         tempBallRef = Instantiate(ball, ballSpawnPoint.transform.position, Quaternion.identity, playerHolder.transform);
         tempBallRef.transform.localScale = Vector3.one / 2;
         tempBallRef.transform.localEulerAngles = ballSpawnPoint.transform.eulerAngles;
@@ -98,14 +104,170 @@ public class PlayerController : MonoBehaviour
         }
 
         tempBallRef.SetBounceLimit(5);
-        
+
+        ShootEffect();
+
         //Việc giữ các quả bóng trong một list là để đảm bảo việc giữ cho các va chạm giữa các quả bóng của người chơi sẽ bỏ qua va chạm đối với quân cùng phe
         //UPDATE: Đã đổi sang sử dụng Collision Layer
     }
+
+    public void TemporaryStopRotation()
+    {
+        if (autoResumeRotation != null)
+        {
+            StopCoroutine(autoResumeRotation);
+        }
+
+        autoResumeRotation = StartCoroutine(ResumeRotationTimer());
+    }
+
     //To Do: Create a function that handle spawning unit
 
+    public void SpawnAnUnit(GameUnitBase unitToSpawn, GameObject spawnPoint, FieldLane spawnLane, GameObject unitHolder)
+    {
+        tempSpawnedUnitReference = Instantiate(unitToSpawn, unitHolder.transform);
+        tempSpawnedUnitReference.transform.localRotation = spawnPoint.transform.localRotation;
+        tempSpawnedUnitReference.transform.position = spawnPoint.transform.position;
+        tempSpawnedUnitReference.SpawnedByPlayer(this);
 
+        if (tempSpawnedUnitReference.isBossOrMiniboss)
+        {
+            if (tempSpawnedUnitReference.GetComponent<DemonUnit>() != null || tempSpawnedUnitReference.GetComponent<KingUnit>() != null)
+            {
+                tempSpawnedUnitReference.transform.localScale = Vector3.one;
+            }
+            else
+            {
+                tempSpawnedUnitReference.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            }
+        }
+        else
+        {
+            tempSpawnedUnitReference.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        }
 
+        if (tempSpawnedUnitReference.GetComponent<UnitMovement>() != null)
+        {
+            if (tempSpawnedUnitReference.GetComponent<UnitMovement>().zigzag)
+            {
+                tempSpawnedUnitReference.GetComponent<UnitMovement>().SetLane(spawnLane);
+            }
+        }
+
+        currentCredits -= tempSpawnedUnitReference.spawnCost;
+
+        RequestCreditsGain();
+        RequestUpdateCreditsNumber();
+    }
+
+    public void GainScore(int score)
+    {
+        playerScore += score;
+        //To do: add dotween to animate score value going up/down (prob never go down)
+    }
+
+    public int GetScore()
+    {
+        return playerScore;
+    }
+
+    public int GetCurrentAmmo()
+    {
+        return currentAmmo;
+    }
+
+    public int GetMaxAmmo()
+    {
+        return maxAmmo;
+    }
+
+    public int GetCurrentCredits()
+    {
+        return currentCredits;
+    }
+
+    public int GetMaxCredits()
+    {
+        return maxCredits;
+    }
+
+    public void CheckCredits()
+    {
+        RequestCreditsGain();
+    }
+
+    public void AmmoReloaded()
+    {
+        currentAmmo = maxAmmo;
+        RequestUpdateAmmoNumber();
+    }
+
+    public void CreditsGainedFromKill(int amount)
+    {
+        if (currentCredits + amount > maxCredits)
+        {
+            currentCredits = maxCredits;
+        }
+        else
+        {
+            currentCredits += amount;
+        }
+
+        RequestUpdateCreditsNumber();
+    }
+
+    public void CreditsGainedOverTime(int modeId)
+    {
+        switch (modeId)
+        {
+            case 1:
+                if (currentCredits + creditsGainedOverTime > maxCredits)
+                {
+                    currentCredits = maxCredits;
+                }
+                else
+                {
+                    currentCredits += creditsGainedOverTime;
+                }
+                break;
+            case 2:
+                if (currentCredits + creditsGainedOverTime > maxCredits)
+                {
+                    currentCredits = maxCredits;
+                }
+                else
+                {
+                    currentCredits += creditsGainedOverTime;
+                }
+                break;
+        }
+
+        RequestUpdateCreditsNumber();
+    }
+
+    public bool IsAmmoFull()
+    {
+        if (currentAmmo >= maxAmmo)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool IsCreditsMaxed()
+    {
+        if (currentCredits >= maxCredits)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     //----------Private----------
     void RotateHandler()
@@ -119,11 +281,88 @@ public class PlayerController : MonoBehaviour
         });
     }
 
-    void InputHandler()
+    void ShootEffect()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (gunShootEffect != null)
         {
-            Shoot();
+            if (finishGunShootEffect != null)
+            {
+                if (finishGunShootEffect.IsPlaying())
+                {
+                    finishGunShootEffect.Kill();
+                }
+            }
+            gunShootEffect.Restart();
+        }
+        else
+        {
+            gunShootEffect = gunModel.transform.DOLocalMoveZ(gunModel.transform.localPosition.z - gunModel.transform.forward.z * 0.2f, 0.05f)
+                .SetEase(Ease.Linear)
+                .SetAutoKill(false)
+                .OnComplete(delegate
+                {
+                    finishGunShootEffect = gunModel.transform.DOLocalMoveZ(ogModelPosition.z, 0.05f)
+                    .SetEase(Ease.Linear);
+                });
+        }
+
+        currentAmmo--;
+
+        RequestReload();
+        RequestUpdateAmmoNumber();
+    }
+
+    void RequestReload()
+    {
+        if (currentAmmo < maxAmmo)
+        {
+            if (playerId == 7)
+            {
+                GamePlayController.Instance.gameScene.Player_1StartReload();
+            }
+            else
+            {
+                GamePlayController.Instance.gameScene.Player_2StartReload();
+            }
+        }
+    }
+
+    void RequestCreditsGain()
+    {
+        if (currentCredits < maxCredits)
+        {
+            if (playerId == 7)
+            {
+                GamePlayController.Instance.gameScene.Player_1GainingCredits();
+            }
+            else
+            {
+                GamePlayController.Instance.gameScene.Player_2GainingCredits();
+            }
+        }
+    }
+
+    void RequestUpdateAmmoNumber()
+    {
+        if (playerId == 7)
+        {
+            GamePlayController.Instance.gameScene.Player_1UpdateAmmo();
+        }
+        else
+        {
+            GamePlayController.Instance.gameScene.Player_2UpdateAmmo();
+        }
+    }
+
+    void RequestUpdateCreditsNumber()
+    {
+        if (playerId == 7)
+        {
+            GamePlayController.Instance.gameScene.Player_1UpdateCurrentCredits(currentCredits);
+        }
+        else
+        {
+            GamePlayController.Instance.gameScene.Player_2UpdateCurrentCredits(currentCredits);
         }
     }
 
@@ -135,12 +374,24 @@ public class PlayerController : MonoBehaviour
     }
 
     //----------Odin Functions----------
-    IEnumerable PlayerIdList()
+    IEnumerable PlayerNameList()
     {
         for (int i = 7; i <= 8; i++)
         {
             yield return LayerMask.LayerToName(i);
         }
+    }
+    IEnumerable PlayerIdList()
+    {
+        for (int i = 7; i <= 8; i++)
+        {
+            yield return i;
+        }
+    }
+
+    void SetPlayerName()
+    {
+        playerName = LayerMask.LayerToName(playerId);
     }
 
     void SetPlayerId()
@@ -151,6 +402,12 @@ public class PlayerController : MonoBehaviour
 
     #region Buff Handler
     #endregion
+}
+
+enum Playername
+{
+    Player_1 = 7,
+    Player_2 = 8,
 }
 
 /*

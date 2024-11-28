@@ -21,6 +21,7 @@ public class UnitScriptLinker : SerializedMonoBehaviour
     public BerserkerUnit berserker;
     public BloodMageUnit bloodMage;
     public KingUnit king;
+    public KingMinionUnit kingMinion;
     #endregion
 
     #region Private Variables
@@ -84,6 +85,25 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         bloodMage.CastDarkFireball();
     }
 
+    public void KingCast()
+    {
+        king.CastSoulball();
+    }
+
+    public void KingSummon()
+    {
+        king.SummonMinion();
+    }
+
+    public void KingMinionAttack()
+    {
+        kingMinion.AttackEnemy();
+    }
+
+    public void KingMinionFinshSpawning()
+    {
+        kingMinion.FinishiSpawnAnimation();
+    }
     //----------Death----------
     public void Death()
     {
@@ -153,6 +173,10 @@ public class UnitScriptLinker : SerializedMonoBehaviour
         else if (linkedUnit.GetComponent<KingUnit>() != null)
         {
             king = linkedUnit.GetComponent<KingUnit>();
+        }
+        else if (linkedUnit.GetComponent<KingMinionUnit>() != null)
+        {
+            kingMinion = linkedUnit.GetComponent<KingMinionUnit>();
         }
         else
         {

@@ -33,6 +33,14 @@ public class MageUnit : GameUnitBase
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
     #endregion
 
     #region Functions

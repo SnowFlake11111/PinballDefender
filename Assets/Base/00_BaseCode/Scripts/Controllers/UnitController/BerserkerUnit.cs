@@ -20,6 +20,14 @@ public class BerserkerUnit : GameUnitBase
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
     #endregion
 
     #region Functions
@@ -107,7 +115,7 @@ public class BerserkerUnit : GameUnitBase
     {
         //To Do: Handle Attack Up buff [done]
 
-        if (gateFound)
+        if (gateFound && enemyGate != null)
         {
             if (IsAttackUpActive())
             {
@@ -118,7 +126,7 @@ public class BerserkerUnit : GameUnitBase
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
         }
-        else if (enemyFound)
+        else if (enemyFound && currentTarget != null)
         {
             if (IsAttackUpActive())
             {

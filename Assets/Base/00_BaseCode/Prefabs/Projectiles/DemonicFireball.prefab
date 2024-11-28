@@ -19040,11 +19040,13 @@ MonoBehaviour:
     SerializationNodes: []
   projectileLifeTime: 20
   projectileSpeed: 0.75
+  additionalEffects: 0
   projectileOwner: {fileID: 0}
   mage: {fileID: 0}
   demon: {fileID: 0}
   healer: {fileID: 0}
   bloodMage: {fileID: 0}
+  king: {fileID: 0}
   doesItExplode: 0
   explosion: {fileID: 4168261888470869760, guid: 5f71cb81b8ff56543a1ea147d48c4519, type: 3}
   projectileMaxHp: 30

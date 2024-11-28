@@ -19148,11 +19148,13 @@ MonoBehaviour:
     SerializationNodes: []
   projectileLifeTime: 2
   projectileSpeed: 1
+  additionalEffects: 0
   projectileOwner: {fileID: 0}
   mage: {fileID: 0}
   demon: {fileID: 0}
   healer: {fileID: 0}
   bloodMage: {fileID: 0}
+  king: {fileID: 0}
   doesItExplode: 1
   explosion: {fileID: 2410043465412993704, guid: 5ec67cba904754f4b9bd2c11bee4db9e, type: 3}
 --- !u!135 &7780517771350157050

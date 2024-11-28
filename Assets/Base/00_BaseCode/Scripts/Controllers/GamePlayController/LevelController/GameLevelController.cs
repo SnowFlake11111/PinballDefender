@@ -12,10 +12,29 @@ public class GameLevelController : MonoBehaviour
     #region Private Variables
     #endregion
 
-    private void Start()
+    #region Start, Update
+    #endregion
+
+    #region Functions
+    //----------Public----------
+    public void Init()
     {
         GenerateLevel();
     }
+
+    public void PlayersCreditsCheck()
+    {
+        if (currentLevel.player_1 != null)
+        {
+            currentLevel.player_1.CheckCredits();
+        }
+
+        if (currentLevel.player_2 != null)
+        {
+            currentLevel.player_2.CheckCredits();
+        }
+    }
+    //----------Private----------
 
     void GenerateLevel()
     {
@@ -37,5 +56,8 @@ public class GameLevelController : MonoBehaviour
         //    currentLevel.cakeController.ApplyColorRandomlyToCakes();
         //    UseProfile.Reshuffle = false;
         //}
+
+        currentLevel.Init();
     }
+    #endregion
 }

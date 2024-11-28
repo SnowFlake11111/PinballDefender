@@ -902,6 +902,7 @@ MonoBehaviour:
   berserker: {fileID: 0}
   bloodMage: {fileID: 0}
   king: {fileID: 0}
+  kingMinion: {fileID: 0}
 --- !u!1 &3465702571891396282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1428,12 +1429,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  unitId: 6
   maxHitPoint: 175
   hitPoint: 175
   healthBar: {fileID: 4473353678781531200}
   healthBarDelay: {fileID: 4473353678149419839}
   animatorBase: {fileID: 8532848887697805031}
   unitColliderBox: {fileID: 4473353678494327568}
+  attackZone: {fileID: 4473353679226809293}
   unitMovement: {fileID: 4473353678494327569}
   enemyFound: 0
   gateFound: 0
@@ -1442,7 +1445,8 @@ MonoBehaviour:
   enemyGate: {fileID: 0}
   altColor: {fileID: 2100000, guid: 21c1dac7c9cd13b45a56fe557bbc0d6b, type: 2}
   mainBodyColor: {fileID: 590051009563867689}
-  spawnCost: 0
+  spawnCost: 60
+  moneyGainOnKill: 30
   isBossOrMiniboss: 0
   stunAt66PercentHp: 0
   stunAt50PercentHp: 0
@@ -1454,7 +1458,6 @@ MonoBehaviour:
   defenseUpIcon: {fileID: 6198332616846811287, guid: e314a50e1b560334ea6d0a45110990c3, type: 3}
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
-  allowBallBounce: 1
   bounceCost: 1
   baseAttackDamage: 15
 --- !u!114 &4473353678494327569
@@ -1537,8 +1540,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.1}
-  m_SizeDelta: {x: 0, y: -0.0000000037252903}
+  m_AnchoredPosition: {x: 0, y: -0.17500001}
+  m_SizeDelta: {x: 0, y: 0.14999998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4473353678526874483
 MonoBehaviour:
@@ -1560,7 +1563,7 @@ MonoBehaviour:
   m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 0.1, y: 0.1}
+  m_CellSize: {x: 0.25, y: 0.25}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
@@ -1903,6 +1906,7 @@ MonoBehaviour:
   berserker: {fileID: 0}
   bloodMage: {fileID: 0}
   king: {fileID: 0}
+  kingMinion: {fileID: 0}
   unitCallId: 6
 --- !u!1 &4577470098390058436
 GameObject:

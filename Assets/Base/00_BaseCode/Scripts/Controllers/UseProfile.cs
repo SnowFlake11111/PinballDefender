@@ -163,18 +163,7 @@ public class UseProfile : MonoBehaviour
         }
     }
 
-    public static int EggRanking
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.SCORE_RANKING, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.SCORE_RANKING, value);
-            PlayerPrefs.Save();
-        }
-    }
+
 
     #region ChestDataKey
     public static int EggChest

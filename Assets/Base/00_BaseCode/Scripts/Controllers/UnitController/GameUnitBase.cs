@@ -10,6 +10,10 @@ using UnityEngine.UI;
 public class GameUnitBase : SerializedMonoBehaviour
 {
     #region Public Variables
+    [Header("UNIT ID")]
+    public int unitId = 0;
+
+    [Space]
     [Header("UNIT HEALTH")]
     public int maxHitPoint = 0;
     public int hitPoint = 0;
@@ -23,6 +27,10 @@ public class GameUnitBase : SerializedMonoBehaviour
     [Space]
     [Header("UNIT COLLIDERBOX")]
     public BoxCollider unitColliderBox;
+
+    [Space]
+    [Header("UNIT ATTACKZONE")]
+    public AttackZone attackZone;
 
     [Space]
     [Header("UNIT MOVEMENT SCRIPT (can be empty)")]
@@ -56,6 +64,8 @@ public class GameUnitBase : SerializedMonoBehaviour
     [Space]
     [Header("IMPORTANT - Spawning info")]
     public int spawnCost = 0;
+    public int moneyGainOnKill = 0;
+    public int scoreGainOnKill = 0;
     public bool isBossOrMiniboss = false;
 
     [ShowIf("HpEventSwitches")]
@@ -78,15 +88,17 @@ public class GameUnitBase : SerializedMonoBehaviour
     public Image defenseUpIcon;
     public Image rallyIcon;
     public Image rageIcon;
+
+    [NonSerialized] public PlayerController playerOwner;
     #endregion
 
     #region Private Variables
-    [Header("IMPORTANT - allow bounce or not")]
-    [SerializeField] bool allowBallBounce = true;
+    [Header("IMPORTANT - set ball bounce cost")]
     [SerializeField] int bounceCost = 1;
 
     GameDirector gameDirector;
     bool spawnedByDirector = false;
+
     bool unitIsDead = false;
 
     Coroutine attackUpTimer;
@@ -102,6 +114,10 @@ public class GameUnitBase : SerializedMonoBehaviour
     {
         get
         {
+            if (hitPoint <= 0)
+            {
+                return 0;
+            }
             return hitPoint / (float)maxHitPoint;
         }
     }
@@ -132,20 +148,6 @@ public class GameUnitBase : SerializedMonoBehaviour
     #endregion
 
     #region Start, Update
-    //To Do: Once the system is complete, remove Start
-    public void Start()
-    {
-        if (gameObject.layer != 7)
-        {
-            mainBodyColor.material = altColor;
-            healthBar.color = new Color(255 / 255, 30 / 255, 30 / 255);
-        }
-
-        if (unitMovement != null)
-        {
-            unitMovement.Init();
-        }
-    }
     #endregion
 
     #region Functions
@@ -160,9 +162,9 @@ public class GameUnitBase : SerializedMonoBehaviour
             healthBar.color = new Color(255 / 255, 30 / 255, 30 / 255);
         }
 
-        if (unitMovement != null)
+        if (attackZone != null)
         {
-            unitMovement.Init();
+            attackZone.Init();
         }
     }
 
@@ -174,9 +176,11 @@ public class GameUnitBase : SerializedMonoBehaviour
         spawnedByDirector = true;
     }
 
-    public void SpawnedByPlayer()
+    public void SpawnedByPlayer(PlayerController player)
     {
-        //To Do: Let player register unit's layer so unity can handle the physics interaction
+        //To Do: Let player register unit's layer so unity can handle the physics interaction [done]
+        gameObject.layer = player.gameObject.layer;
+        playerOwner = player;
     }
 
     //**** Health Control Section ****
@@ -202,25 +206,22 @@ public class GameUnitBase : SerializedMonoBehaviour
         }
         else
         {
+            if (healthBarDelayChange != null)
+            {
+                healthBarDelayChange.Kill();
+            }
+
             healthBarMainChange = healthBar.DOFillAmount(currentHealthPercent, 0.5f)
-                .SetAutoKill(true)
-                .OnStart(delegate
+                .OnComplete(delegate
                 {
                     healthBarMainChange = null;
-                    if (healthBarDelayChange != null)
-                    {
-                        healthBarDelayChange.ChangeEndValue(currentHealthPercent, true);
-                    }
-                    else
-                    {
-                        healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
+                    healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
                         .SetDelay(1)
                         .SetAutoKill(true)
                         .OnComplete(delegate
                         {
                             healthBarDelayChange = null;
                         });
-                    }
                 });
         }
 
@@ -235,24 +236,20 @@ public class GameUnitBase : SerializedMonoBehaviour
         }
         else
         {
+            if (healthBarDelayChange != null)
+            {
+                healthBarDelayChange.Kill();
+            }
+
             healthBarMainChange = healthBar.DOFillAmount(currentHealthPercent, 0.5f)
-                .SetAutoKill(true)
                 .OnStart(delegate
                 {
                     healthBarMainChange = null;
-                    if (healthBarDelayChange != null)
-                    {
-                        healthBarDelayChange.ChangeEndValue(currentHealthPercent, true);
-                    }
-                    else
-                    {
-                        healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
-                        .SetAutoKill(true)
+                    healthBarDelayChange = healthBarDelay.DOFillAmount(currentHealthPercent, 0.5f)
                         .OnComplete(delegate
                         {
                             healthBarDelayChange = null;
                         });
-                    }
                 });
         }
 
@@ -328,8 +325,17 @@ public class GameUnitBase : SerializedMonoBehaviour
     //**** Detecting Enemies Section ****
     public void CheckForTarget()
     {
-        if (targets.Count > 0)
+        for (int i = 0; i < targets.Count; i++)
         {
+            if (targets[i] == null)
+            {
+                targets.RemoveAt(i);
+                i--;
+            }
+        }
+
+        if (targets.Count > 0)
+        {   
             enemyFound = true;
             ChangeMovementStatus();
         }
@@ -408,13 +414,14 @@ public class GameUnitBase : SerializedMonoBehaviour
     }
 
     //**** Damage Taken Section ****
-    public void TakeDamage(int damage)
+    public void TakeDamage(PlayerController player, int damage)
     {
         if (defenseUp > 0)
         {
             if ((damage / 2) >= hitPoint)
             {
                 hitPoint = 0;
+                SendRewardToPlayer(player);
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -429,6 +436,7 @@ public class GameUnitBase : SerializedMonoBehaviour
             if (damage >= hitPoint)
             {
                 hitPoint = 0;
+                SendRewardToPlayer(player);
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -451,6 +459,10 @@ public class GameUnitBase : SerializedMonoBehaviour
             if ((damage / 2) > hitPoint)
             {
                 hitPoint = 0;
+                if (!attacker.spawnedByDirector)
+                {
+                    SendRewardToPlayer(attacker.playerOwner);
+                }
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -465,6 +477,10 @@ public class GameUnitBase : SerializedMonoBehaviour
             if (damage > hitPoint)
             {
                 hitPoint = 0;
+                if (!attacker.spawnedByDirector)
+                {
+                    SendRewardToPlayer(attacker.playerOwner);
+                }
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -497,6 +513,18 @@ public class GameUnitBase : SerializedMonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void SendRewardToPlayer(PlayerController executioner)
+    {
+        if (GamePlayController.Instance.modeCampaign || GamePlayController.Instance.modeDefenderBattle)
+        {
+            executioner.CreditsGainedFromKill(moneyGainOnKill);
+        }
+        else
+        {
+            //To do: Handle sending points to player on kill
         }
     }
 
@@ -574,11 +602,6 @@ public class GameUnitBase : SerializedMonoBehaviour
 
 
     //**** Ball Bounce Section ****
-    public bool GetBouncePermission()
-    {
-        return allowBallBounce;
-    }
-
     public int GetBounceCost()
     {
         return bounceCost;

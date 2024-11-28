@@ -2,7 +2,6 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ToonyColorsPro.ShaderGenerator.Enums;
 
 public class UnitProjectile : SerializedMonoBehaviour
 {
@@ -29,6 +28,7 @@ public class UnitProjectile : SerializedMonoBehaviour
     public DemonUnit demon;
     public HealerUnit healer;
     public BloodMageUnit bloodMage;
+    public KingUnit king;
 
     [Space]
     [Header("If the projectile explode and deal damage, check this box")]
@@ -115,6 +115,10 @@ public class UnitProjectile : SerializedMonoBehaviour
         {
             damage = bloodMage.GetExplosionDamage();
         }
+        else if (king != null)
+        {
+            damage = king.GetSoulballDamage();
+        }
     }
 
     void AdditionalEffectOnHit()
@@ -173,6 +177,10 @@ public class UnitProjectile : SerializedMonoBehaviour
         else if (projectileOwner.GetComponent<BloodMageUnit>() != null)
         {
             bloodMage = projectileOwner.GetComponent<BloodMageUnit>();
+        }
+        else if (projectileOwner.GetComponent<KingUnit>() != null)
+        {
+            king = projectileOwner.GetComponent<KingUnit>();
         }
         else
         {

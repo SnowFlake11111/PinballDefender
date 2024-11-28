@@ -20,6 +20,14 @@ public class MonsterUnit : GameUnitBase
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
     #endregion
 
     #region Functions
@@ -164,7 +172,7 @@ public class MonsterUnit : GameUnitBase
     //----------Animation Functions----------
     public void DoubleAttack()
     {
-        if (gateFound)
+        if (gateFound && enemyGate != null)
         {
             if (IsAttackUpActive())
             {

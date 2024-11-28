@@ -965,10 +965,6 @@
       <Project>{4E3C9F1A-302A-5144-709A-7D48FBC1F663}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="ToonyColorsPro2.Demo.csproj">
-      <Project>{031F1A1E-5EEB-3766-9812-CD90455A7CC8}</Project>
-      <Name>ToonyColorsPro2.Demo</Name>
-    </ProjectReference>
     <ProjectReference Include="ACTk.Editor.csproj">
       <Project>{D27F2B35-5423-37D7-5A31-8CBE8D16CA4A}</Project>
       <Name>ACTk.Editor</Name>
@@ -976,10 +972,6 @@
     <ProjectReference Include="ACTk.Examples.Genuine.Runtime.csproj">
       <Project>{3624936A-B6D6-3741-8C17-DC6682720992}</Project>
       <Name>ACTk.Examples.Genuine.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj">
-      <Project>{B2E729FA-1B3F-C78E-95C0-89A7C81149E4}</Project>
-      <Name>ToonyColorsPro.Demo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="MoreMountains.NiceVibrations.csproj">
       <Project>{C80F2C44-3A1D-A449-498F-694FFE069582}</Project>
@@ -1021,10 +1013,6 @@
       <Project>{E930FEEB-49FB-B953-1039-5A0EF88F3E03}</Project>
       <Name>ACTk.Examples.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="ToonyColorsPro.Runtime.csproj">
-      <Project>{7DF8DEA1-6EF1-1329-2802-D2F7CBFACAE4}</Project>
-      <Name>ToonyColorsPro.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="MaxSdk.Scripts.csproj">
       <Project>{E2E5C1DF-14F2-846D-23CB-BB8E10EBE3DD}</Project>
       <Name>MaxSdk.Scripts</Name>
@@ -1036,10 +1024,6 @@
     <ProjectReference Include="MaxSdk.Scripts.IntegrationManager.Editor.csproj">
       <Project>{E566D66C-8166-A732-09C1-6D54DB082B64}</Project>
       <Name>MaxSdk.Scripts.IntegrationManager.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="ToonyColorsPro.Editor.csproj">
-      <Project>{19D83C83-24EE-0E05-2241-2306E6790498}</Project>
-      <Name>ToonyColorsPro.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

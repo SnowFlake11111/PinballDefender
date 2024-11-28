@@ -196,8 +196,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.10000001}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.17500001}
+  m_SizeDelta: {x: 0, y: 0.14999998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8946419397183828845
 MonoBehaviour:
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 0.1, y: 0.1}
+  m_CellSize: {x: 0.25, y: 0.25}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
@@ -369,6 +369,7 @@ MonoBehaviour:
   berserker: {fileID: 0}
   bloodMage: {fileID: 0}
   king: {fileID: 0}
+  kingMinion: {fileID: 0}
   unitCallId: 3
 --- !u!1 &1525868527322701895
 GameObject:
@@ -11078,12 +11079,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  unitId: 3
   maxHitPoint: 50
   hitPoint: 50
   healthBar: {fileID: 5704373026850798283}
   healthBarDelay: {fileID: 5112570112972269511}
   animatorBase: {fileID: 2555628606801211100}
   unitColliderBox: {fileID: 1370873217236652593}
+  attackZone: {fileID: 2601317989472014697}
   unitMovement: {fileID: 2860459505801351236}
   enemyFound: 0
   gateFound: 0
@@ -11092,7 +11095,8 @@ MonoBehaviour:
   enemyGate: {fileID: 0}
   altColor: {fileID: 2100000, guid: 18184d2de261ec9499628d2ee90a067f, type: 2}
   mainBodyColor: {fileID: 7241430083846277947}
-  spawnCost: 0
+  spawnCost: 35
+  moneyGainOnKill: 17
   isBossOrMiniboss: 0
   stunAt66PercentHp: 0
   stunAt50PercentHp: 0
@@ -11104,7 +11108,6 @@ MonoBehaviour:
   defenseUpIcon: {fileID: 6198332616846811287, guid: e314a50e1b560334ea6d0a45110990c3, type: 3}
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
-  allowBallBounce: 1
   bounceCost: 1
   explosionDamage: 20
   shootEffect: {fileID: 5745270354398248042}
@@ -11565,3 +11568,4 @@ MonoBehaviour:
   berserker: {fileID: 0}
   bloodMage: {fileID: 0}
   king: {fileID: 0}
+  kingMinion: {fileID: 0}

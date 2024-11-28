@@ -152,6 +152,18 @@ public class UnitMovement : MonoBehaviour
     public void DeathState()
     {
         allowedMoving = false;
+        if (zigzag)
+        {
+            if (changeLaneThinking != null)
+            {
+                StopCoroutine(changeLaneThinking);
+            }
+            
+            if (changeLaneInProgress != null)
+            {
+                changeLaneInProgress.Kill();
+            }
+        }
     }
 
     public void SetLane(FieldLane lane)

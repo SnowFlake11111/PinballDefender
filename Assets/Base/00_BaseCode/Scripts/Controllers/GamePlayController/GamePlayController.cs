@@ -1,5 +1,6 @@
 ﻿using Crystal;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,13 @@ public class GamePlayController : Singleton<GamePlayController>
     public PlayerContain playerContain;
     public GameScene gameScene;
     public GameLevelController gameLevelController;
-    
+
+    [OnValueChanged("CampaignActivated")]
+    public bool modeCampaign = false;
+    [OnValueChanged("ScoreBattleActivated")]
+    public bool modeScoreBattle = false;
+    [OnValueChanged("DefenderBattleActivated")]
+    public bool modeDefenderBattle = false;
 
     protected override void OnAwake()
     {
@@ -31,9 +38,23 @@ public class GamePlayController : Singleton<GamePlayController>
     }
 
     public void Init()
-    {      
-        gameScene.Init();
-        
+    {
+        gameLevelController.Init();
+
+        if (modeCampaign)
+        {
+            gameScene.Init(1);
+        }
+        else if (modeScoreBattle)
+        {
+            gameScene.Init(2);
+        }
+        else
+        {
+            gameScene.Init(3);
+        }
+
+        gameLevelController.PlayersCreditsCheck();
     }
 
     //private void OnEnable()
@@ -57,5 +78,24 @@ public class GamePlayController : Singleton<GamePlayController>
             GameController.Instance.admobAds.DestroyBanner();
         }
        
+    }
+
+    //----------Odin Functions----------
+    void CampaignActivated()
+    {
+        modeScoreBattle = false;
+        modeDefenderBattle = false;
+    }
+
+    void ScoreBattleActivated()
+    {
+        modeCampaign = false;
+        modeDefenderBattle = false;
+    }
+
+    void DefenderBattleActivated()
+    {
+        modeCampaign = false;
+        modeScoreBattle = false;
     }
 }

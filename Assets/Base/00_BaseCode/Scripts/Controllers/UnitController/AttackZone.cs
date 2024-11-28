@@ -21,6 +21,7 @@ public class AttackZone : SerializedMonoBehaviour
     public BerserkerUnit berserker;
     public BloodMageUnit bloodMage;
     public KingUnit king;
+    public KingMinionUnit kingMinion;
 
     [Space]
     [Header("Specific unit function call id - Odin will detect this")]
@@ -31,14 +32,14 @@ public class AttackZone : SerializedMonoBehaviour
     #endregion
 
     #region Start, Update
-    private void Start()
-    {
-        gameObject.layer = unitBase.gameObject.layer;
-    }
     #endregion
 
     #region Functions
     //----------Public----------
+    public void Init()
+    {
+        gameObject.layer = unitBase.gameObject.layer;
+    }
     //----------Private----------
     void SendAttackMessage()
     {
@@ -82,6 +83,11 @@ public class AttackZone : SerializedMonoBehaviour
                 break;
             case 10:
                 //King
+                king.ActivateAttackPhase();
+                break;
+            case 11:
+                //King Minion
+                kingMinion.ActivateAttackPhase();
                 break;
             default:
                 Debug.LogError("Unknown AttackZone owner, attack message failed to deliver");
@@ -162,6 +168,11 @@ public class AttackZone : SerializedMonoBehaviour
         {
             unitCallId = 10;    
             king = unitBase.GetComponent<KingUnit>();
+        }
+        else if (unitBase.GetComponent<KingMinionUnit>() != null)
+        {
+            unitCallId = 11;
+            kingMinion = unitBase.GetComponent<KingMinionUnit>();
         }
         else
         {

@@ -5,8 +5,7 @@ using UnityEngine;
 public class GameWall : MonoBehaviour
 {
     #region Public Variables
-    [Header("IMPORTANT - allow bounce or not")]
-    [SerializeField] bool allowBallBounce = true;
+    [Header("IMPORTANT - set ball bounce cost")]
     [SerializeField] int bounceCost = 1;
 
     [Space]
@@ -24,11 +23,6 @@ public class GameWall : MonoBehaviour
     //----------Public----------
 
     //**** Ball Bounce Section ****
-    public bool GetBouncePermission()
-    {
-        return allowBallBounce;
-    }
-
     public int GetBounceCost()
     {
         return bounceCost;

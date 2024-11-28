@@ -9,22 +9,16 @@ public class DemonUnit : GameUnitBase
 {
     #region Public Variables
     [BoxGroup("Demon Stats", centerLabel: true)]
-    [Header("Base Attack Damage")]
+    [Header("Demonic Slash Damage")]
     public int baseDamage = 0;
     [BoxGroup("Demon Stats")]
+    [Header("Demonic Fireball Damage")]
     public int fireballDamage = 0;
 
     [BoxGroup("Demon Stats")]
     [Space]
     [Header("Demonic Fireball Cooldown")]
     public float fireballCooldown = 0;
-
-    [BoxGroup("Demon Stats")]
-    [Space]
-    [Header("Setup Stun (Phase change) - MUST TURN ON ISBOSSORMINIBOSS FIRST")]
-    [OnValueChanged("StunValueHasBeenChosen")]
-    [ValueDropdown("ChooseStunValueForHpPercent")]
-    public int stunAtHpPercent = 0;
 
     [BoxGroup("Demon Stats")]
     [Space]
@@ -59,7 +53,11 @@ public class DemonUnit : GameUnitBase
     #region Start, Update
     private void Start()
     {
-        base.Start();
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
 
         laneList.Clear();
         laneList = new List<FieldLane>(GamePlayController.Instance.gameLevelController.currentLevel.GetMapLanes());
@@ -89,6 +87,19 @@ public class DemonUnit : GameUnitBase
         {
             return fireballDamage;
         }
+    }
+
+    public void Stunned()
+    {
+        StopAttackAnimation();
+        animatorBase.Play("Stunned");
+
+        transform.DOLocalMoveZ(transform.localPosition.z - transform.forward.z * 2.25f, 0.5f)
+        .OnComplete(delegate
+        {
+            StartAutoCastFireball();
+            //CheckForTarget();
+        });
     }
     //----------Private----------
     void AttackThinking()
@@ -133,40 +144,11 @@ public class DemonUnit : GameUnitBase
         InitiateCastingAnimation();
     }
 
-    public void Stunned()
-    {
-        animatorBase.Play("Stunned");
-
-        if (transform.forward.z < 0)
-        {
-            transform.DOLocalMoveZ(transform.localPosition.z - transform.forward.z * 2.25f, 0.5f)
-            .OnComplete(delegate
-            {
-                StartAutoCastFireball();
-                //CheckForTarget();
-            });
-        }
-        else
-        {
-            transform.DOLocalMoveZ(transform.localPosition.z + transform.forward.z * 2.25f, 0.5f)
-            .OnComplete(delegate
-            {
-                StartAutoCastFireball();
-                //CheckForTarget();
-            });
-        }
-        
-    }
     //----------Animation Functions----------
     public void DemonicSlash()
     {
         //This attack will hit everything within the AttackZone, thus this will scan for every targets it detect and deal damage to 'em, including gate if it's within the range as well
         //As the usual way of getting enemies will cause Invalid Operation error (collection was modified error), its necessary to create a seperate List for this function
-
-        if (shootFireball)
-        {
-            return;
-        }
 
         List<GameUnitBase> enemiesInRange = new List<GameUnitBase>(targets);
 
@@ -180,7 +162,7 @@ public class DemonUnit : GameUnitBase
                 }
             }
 
-            if (gateFound)
+            if (gateFound && enemyGate != null)
             {
                 enemyGate.TakeDamage(this, baseDamage + Mathf.FloorToInt(baseDamage * 0.2f));
             }
@@ -195,13 +177,16 @@ public class DemonUnit : GameUnitBase
                 }
             }
 
-            if (gateFound)
+            if (gateFound && enemyGate != null)
             {
                 enemyGate.TakeDamage(this, baseDamage);
             }
         }
 
-        ContinueAttackingOrNot();
+        if (!shootFireball)
+        {
+            ContinueAttackingOrNot();
+        }      
     }
 
     public void DemonicFireball()
@@ -280,36 +265,5 @@ public class DemonUnit : GameUnitBase
         animatorBase.SetBool("Fireball", true);
     }
     //----------Odin Functions----------
-    IEnumerable ChooseStunValueForHpPercent()
-    {
-        if (isBossOrMiniboss)
-        {
-            return new List<int>{66, 50, 33};
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    void StunValueHasBeenChosen()
-    {
-        stunAt66PercentHp = false;
-        stunAt50PercentHp = false;
-        stunAt33PercentHp = false;
-
-        switch (stunAtHpPercent)
-        {
-            case 66:
-                stunAt66PercentHp = true;
-                break;
-            case 50:
-                stunAt50PercentHp = true;
-                break;
-            case 33:
-                stunAt33PercentHp = true;
-                break;
-        }
-    }
     #endregion
 }

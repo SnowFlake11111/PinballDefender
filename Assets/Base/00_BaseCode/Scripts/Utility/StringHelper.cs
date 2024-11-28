@@ -4,6 +4,45 @@ using UnityEngine;
 
 public static class StringHelper
 {
+    public const string CAMPAIGN_PROGRESS = "campaign_progress";
+    public const string CAMPAIGN_DAMAGE_UPGRADE_COUNT = "campaign_damage_upgrade_count";
+    public const string CAMPAIGN_MAGAZINE_UPGRADE_COUNT = "campaign_magazine_upgrade_count";
+    public const string CAMPAIGN_RELOAD_SPEED_UPGRADE_COUNT = "campaign_reload_speed_upgrade_count";
+    public const string CAMPAIGN_CREDITS_GAIN_RATE_UPGRADE_COUNT = "campaign_credits_gain_rate_upgrade_count";
+    public const string CAMPAIGN_MAX_CREDITS_UPGRADE_COUNT = "campaign_max_credits_upgrade_count";
+    public const string CAMPAIGN_GATE_HEALTH_UPGRADE_COUNT = "campaign_gate_health_upgrade_count";
+    public const string CAMPAIGN_BALL_TEXTURE_CHOICE = "campaign_ball_texture_choice";
+    public const string CAMPAIGN_BALL_TRAIL_CHOICE = "campaign_ball_trail_choice";
+    public const string CAMPAIGN_SLOT_1_UNIT = "campaign_slot_1_unit";
+    public const string CAMPAIGN_SLOT_2_UNIT = "campaign_slot_2_unit";
+    public const string CAMPAIGN_SLOT_3_UNIT = "campaign_slot_3_unit";
+    public const string CAMPAIGN_SLOT_4_UNIT = "campaign_slot_4_unit";
+    public const string CAMPAIGN_SLOT_5_UNIT = "campaign_slot_5_unit";
+    public const string MULTIPLAYER_PLAYER_1_BALL_TEXTURE_CHOICE = "multiplayer_player_1_ball_texture_choice";
+    public const string MULTIPLAYER_PLAYER_1_BALL_TRAIL_CHOICE = "multiplayer_player_1_ball_trail_choice";
+    public const string MULTIPLAYER_PLAYER_2_BALL_TEXTURE_CHOICE = "multiplayer_player_2_ball_texture_choice";
+    public const string MULTIPLAYER_PLAYER_2_BALL_TRAIL_CHOICE = "multiplayer_player_2_ball_trail_choice";
+    public const string MULTIPLAYER_PLAYER_1_SLOT_1_UNIT = "multiplayer_player_1_slot_1_unit";
+    public const string MULTIPLAYER_PLAYER_1_SLOT_2_UNIT = "multiplayer_player_1_slot_2_unit";
+    public const string MULTIPLAYER_PLAYER_1_SLOT_3_UNIT = "multiplayer_player_1_slot_3_unit";
+    public const string MULTIPLAYER_PLAYER_1_SLOT_4_UNIT = "multiplayer_player_1_slot_4_unit";
+    public const string MULTIPLAYER_PLAYER_1_SLOT_5_UNIT = "multiplayer_player_1_slot_5_unit";
+    public const string MULTIPLAYER_PLAYER_2_SLOT_1_UNIT = "multiplayer_player_2_slot_1_unit";
+    public const string MULTIPLAYER_PLAYER_2_SLOT_2_UNIT = "multiplayer_player_2_slot_2_unit";
+    public const string MULTIPLAYER_PLAYER_2_SLOT_3_UNIT = "multiplayer_player_2_slot_3_unit";
+    public const string MULTIPLAYER_PLAYER_2_SLOT_4_UNIT = "multiplayer_player_2_slot_4_unit";
+    public const string MULTIPLAYER_PLAYER_2_SLOT_5_UNIT = "multiplayer_player_2_slot_5_unit";
+    public const string WARRIOR_UNLOCKED = "warrior_unlocked";
+    public const string RANGER_UNLOCKED = "ranger_unlocked";
+    public const string MAGE_UNLOCKED = "mage_unlocked";
+    public const string ENFORCER_UNLOCKED = "enforcer_unlocked";
+    public const string DEMON_UNLOCKED = "demon_unlocked";
+    public const string MONSTER_UNLOCKED = "monster_unlocked";
+    public const string HEALER_UNLOCKED = "healer_unlocked";
+    public const string BERSERKER_UNLOCKED = "berserker_unlocked";
+    public const string BLOODMAGE_UNLOCKED = "bloodmage_unlocked";
+    public const string KING_UNLOCKED = "king_unlocked";
+
     public const string TIME_SINCE_LAST_EXIT = "time_since_last_exit";
     public const string REMAINING_COUNTER_SINCE_SINCE_LAST_EXIT = "remaining_counter_since_last_exit";
     public const string CURRENT_COUNTER = "current_counter";   

@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class RangerUnit : GameUnitBase
@@ -23,6 +24,14 @@ public class RangerUnit : GameUnitBase
     #endregion
 
     #region Start, Update
+    private void Start()
+    {
+        InitUnit();
+        if (unitMovement != null)
+        {
+            unitMovement.Init();
+        }
+    }
     #endregion
 
     #region Functions
@@ -107,7 +116,7 @@ public class RangerUnit : GameUnitBase
     //----------Animation Functions----------
     public void ShootEnemy()
     {
-        if (gateFound)
+        if (gateFound && enemyGate != null)
         {
             if (IsAttackUpActive())
             {
@@ -117,8 +126,10 @@ public class RangerUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
+
+            shootEffect.Play();
         }
-        else if (enemyFound)
+        else if (enemyFound && currentTarget != null)
         {
             if (IsAttackUpActive())
             {
@@ -129,8 +140,8 @@ public class RangerUnit : GameUnitBase
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
             }
 
+            shootEffect.Play();
         }
-        currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
 
         ContinueAttackingOrNot();
         //To do: Play an effect for when the unit shoot [done]

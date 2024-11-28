@@ -16,8 +16,19 @@ public class GateController : MonoBehaviour
     #endregion
 
     #region Private Variables
-    [SerializeField] int maxHitPoint = 0;
-    [SerializeField] int realHitPoint = 0;
+    [SerializeField] int currentHitPoint = 0;
+
+    float hpPercentage
+    {
+        get
+        {
+            if (currentHitPoint <= 0)
+            {
+                return 0;
+            }
+            return currentHitPoint / (float)baseHitPoint;
+        }
+    }
     #endregion
 
     #region Start, Update
@@ -32,8 +43,7 @@ public class GateController : MonoBehaviour
     //**** Health Control ****
     public void SetHealth()
     {
-        realHitPoint = baseHitPoint;
-        maxHitPoint = baseHitPoint;
+        currentHitPoint = baseHitPoint;
         //To Do: Set realHitPoint to be the actual hp of the gate with some extra hp if upgrade count goes up
     }
 
@@ -42,15 +52,17 @@ public class GateController : MonoBehaviour
     {
         RegisterAttacker(attacker);
 
-        if (damage > realHitPoint)
+        if (damage > currentHitPoint)
         {
             AnnounceDeath();
             Destroy(gameObject);
         }
         else
         {
-            realHitPoint -= damage;
+            currentHitPoint -= damage;
         }
+
+        RequestUpdateHpValue();
     }
 
     public void RemoveAttacker(GameUnitBase attacker)
@@ -64,6 +76,18 @@ public class GateController : MonoBehaviour
         if (!attackers.Contains(attacker))
         {
             attackers.Add(attacker);
+        }
+    }
+
+    void RequestUpdateHpValue()
+    {
+        if (gameObject.layer == 7)
+        {
+            GamePlayController.Instance.gameScene.UpdateGateHp(hpPercentage, 1);
+        }
+        else
+        {
+            GamePlayController.Instance.gameScene.UpdateGateHp(hpPercentage, 2);
         }
     }
 
