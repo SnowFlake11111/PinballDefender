@@ -1690,6 +1690,7 @@ MonoBehaviour:
   mainBodyColor: {fileID: 8937810033433039533}
   spawnCost: 75
   moneyGainOnKill: 56
+  scoreGainOnKill: 100
   isBossOrMiniboss: 1
   stunAt66PercentHp: 0
   stunAt50PercentHp: 0

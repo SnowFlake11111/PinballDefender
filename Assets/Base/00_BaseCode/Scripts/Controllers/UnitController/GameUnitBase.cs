@@ -414,14 +414,14 @@ public class GameUnitBase : SerializedMonoBehaviour
     }
 
     //**** Damage Taken Section ****
-    public void TakeDamage(PlayerController player, int damage)
+    public void TakeDamage(PlayerController player, int damage, int ballBounceCount = 0)
     {
         if (defenseUp > 0)
         {
             if ((damage / 2) >= hitPoint)
             {
                 hitPoint = 0;
-                SendRewardToPlayer(player);
+                SendRewardToPlayer(player, ballBounceCount);
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -436,7 +436,7 @@ public class GameUnitBase : SerializedMonoBehaviour
             if (damage >= hitPoint)
             {
                 hitPoint = 0;
-                SendRewardToPlayer(player);
+                SendRewardToPlayer(player, ballBounceCount);
                 AnnounceDeath();
 
                 //To do: Add function to register the kill for the owner of the ball that killed this unit
@@ -516,15 +516,25 @@ public class GameUnitBase : SerializedMonoBehaviour
         }
     }
 
-    public void SendRewardToPlayer(PlayerController executioner)
+    public void SendRewardToPlayer(PlayerController executioner, int ballBounceCount = 0)
     {
-        if (GamePlayController.Instance.modeCampaign || GamePlayController.Instance.modeDefenderBattle)
+        if (GamePlayController.Instance.gameLevelController.currentLevel.modeCampaign || GamePlayController.Instance.gameLevelController.currentLevel.modeDefenderBattle)
         {
+            if (moneyGainOnKill <= 0)
+            {
+                return;
+            }
+
             executioner.CreditsGainedFromKill(moneyGainOnKill);
         }
         else
         {
-            //To do: Handle sending points to player on kill
+            //To do: Handle sending points to player on kill [done]
+            if (scoreGainOnKill <= 0)
+            {
+                return;
+            }
+            executioner.ScoreGainedFromKill(scoreGainOnKill + Mathf.RoundToInt(scoreGainOnKill * 0.25f * ballBounceCount));
         }
     }
 

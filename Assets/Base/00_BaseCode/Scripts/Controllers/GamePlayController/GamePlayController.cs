@@ -22,12 +22,9 @@ public class GamePlayController : Singleton<GamePlayController>
     public GameScene gameScene;
     public GameLevelController gameLevelController;
 
-    [OnValueChanged("CampaignActivated")]
-    public bool modeCampaign = false;
-    [OnValueChanged("ScoreBattleActivated")]
-    public bool modeScoreBattle = false;
-    [OnValueChanged("DefenderBattleActivated")]
-    public bool modeDefenderBattle = false;
+    bool modeCampaign = false;
+    bool modeScoreBattle = false;
+    bool modeDefenderBattle = false;
 
     protected override void OnAwake()
     {
@@ -57,6 +54,28 @@ public class GamePlayController : Singleton<GamePlayController>
         gameLevelController.PlayersCreditsCheck();
     }
 
+    public void ChangeUILoadout(int id)
+    {
+        switch (id)
+        {
+            case 1:     //Campaign
+                modeCampaign = true;
+                modeScoreBattle = false;
+                modeDefenderBattle = false;
+                break;
+            case 2:     //ScoreBattle
+                modeScoreBattle = true;
+                modeCampaign = false;
+                modeDefenderBattle = false;
+                break;
+            case 3:     //DefenderBattle
+                modeDefenderBattle = true;
+                modeCampaign = false;
+                modeScoreBattle = false;
+                break;
+        }
+    }
+
     //private void OnEnable()
     //{
     //    ChangeBannerStateInGamePlay(false);
@@ -78,24 +97,5 @@ public class GamePlayController : Singleton<GamePlayController>
             GameController.Instance.admobAds.DestroyBanner();
         }
        
-    }
-
-    //----------Odin Functions----------
-    void CampaignActivated()
-    {
-        modeScoreBattle = false;
-        modeDefenderBattle = false;
-    }
-
-    void ScoreBattleActivated()
-    {
-        modeCampaign = false;
-        modeDefenderBattle = false;
-    }
-
-    void DefenderBattleActivated()
-    {
-        modeCampaign = false;
-        modeScoreBattle = false;
     }
 }

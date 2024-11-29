@@ -52,9 +52,9 @@ public class PlayerController : SerializedMonoBehaviour
     Ball tempBallRef;
 
     Vector3 ogModelPosition;
+    Vector3 ogRotation;
 
     GameUnitBase tempSpawnedUnitReference;
-    List<GameUnitBase> spawnedUnits = new List<GameUnitBase>();
     #endregion
 
     #region Buffs Timer
@@ -74,13 +74,9 @@ public class PlayerController : SerializedMonoBehaviour
     {
         RotateHandler();
 
+        ogRotation = gameObject.transform.localEulerAngles;
         ogModelPosition = gunModel.transform.localPosition;
-
-        if (allowUnitSpawning)
-        {
-            //To do
-            //Unit Spawn function
-        }
+        gameObject.layer = playerId;
     }
 
     public void Shoot()
@@ -245,6 +241,12 @@ public class PlayerController : SerializedMonoBehaviour
         RequestUpdateCreditsNumber();
     }
 
+    public void ScoreGainedFromKill(int amount)
+    {
+        playerScore += amount;
+        RequestScoreUpdate(playerScore);
+    }
+
     public bool IsAmmoFull()
     {
         if (currentAmmo >= maxAmmo)
@@ -272,9 +274,9 @@ public class PlayerController : SerializedMonoBehaviour
     //----------Private----------
     void RotateHandler()
     {
-        rotateGun = transform.DOLocalRotate(new Vector3(0, 80f, 0), 100f).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(delegate
+        rotateGun = transform.DOLocalRotate(new Vector3(0, ogRotation.y + 80f, 0), 100f).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(delegate
         {
-            rotateGun = transform.DOLocalRotate(new Vector3(0, -80f, 0), 100f).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(delegate
+            rotateGun = transform.DOLocalRotate(new Vector3(0, ogRotation.y - 80f, 0), 100f).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(delegate
             {
                 RotateHandler();
             });
@@ -366,6 +368,18 @@ public class PlayerController : SerializedMonoBehaviour
         }
     }
 
+    void RequestScoreUpdate(int amount)
+    {
+        if (playerId == 7)
+        {
+            GamePlayController.Instance.gameScene.Player_1UpdatePoint(amount);
+        }
+        else
+        {
+            GamePlayController.Instance.gameScene.Player_2UpdatePoint(amount);
+        }
+    }
+
     IEnumerator ResumeRotationTimer()
     {
         rotateGun.Pause();
@@ -402,12 +416,6 @@ public class PlayerController : SerializedMonoBehaviour
 
     #region Buff Handler
     #endregion
-}
-
-enum Playername
-{
-    Player_1 = 7,
-    Player_2 = 8,
 }
 
 /*

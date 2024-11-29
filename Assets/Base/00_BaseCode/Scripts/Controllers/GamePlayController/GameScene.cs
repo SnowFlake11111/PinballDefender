@@ -265,6 +265,7 @@ public class GameScene : BaseScene
     #region Private Variables
     [Header("REMOVE WHEN THE GAME SYSTEM IS COMPLETED")]
     [SerializeField] List<GameUnitBase> player_1chosenUnits = new List<GameUnitBase>();
+    [SerializeField] List<GameUnitBase> player_2chosenUnits = new List<GameUnitBase>();
 
     GameObject unitHolder;
 
@@ -273,6 +274,28 @@ public class GameScene : BaseScene
     int player_2prevCredits = 0;
     int player_1prevScore = 0;
     int player_2prevScore = 0;
+
+    float player_1CurrentScore
+    {
+        get
+        {
+            return GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetScore();
+        }
+    }
+    float player_2CurrentScore
+    {
+        get
+        {
+            return GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetScore();
+        }
+    }
+    float scoreComparisonPercent
+    {
+        get
+        {
+            return player_1CurrentScore / (player_1CurrentScore + player_2CurrentScore);
+        }
+    }
 
     bool campaignMode = false;
     bool scoreBattleMode = false;
@@ -293,6 +316,9 @@ public class GameScene : BaseScene
     Tweener player_2GateDelayHpChange;
     Tweener player_1GainCreditsAnimation;
     Tweener player_2GainCreditsAnimation;
+    Tweener player_1GainScoreAnimation;
+    Tweener player_2GainScoreAnimation;
+    Tweener scoreComparisonAnimation;
     Tween player_1Reload;
     Tween player_2Reload;
     Tween player_1GainCredits;
@@ -499,13 +525,6 @@ public class GameScene : BaseScene
         {
             if (campaignMode)
             {
-                //player_1GainCreditsAnimation = campaignPlayerSpawnCredits.DOText(newCurrentCredits.ToString(), 0.75f, scrambleMode: ScrambleMode.Numerals)
-                //    .OnComplete(delegate
-                //    {
-                //        campaignPlayerSpawnCredits.text = newCurrentCredits.ToString();
-                //        player_1GainCreditsAnimation = null;
-                //    });
-
                 player_1GainCreditsAnimation = DOTween.To
                     (
                         delegate
@@ -531,12 +550,6 @@ public class GameScene : BaseScene
             }
             else
             {
-                //player_1GainCreditsAnimation = defenderPlayer_1SpawnCredits.DOText(newCurrentCredits.ToString(), 0.75f, scrambleMode: ScrambleMode.Numerals)
-                //    .OnComplete(delegate
-                //    {
-                //        defenderPlayer_1SpawnCredits.text = newCurrentCredits.ToString();
-                //        player_1GainCreditsAnimation = null;
-                //    });
                 player_1GainCreditsAnimation = DOTween.To
                     (
                         delegate
@@ -573,13 +586,6 @@ public class GameScene : BaseScene
         }
         else
         {
-            //player_2GainCreditsAnimation = defenderPlayer_2SpawnCredits.DOText(newCurrentCredits.ToString(), 0.75f, scrambleMode: ScrambleMode.Numerals)
-            //        .OnComplete(delegate
-            //        {
-            //            defenderPlayer_2SpawnCredits.text = newCurrentCredits.ToString();
-            //            player_2GainCreditsAnimation = null;
-            //        });
-
             player_2GainCreditsAnimation = DOTween.To
                     (
                         delegate
@@ -603,6 +609,76 @@ public class GameScene : BaseScene
                         player_2GainCreditsAnimation = null;
                     });
         }
+    }
+
+    public void Player_1UpdatePoint(int currentPoint)
+    {
+        if (player_1GainScoreAnimation != null)
+        {
+            player_1GainScoreAnimation.ChangeEndValue(currentPoint, true);
+        }
+        else
+        {
+            player_1GainScoreAnimation = DOTween.To
+                    (
+                        delegate
+                        {
+                            return player_1prevScore;
+                        },
+                        delegate (int x)
+                        {
+                            player_1prevScore = x;
+                        },
+                        currentPoint,
+                        0.5f
+                    )
+                    .OnUpdate(delegate
+                    {
+                        scorePlayer_1Score.text = player_1prevScore.ToString();
+                    })
+                    .OnComplete(delegate
+                    {
+                        player_1prevScore = currentPoint;
+                        player_1GainScoreAnimation = null;
+                    });
+        }
+
+        ScoreComparisonBarAnimation();
+    }
+
+    public void Player_2UpdatePoint(int currentPoint)
+    {
+        if (player_2GainScoreAnimation != null)
+        {
+            player_2GainScoreAnimation.ChangeEndValue(currentPoint, true);
+        }
+        else
+        {
+            player_2GainScoreAnimation = DOTween.To
+                    (
+                        delegate
+                        {
+                            return player_2prevScore;
+                        },
+                        delegate (int x)
+                        {
+                            player_2prevScore = x;
+                        },
+                        currentPoint,
+                        0.5f
+                    )
+                    .OnUpdate(delegate
+                    {
+                        scorePlayer_2Score.text = player_2prevScore.ToString();
+                    })
+                    .OnComplete(delegate
+                    {
+                        player_2prevScore = currentPoint;
+                        player_2GainScoreAnimation = null;
+                    });
+        }
+
+        ScoreComparisonBarAnimation();
     }
 
     public void Player_1UpdateSpawnBtnPriceCheck()
@@ -651,9 +727,22 @@ public class GameScene : BaseScene
 
     public void Player_2UpdateSpawnBtnPriceCheck()
     {
-        for (int i = 0; i < player_1UnitsCostList.Count; i++)
+        for (int i = 0; i < player_2UnitsCostList.Count; i++)
         {
-            //Note: Incomplete, awaiting test from campaign
+            if (player_2UnitsCostList[i] <= GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetCurrentCredits())
+            {
+                if (defenderPlayer_2UnitSpawnBtn[i].gameObject.activeSelf)
+                {
+                    defenderPlayer_2UnitSpawnBtn[i].interactable = true;
+                }
+            }
+            else
+            {
+                if (defenderPlayer_2UnitSpawnBtn[i].gameObject.activeSelf)
+                {
+                    defenderPlayer_2UnitSpawnBtn[i].interactable = false;
+                }
+            }
         }
     }
 
@@ -809,11 +898,24 @@ public class GameScene : BaseScene
         {
             if (player_1ChosenUnitToSpawn == pickedUnit)
             {
-                foreach (Button lanePickingBtn in campaignUnitSpawnLaneBtn)
+                if (campaignMode)
                 {
-                    if (lanePickingBtn.gameObject.activeSelf)
+                    foreach (Button lanePickingBtn in campaignUnitSpawnLaneBtn)
                     {
-                        lanePickingBtn.gameObject.SetActive(false);
+                        if (lanePickingBtn.gameObject.activeSelf)
+                        {
+                            lanePickingBtn.gameObject.SetActive(false);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Button lanePickingBtn in defenderPlayer_1UnitSpawnLaneBtn)
+                    {
+                        if (lanePickingBtn.gameObject.activeSelf)
+                        {
+                            lanePickingBtn.gameObject.SetActive(false);
+                        }
                     }
                 }
 
@@ -838,7 +940,7 @@ public class GameScene : BaseScene
             }
             else
             {
-                foreach (Button lanePickingBtn in defenderPlayer_1UnitSpawnLaneBtn.Skip(1).Take(campaignUnitSpawnLaneBtn.Count - 2))
+                foreach (Button lanePickingBtn in defenderPlayer_1UnitSpawnLaneBtn.Skip(1).Take(defenderPlayer_1UnitSpawnLaneBtn.Count - 2))
                 {
                     if (!lanePickingBtn.gameObject.activeSelf)
                     {
@@ -874,8 +976,45 @@ public class GameScene : BaseScene
 
     public void Player_2PickedUnitToSpawn(GameUnitBase pickedUnit)
     {
-        //Note: Incomplete, awaiting test from campaign
+        if (player_2ChosenUnitToSpawn != null)
+        {
+            if (player_2ChosenUnitToSpawn == pickedUnit)
+            {
+                foreach (Button lanePickingBtn in defenderPlayer_2UnitSpawnLaneBtn)
+                {
+                    if (lanePickingBtn.gameObject.activeSelf)
+                    {
+                        lanePickingBtn.gameObject.SetActive(false);
+                    }
+                }
+
+                player_2ChosenUnitToSpawn = null;
+                return;
+            }
+        }
+
         player_2ChosenUnitToSpawn = pickedUnit;
+
+        if (pickedUnit.isBossOrMiniboss)
+        {
+            foreach (Button lanePickingBtn in defenderPlayer_2UnitSpawnLaneBtn.Skip(1).Take(defenderPlayer_2UnitSpawnLaneBtn.Count - 2))
+            {
+                if (!lanePickingBtn.gameObject.activeSelf)
+                {
+                    lanePickingBtn.gameObject.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            foreach (Button lanePickingBtn in defenderPlayer_2UnitSpawnLaneBtn)
+            {
+                if (!lanePickingBtn.gameObject.activeSelf)
+                {
+                    lanePickingBtn.gameObject.SetActive(true);
+                }
+            }
+        }
     }
 
     public void Player_1SpawnUnitProcedure(int laneId)
@@ -884,11 +1023,24 @@ public class GameScene : BaseScene
         {
             GamePlayController.Instance.gameLevelController.currentLevel.player_1.SpawnAnUnit(player_1ChosenUnitToSpawn, lanes[laneId].spawnPointA, lanes[laneId], unitHolder);
 
-            foreach(Button lanePickingBtn in campaignUnitSpawnLaneBtn)
+            if (campaignMode)
             {
-                if (lanePickingBtn.gameObject.activeSelf)
+                foreach (Button lanePickingBtn in campaignUnitSpawnLaneBtn)
                 {
-                    lanePickingBtn.gameObject.SetActive(false);
+                    if (lanePickingBtn.gameObject.activeSelf)
+                    {
+                        lanePickingBtn.gameObject.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Button lanePickingBtn in defenderPlayer_1UnitSpawnLaneBtn)
+                {
+                    if (lanePickingBtn.gameObject.activeSelf)
+                    {
+                        lanePickingBtn.gameObject.SetActive(false);
+                    }
                 }
             }
 
@@ -902,7 +1054,24 @@ public class GameScene : BaseScene
 
     public void Player_2SpawnUnitProcedure(int laneId)
     {
-        //Note: Incomplete, awaiting test from campaign
+        if (player_2ChosenUnitToSpawn != null)
+        {
+            GamePlayController.Instance.gameLevelController.currentLevel.player_2.SpawnAnUnit(player_2ChosenUnitToSpawn, lanes[laneId].spawnPointB, lanes[laneId], unitHolder);
+
+            foreach (Button lanePickingBtn in defenderPlayer_2UnitSpawnLaneBtn)
+            {
+                if (lanePickingBtn.gameObject.activeSelf)
+                {
+                    lanePickingBtn.gameObject.SetActive(false);
+                }
+            }
+
+            player_2ChosenUnitToSpawn = null;
+        }
+        else
+        {
+            Debug.LogError("Player 2 has't chosen any unit to spawn");
+        }
     }
 
     //----------Private----------
@@ -1049,10 +1218,10 @@ public class GameScene : BaseScene
                     defenderPlayer_1UnitSpawnBtn[i].gameObject.SetActive(false);
                 }
 
-                for (int i = 0; i < defenderPlayer_1UnitSpawnBtn.Count; i++)
+                for (int i = 0; i < player_1chosenUnits.Count; i++)
                 {
                     int tempIndex = i;
-                    defenderPlayer_1UnitSpawnBtnImage[i].sprite = unitImages[i + 1];
+                    defenderPlayer_1UnitSpawnBtnImage[i].sprite = unitImages[player_1chosenUnits[i].unitId];
                     defenderPlayer_1UnitSpawnBtnCost[i].text = player_1chosenUnits[i].spawnCost.ToString();
                     player_1UnitsCostList.Add(player_1chosenUnits[i].spawnCost);
                     defenderPlayer_1UnitSpawnBtn[i].onClick.AddListener(delegate { Player_1PickedUnitToSpawn(player_1chosenUnits[tempIndex]); });
@@ -1060,10 +1229,10 @@ public class GameScene : BaseScene
             }
             else
             {
-                for (int i = 0; i < defenderPlayer_1UnitSpawnBtn.Count; i++)
+                for (int i = 0; i < player_1chosenUnits.Count; i++)
                 {
                     int tempIndex = i;
-                    defenderPlayer_1UnitSpawnBtnImage[i].sprite = unitImages[i + 1];
+                    defenderPlayer_1UnitSpawnBtnImage[i].sprite = unitImages[player_1chosenUnits[i].unitId];
                     defenderPlayer_1UnitSpawnBtnCost[i].text = player_1chosenUnits[i].spawnCost.ToString();
                     player_1UnitsCostList.Add(player_1chosenUnits[i].spawnCost);
                     defenderPlayer_1UnitSpawnBtn[i].onClick.AddListener(delegate { Player_1PickedUnitToSpawn(player_1chosenUnits[tempIndex]); });
@@ -1074,8 +1243,37 @@ public class GameScene : BaseScene
 
     void Player_2SetupSpawnList()
     {
-        //Note: Incomplete, awaiting test from campaign
-        List<GameUnitBase> choosenUnits = new List<GameUnitBase>();
+        player_2UnitsCostList.Clear();
+
+        int emptySlotCount = defenderPlayer_2UnitSpawnBtn.Count - player_2chosenUnits.Count;
+
+        if (emptySlotCount > 0)
+        {
+            for (int i = player_2chosenUnits.Count; i < defenderPlayer_2UnitSpawnBtn.Count; i++)
+            {
+                defenderPlayer_2UnitSpawnBtn[i].gameObject.SetActive(false);
+            }
+
+            for (int i = 0; i < player_2chosenUnits.Count; i++)
+            {
+                int tempIndex = i;
+                defenderPlayer_2UnitSpawnBtnImage[i].sprite = unitImages[player_2chosenUnits[i].unitId];
+                defenderPlayer_2UnitSpawnBtnCost[i].text = player_2chosenUnits[i].spawnCost.ToString();
+                player_2UnitsCostList.Add(player_2chosenUnits[i].spawnCost);
+                defenderPlayer_2UnitSpawnBtn[i].onClick.AddListener(delegate { Player_2PickedUnitToSpawn(player_2chosenUnits[tempIndex]); });
+            }
+        }
+        else
+        {
+            for (int i = 0; i < player_2chosenUnits.Count; i++)
+            {
+                int tempIndex = i;
+                defenderPlayer_2UnitSpawnBtnImage[i].sprite = unitImages[player_2chosenUnits[i].unitId];
+                defenderPlayer_2UnitSpawnBtnCost[i].text = player_2chosenUnits[i].spawnCost.ToString();
+                player_2UnitsCostList.Add(player_2chosenUnits[i].spawnCost);
+                defenderPlayer_2UnitSpawnBtn[i].onClick.AddListener(delegate { Player_2PickedUnitToSpawn(player_2chosenUnits[tempIndex]); });
+            }
+        }       
     }
 
     void Player_1SetupSpawnLaneButtons()
@@ -1110,7 +1308,34 @@ public class GameScene : BaseScene
 
     void Player_2SetupSpawnLaneButtons()
     {
-        //Note: Incomplete, awaiting test from campaign
+        for (int i = 0; i < defenderPlayer_2UnitSpawnLaneBtn.Count; i++)
+        {
+            int tempIndex = i;
+            defenderPlayer_2UnitSpawnLaneBtn[i].onClick.AddListener(delegate { Player_2SpawnUnitProcedure(defenderPlayer_2UnitSpawnLaneBtn.Count - 1 - tempIndex); });
+
+            if (defenderPlayer_2UnitSpawnLaneBtn[i].gameObject.activeSelf)
+            {
+                defenderPlayer_2UnitSpawnLaneBtn[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    void ScoreComparisonBarAnimation()
+    {
+        if (scoreComparisonAnimation != null)
+        {
+            scoreComparisonAnimation.ChangeEndValue(scoreComparisonPercent, true);
+        }
+        else
+        {
+            scoreComparisonAnimation = scoreComparisonBar.DOValue(scoreComparisonPercent, 0.5f)
+                .SetEase(Ease.Linear)
+                .OnComplete(delegate
+                {
+                    scoreComparisonAnimation = null;
+                });
+        }
+        
     }
 
     //----------Mode Section----------
@@ -1156,6 +1381,9 @@ public class GameScene : BaseScene
         scorePlayer_1Score.text = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetScore().ToString();
         scorePlayer_2Score.text = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetScore().ToString();
 
+        player_1prevScore = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetScore();
+        player_2prevScore = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetScore();
+
         scorePlayer_1ShootBtn.onClick.AddListener(delegate { Player_1Shoot(); });
         scorePlayer_2ShootBtn.onClick.AddListener (delegate { Player_2Shoot(); });
     }
@@ -1175,11 +1403,25 @@ public class GameScene : BaseScene
         defenderPlayer_1MaxAmmo.text = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetMaxAmmo().ToString();
         defenderPlayer_2MaxAmmo.text = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetMaxAmmo().ToString();
 
-        defenderPlayer_1ShootBtn.onClick.AddListener(delegate { Player_1Shoot(); });
-        defenderPlayer_2ShootBtn.onClick.AddListener(delegate { Player_2Shoot(); });
+        defenderPlayer_1SpawnCredits.text = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetCurrentCredits().ToString();
+        defenderPlayer_2SpawnCredits.text = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetCurrentCredits().ToString();
+
+        defenderPlayer_1MaxSpawnCredits.text = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetMaxCredits().ToString();
+        defenderPlayer_2MaxSpawnCredits.text = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetMaxCredits().ToString();
 
         player_1prevCredits = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetCurrentCredits();
         player_2prevCredits = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetCurrentCredits();
+
+        Player_1SetupSpawnLaneButtons();
+        Player_1SetupSpawnList();
+        Player_1UpdateSpawnBtnPriceCheck();
+
+        Player_2SetupSpawnLaneButtons();
+        Player_2SetupSpawnList();
+        Player_2UpdateSpawnBtnPriceCheck();
+
+        defenderPlayer_1ShootBtn.onClick.AddListener(delegate { Player_1Shoot(); });
+        defenderPlayer_2ShootBtn.onClick.AddListener(delegate { Player_2Shoot(); });
     }
 
     //----------Buttons----------

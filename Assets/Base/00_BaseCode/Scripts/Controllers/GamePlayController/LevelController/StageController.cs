@@ -10,6 +10,15 @@ public class StageController : SerializedMonoBehaviour
     public int stageId = 0;
 
     [Space]
+    [Header("IMPORTANT - Set gamemode for this stage")]
+    [OnValueChanged("CampaignActivated")]
+    public bool modeCampaign = false;
+    [OnValueChanged("ScoreBattleActivated")]
+    public bool modeScoreBattle = false;
+    [OnValueChanged("DefenderBattleActivated")]
+    public bool modeDefenderBattle = false;
+
+    [Space]
     [Header("Map Lanes")]
     public List<FieldLane> laneList = new List<FieldLane>();
 
@@ -22,6 +31,7 @@ public class StageController : SerializedMonoBehaviour
     public PlayerController player_2;
 
     [Space]
+    [Header("End of the field wall")]
     public DeathWall deathWallASide;
     public DeathWall deathWallBSide;
 
@@ -41,19 +51,24 @@ public class StageController : SerializedMonoBehaviour
     //----------Public----------
     public void Init()
     {
-        if (player_1 != null)
+        if (modeCampaign)
         {
             player_1.Init();
-        }
-
-        if (player_2 != null)
-        {
-            player_2.Init();
-        }
-
-        if (gameDirector != null)
-        {
             gameDirector.InitGameDirector();
+            GamePlayController.Instance.ChangeUILoadout(1);
+        }
+        else if (modeScoreBattle)
+        {
+            player_1.Init();
+            player_2.Init();
+            gameDirector.InitGameDirector();
+            GamePlayController.Instance.ChangeUILoadout(2);
+        }
+        else
+        {
+            player_1.Init();
+            player_2.Init();
+            GamePlayController.Instance.ChangeUILoadout(3);
         }
 
         DeathWallSetup();
@@ -80,7 +95,7 @@ public class StageController : SerializedMonoBehaviour
     {
         deathWallASide.Init(7);
 
-        if (gameDirector != null)
+        if (!modeDefenderBattle)
         {
             deathWallBSide.Init(6);
         }
@@ -88,6 +103,24 @@ public class StageController : SerializedMonoBehaviour
         {
             deathWallBSide.Init(8);
         }
+    }
+    //----------Odin Functions----------
+    void CampaignActivated()
+    {
+        modeScoreBattle = false;
+        modeDefenderBattle = false;
+    }
+
+    void ScoreBattleActivated()
+    {
+        modeCampaign = false;
+        modeDefenderBattle = false;
+    }
+
+    void DefenderBattleActivated()
+    {
+        modeCampaign = false;
+        modeScoreBattle = false;
     }
     #endregion
 }

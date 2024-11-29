@@ -18,6 +18,7 @@ public class Ball : MonoBehaviour
 
     int ownerId = 0;
     int bounceLimit = 0;
+    int bounceCount = 0;
     int ballDamage = 0;
 
     float velocityStrength;
@@ -52,11 +53,6 @@ public class Ball : MonoBehaviour
         owner = ballOwner;
         gameObject.layer = id;
     }
-
-    public void AllowGatheringScore()
-    {
-
-    }
     #endregion
 
     #region Start, Update
@@ -88,6 +84,7 @@ public class Ball : MonoBehaviour
         }
         else if (collision.collider.GetComponent<Ball>() != null)
         {
+            bounceCount++;
             BounceBall(collision);
         }
     }
@@ -97,7 +94,7 @@ public class Ball : MonoBehaviour
         //Ý tưởng ở đây là kiểm tra xem unit va phải có là đồng đội hay không, nếu là đồng đội thì sẽ không gây sát thương, nếu không phải thì ngược lại
         //UPDATE: Sau khi áp dụng việc sử dụng danh sách đồng đội và danh sách bóng bắn ra thì không cần phải sử dụng ownerId để kiểm tra phe nữa mà bóng sẽ tự bỏ qua va chạm đối với các unit cùng phe
         //UPDATE 2: Đã đổi sang sử dụng Collision Layer
-        unit.collider.GetComponent<GameUnitBase>().TakeDamage(owner, ballDamage);
+        unit.collider.GetComponent<GameUnitBase>().TakeDamage(owner, ballDamage, ballBounceCount: bounceCount);
 
         if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
         {
@@ -106,6 +103,7 @@ public class Ball : MonoBehaviour
         else
         {
             bounceLimit -= unit.collider.GetComponent<GameUnitBase>().GetBounceCost();
+            bounceCount++;
             BounceBall(unit);
         }
     }
@@ -120,6 +118,7 @@ public class Ball : MonoBehaviour
         else
         {
             bounceLimit -= wall.collider.GetComponent<GameWall>().GetBounceCost();
+            bounceCount++;
             BounceBall(wall);
         }
     }
@@ -135,6 +134,7 @@ public class Ball : MonoBehaviour
         else
         {
             bounceLimit -= projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost();
+            bounceCount++;
             BounceBall(projectile);
         }
     }
