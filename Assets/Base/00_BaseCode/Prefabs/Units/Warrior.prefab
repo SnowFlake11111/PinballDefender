@@ -1334,8 +1334,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   unitId: 1
-  maxHitPoint: 100
-  hitPoint: 100
+  maxHitPoint: 250
+  hitPoint: 250
   healthBar: {fileID: 5629204634256097883}
   healthBarDelay: {fileID: 3654039868286029279}
   animatorBase: {fileID: 1736446252846881466}
@@ -1364,7 +1364,7 @@ MonoBehaviour:
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   bounceCost: 1
-  baseAttackDamage: 10
+  baseAttackDamage: 25
 --- !u!114 &1736446253643440437
 MonoBehaviour:
   m_ObjectHideFlags: 0

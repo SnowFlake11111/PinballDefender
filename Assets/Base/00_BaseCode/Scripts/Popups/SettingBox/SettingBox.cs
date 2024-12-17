@@ -24,8 +24,7 @@ public class SettingBox : BaseBox
     #region Var
 
     [Header("-----BUTTONS-----")]
-    [SerializeField] private Button btnClose;
-  
+    [SerializeField] private Button btnClose;  
 
     [SerializeField] private Button btnVibration;
     [SerializeField] private Button btnMusic;
@@ -58,34 +57,34 @@ public class SettingBox : BaseBox
     {
         if (GameController.Instance.useProfile.OnVibration)
         {
-            vibrationSlider.DOValue(1, 0.25f).SetEase(Ease.Linear);
+            vibrationSlider.DOValue(1, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
           //  btnVibration.GetComponent<Image>().sprite = spriteBtnOn;
         }
         else
         {
-            vibrationSlider.DOValue(0, 0.25f).SetEase(Ease.Linear);
+            vibrationSlider.DOValue(0, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
             // btnVibration.GetComponent<Image>().sprite = spriteBtnOff;
         }
 
         if (GameController.Instance.useProfile.OnMusic)
         {
-            musicSlider.DOValue(1, 0.25f).SetEase(Ease.Linear);
+            musicSlider.DOValue(1, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
             //    btnMusic.GetComponent<Image>().sprite = spriteBtnOn;
         }
         else
         {
-            musicSlider.DOValue(0, 0.25f).SetEase(Ease.Linear);
+            musicSlider.DOValue(0, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
             //  btnMusic.GetComponent<Image>().sprite = spriteBtnOff;
         }
 
         if (GameController.Instance.useProfile.OnSound)
         {
-            soundSlider.DOValue(1, 0.25f).SetEase(Ease.Linear);
+            soundSlider.DOValue(1, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
             // btnSound.GetComponent<Image>().sprite = spriteBtnOn;
         }
         else
         {
-            soundSlider.DOValue(0, 0.25f).SetEase(Ease.Linear);
+            soundSlider.DOValue(0, 0.25f).SetEase(Ease.Linear).SetUpdate(true);
             //  btnSound.GetComponent<Image>().sprite = spriteBtnOff;
         }
         //imageVibration.SetNativeSize();
@@ -98,6 +97,7 @@ public class SettingBox : BaseBox
         }
         else
         {
+            Time.timeScale = 0;
             returnToMenu.gameObject.SetActive(true);
         }
     }
@@ -149,25 +149,29 @@ public class SettingBox : BaseBox
 
     void ReturnToMenu()
     {
-        //To do: open pop up warning about losing heart
-        //SceneManager.LoadScene("HomeScene");
-
         GameController.Instance.musicManager.PlayClickSound();
+
+        var temp = SceneManager.LoadSceneAsync("HomeScene");
+        StartCoroutine(WaitForSceneTransition(temp));
     }
 
+    IEnumerator WaitForSceneTransition(AsyncOperation sceneTransitionOperation)
+    {
+        while (!sceneTransitionOperation.isDone)
+        {
+            yield return null;
+        }
+
+        Time.timeScale = 1;
+    }
 
     private void OnClickButtonClose()
     {
         GameController.Instance.musicManager.PlayClickSound();
 
-        if (SceneManager.GetActiveScene().name == "HomeScene")
-        {
-            
-        }
-
         if (SceneManager.GetActiveScene().name == "GamePlay")
         {
-            
+            Time.timeScale = 1;
         }
         Close();
     }

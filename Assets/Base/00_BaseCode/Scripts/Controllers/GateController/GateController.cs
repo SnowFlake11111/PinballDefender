@@ -1,22 +1,15 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GateController : MonoBehaviour
 {
     #region Public Variables
-    [Header("Gate HP")]
-    public int baseHitPoint = 500;
-
-    [Space]
-    [Header("Attackers List")]
-    public List<GameUnitBase> attackers = new List<GameUnitBase>();
-
-
     #endregion
 
     #region Private Variables
-    [SerializeField] int currentHitPoint = 0;
+    int baseHitPoint = 1250;
+    int currentHitPoint = 1250;
 
     float hpPercentage
     {
@@ -29,20 +22,19 @@ public class GateController : MonoBehaviour
             return currentHitPoint / (float)baseHitPoint;
         }
     }
+    
+    List<GameUnitBase> attackers = new List<GameUnitBase>();
     #endregion
 
     #region Start, Update
-    private void Start()
-    {
-        SetHealth();
-    }
     #endregion
 
     #region Functions
     //----------Public----------
     //**** Health Control ****
-    public void SetHealth()
+    public void Init()
     {
+        SetupGateHealth();
         currentHitPoint = baseHitPoint;
         //To Do: Set realHitPoint to be the actual hp of the gate with some extra hp if upgrade count goes up
     }
@@ -70,6 +62,25 @@ public class GateController : MonoBehaviour
         attackers.Remove(attacker);
     }
     //----------Private----------
+    void SetupGateHealth()
+    {
+        if (GamePlayController.Instance.gameLevelController.currentLevel.modeCampaign)
+        {
+            baseHitPoint = 1250 + 250 * UseProfile.CampaignGateHealthUpgradeCount;
+        }
+        else
+        {
+            if (gameObject.layer == 7)
+            {
+                baseHitPoint = 1250 + 250 * GameController.Instance.gameModeData.GetPlayerGateHealthUpgrade(1);
+            }
+            else
+            {
+                baseHitPoint = 1250 + 250 * GameController.Instance.gameModeData.GetPlayerGateHealthUpgrade(2);
+            }
+        }
+    }
+
     //**** Take Damage ****
     void RegisterAttacker(GameUnitBase attacker)
     {
@@ -101,6 +112,16 @@ public class GateController : MonoBehaviour
                 attacker.RemoveEnemyGate();
             }
         }
+
+        //To do: Handle player losing situation [done]
+        if (gameObject.layer != 7)
+        {
+            GamePlayController.Instance.gameLevelController.currentLevel.GameOutcome(2);
+        }
+        else
+        {
+            GamePlayController.Instance.gameLevelController.currentLevel.GameOutcome(1);
+        }
     }
 
     //----------Odin Functions----------
@@ -109,3 +130,11 @@ public class GateController : MonoBehaviour
     #region Collision Functions
     #endregion
 }
+/*
+ * Danh sách Layer:
+ * 6: Director
+ * 7: Player_1
+ * 8: Player_2
+ * 
+ * NOTE: 3 layer này đã được thiết lập để không xử lý vật lý (như va chạm collider) đối với các object có cùng layer với chúng
+ */

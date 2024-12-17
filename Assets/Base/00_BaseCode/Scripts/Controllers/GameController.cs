@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using EventDispatcher;
+using DG.Tweening;
 #if UNITY_IOS
 using Unity.Advertisement.IosSupport;
 #endif
@@ -13,6 +14,8 @@ public class GameController : MonoBehaviour
     #region Public Variables
     public static GameController Instance;
 
+    public GameModeData gameModeData;
+    public AchievementController gameAchievementController;
     public MoneyEffectController moneyEffectController;
     public UseProfile useProfile;
     public DataContain dataContain;
@@ -21,6 +24,8 @@ public class GameController : MonoBehaviour
 
     public AnalyticsController AnalyticsController;
     public IapController iapController;
+
+    public GameObject sceneTransitionScreen;
 
     [HideInInspector] public SceneType currentScene;
 
@@ -41,8 +46,13 @@ public class GameController : MonoBehaviour
     [NonSerialized] public float cooldownPerHeart = 1800;
 
     [SerializeField]float idleTimer = 0;
+
+    Vector3 sceneTransitionScreenOgPos;
+    Tweener sceneTransitionAnimation;
     #endregion
 
+
+    #region Start, Update
     protected void Awake()
     {
         Instance = this;
@@ -72,24 +82,68 @@ public class GameController : MonoBehaviour
         //   musicManager.PlayBGMusic();
     }
 
-    private void Update()
+    //private void Update()
+    //{
+    //    RescaleCamSize();
+
+    //    UnlimitedHeartCountDown();
+    //    AdsCooldownUnlimitedHeartCountDown();
+    //    HeartCooldownCountDown();
+
+    //    if (!useProfile.IsRemoveAds && activateAds)
+    //    {
+    //        if (SceneManager.GetActiveScene().name == "HomeScene")
+    //        {
+    //            ActivateInter();
+    //        }
+    //    }
+    //}
+    #endregion
+
+    #region Functions
+    public void Init()
     {
-        RescaleCamSize();
+        //Debug.LogError("GameController loaded");
 
-        UnlimitedHeartCountDown();
-        AdsCooldownUnlimitedHeartCountDown();
-        HeartCooldownCountDown();
+        //Application.targetFrameRate = 60;
+        //useProfile.CurrentLevelPlay = UseProfile.CurrentLevel;
+        admobAds.Init();
+        musicManager.Init();
+        iapController.Init();
 
-        if (!useProfile.IsRemoveAds && activateAds)
-        {
-            if (SceneManager.GetActiveScene().name == "HomeScene")
+        MMVibrationManager.SetHapticsActive(useProfile.OnVibration);
+
+        sceneTransitionScreenOgPos = sceneTransitionScreen.transform.position;
+
+        //CheckRemainingUnlimitedHeartTime();
+        //CheckRemainingCooldownAdsUnlimitedHeart();
+        //CheckRemainingHeartCooldown();
+
+        //this.RegisterListener(EventID.REMOVE_ADS, ChangeAdsState);
+        //Debug.LogError("Ads listener registered");
+
+        // GameController.Instance.admobAds.ShowBanner();
+    }
+
+    public void StartSceneTransition(string nextSceneName)
+    {
+        sceneTransitionAnimation = sceneTransitionScreen.transform.DOMoveY(0, 0.75f)
+            .OnComplete(delegate
             {
-                ActivateInter();
-            }
+                SceneManager.LoadScene(nextSceneName);
+            });
+    }
+
+    public void FinishSceneTransition()
+    {
+        if (sceneTransitionAnimation != null)
+        {
+            sceneTransitionScreen.transform.DOMoveY(sceneTransitionScreenOgPos.y, 0.75f);
+            sceneTransitionAnimation = null;
         }
     }
 
-    private void RescaleCamSize()
+    void RescaleCamSize()
     {
         if(SceneManager.GetActiveScene().name == "GamePlay")
         {
@@ -159,28 +213,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void Init()
-    {
-        //Debug.LogError("GameController loaded");
-
-        //Application.targetFrameRate = 60;
-        //useProfile.CurrentLevelPlay = UseProfile.CurrentLevel;
-        admobAds.Init();
-        musicManager.Init();
-        iapController.Init();
-
-        MMVibrationManager.SetHapticsActive(useProfile.OnVibration);
-
-        CheckRemainingUnlimitedHeartTime();
-        CheckRemainingCooldownAdsUnlimitedHeart();
-        CheckRemainingHeartCooldown();
-
-        //this.RegisterListener(EventID.REMOVE_ADS, ChangeAdsState);
-        //Debug.LogError("Ads listener registered");
-
-        // GameController.Instance.admobAds.ShowBanner();
-    }
-
     void CheckRemainingHeartCooldown()
     {
         if (UseProfile.RemainingTimeHeartCooldown > 0 )
@@ -245,6 +277,7 @@ public class GameController : MonoBehaviour
     {
         UseProfile.TimeSinceLastExit = DateTime.UtcNow;
     }
+    #endregion
 
     #region Inter Ads
     void ActivateInter()

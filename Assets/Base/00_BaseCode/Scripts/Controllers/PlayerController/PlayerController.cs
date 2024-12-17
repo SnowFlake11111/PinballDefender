@@ -33,13 +33,18 @@ public class PlayerController : SerializedMonoBehaviour
     #endregion
 
     #region Private Variables
-    int playerDamage = 10;
+    Material ballSkin;
+    GameObject ballTrail;
+
     int playerScore = 0;
+
+    int playerDamage = 25;
+    int bounceLimit = 5;
     int maxAmmo = 5;
     int currentAmmo = 5;
     int currentCredits = 0;
-    int maxCredits = 300;
-    int creditsGainedOverTime = 25;
+    int maxCredits = 100;
+    int creditsGainedOverTime = 5;
 
     float resumeRotationTimer = 0.5f;
 
@@ -70,13 +75,26 @@ public class PlayerController : SerializedMonoBehaviour
 
     #region Functions
     //----------Public----------
-    public void Init()
+    public void Init(int setupId)
     {
         RotateHandler();
 
         ogRotation = gameObject.transform.localEulerAngles;
         ogModelPosition = gunModel.transform.localPosition;
         gameObject.layer = playerId;
+
+        switch (setupId)
+        {
+            case 1:
+                CampaignSetup();
+                break;
+            case 2:
+                ScoreSetup();
+                break;
+            case 3:
+                DefenderSetup();
+                break;
+        }
     }
 
     public void Shoot()
@@ -85,10 +103,11 @@ public class PlayerController : SerializedMonoBehaviour
         tempBallRef.transform.localScale = Vector3.one / 2;
         tempBallRef.transform.localEulerAngles = ballSpawnPoint.transform.eulerAngles;
 
-        tempBallRef.ShootBall(ballSpawnPoint.transform.forward);
-        tempBallRef.SetOwner(playerId, this);
+        tempBallRef.AssignNewTexture(ballSkin);
+        tempBallRef.AssignNewTrail(ballTrail);
 
-        //Debug.LogError(playerId);
+        tempBallRef.ShootBall();
+        tempBallRef.SetOwner(this);
 
         if (doubleDamageBuffTimer > 0)
         {
@@ -99,12 +118,25 @@ public class PlayerController : SerializedMonoBehaviour
             tempBallRef.SetDamage(playerDamage);
         }
 
-        tempBallRef.SetBounceLimit(5);
+        tempBallRef.SetBounceLimit(bounceLimit);
 
         ShootEffect();
 
         //Việc giữ các quả bóng trong một list là để đảm bảo việc giữ cho các va chạm giữa các quả bóng của người chơi sẽ bỏ qua va chạm đối với quân cùng phe
         //UPDATE: Đã đổi sang sử dụng Collision Layer
+    }
+
+    public void StartRotation()
+    {
+        RotateHandler();
+    }
+
+    public void PermanentlyStopRotation()
+    {
+        if (autoResumeRotation != null)
+        {
+            StopCoroutine(autoResumeRotation);
+        }
     }
 
     public void TemporaryStopRotation()
@@ -117,7 +149,7 @@ public class PlayerController : SerializedMonoBehaviour
         autoResumeRotation = StartCoroutine(ResumeRotationTimer());
     }
 
-    //To Do: Create a function that handle spawning unit
+    //To Do: Create a function that handle spawning unit [done]
 
     public void SpawnAnUnit(GameUnitBase unitToSpawn, GameObject spawnPoint, FieldLane spawnLane, GameObject unitHolder)
     {
@@ -212,7 +244,7 @@ public class PlayerController : SerializedMonoBehaviour
         RequestUpdateCreditsNumber();
     }
 
-    public void CreditsGainedOverTime(int modeId)
+    public void CreditsGainedOverTime(int modeId, int bonusMultiplierOverTime = 0)
     {
         switch (modeId)
         {
@@ -227,13 +259,13 @@ public class PlayerController : SerializedMonoBehaviour
                 }
                 break;
             case 2:
-                if (currentCredits + creditsGainedOverTime > maxCredits)
+                if (currentCredits + creditsGainedOverTime + 5 * bonusMultiplierOverTime > maxCredits)
                 {
                     currentCredits = maxCredits;
                 }
                 else
                 {
-                    currentCredits += creditsGainedOverTime;
+                    currentCredits += creditsGainedOverTime + 5 * bonusMultiplierOverTime;
                 }
                 break;
         }
@@ -385,6 +417,73 @@ public class PlayerController : SerializedMonoBehaviour
         rotateGun.Pause();
         yield return new WaitForSeconds(resumeRotationTimer);
         rotateGun.Play();
+    }
+
+    //***   Game Mode Setup     ***
+    void CampaignSetup()
+    {
+        playerDamage = 25 + 5 * UseProfile.CampaignDamageUpgradeCount;
+        bounceLimit = 5 + 1 * UseProfile.CampaignBounceUpgradeCount;
+        maxAmmo = 5 + 1 * UseProfile.CampaignMagazineUpgradeCount;
+        creditsGainedOverTime = 5 + 2 * UseProfile.CampaignCreditsGainRateUpgradeCount;
+        maxCredits = 100 + 80 * UseProfile.CampaignMaxCreditsUpgradeCount;
+
+        currentAmmo = maxAmmo;
+
+        ballSkin = GameController.Instance.gameModeData.GetBallSkin(UseProfile.CampaignBallTextureChoice);
+        ballTrail = GameController.Instance.gameModeData.GetBallTrail(UseProfile.CampaignBallTrailChoice);
+    }
+
+    void ScoreSetup()
+    {
+        if (playerId != 7)
+        {
+            playerDamage = 25 + 5 * GameController.Instance.gameModeData.GetPlayerDamageUpgrade(2);
+            bounceLimit = 5 + 1 * GameController.Instance.gameModeData.GetPlayerBounceUpgrade(2);
+            maxAmmo = 5 + 1 * GameController.Instance.gameModeData.GetPlayerMagazineUpgrade(2);
+
+            ballSkin = GameController.Instance.gameModeData.GetBallSkin(UseProfile.MultiplayerPlayer_2BallTextureChoice);
+            ballTrail = GameController.Instance.gameModeData.GetBallTrail(UseProfile.MultiplayerPlayer_2BallTrailChoice);
+        }
+        else
+        {
+            playerDamage = 25 + 5 * GameController.Instance.gameModeData.GetPlayerDamageUpgrade(1);
+            bounceLimit = 5 + 1 * GameController.Instance.gameModeData.GetPlayerBounceUpgrade(1);
+            maxAmmo = 5 + 1 * GameController.Instance.gameModeData.GetPlayerMagazineUpgrade(1);
+
+            ballSkin = GameController.Instance.gameModeData.GetBallSkin(UseProfile.MultiplayerPlayer_1BallTextureChoice);
+            ballTrail = GameController.Instance.gameModeData.GetBallTrail(UseProfile.MultiplayerPlayer_1BallTrailChoice);
+        }      
+
+        currentAmmo = maxAmmo;
+    }
+
+    void DefenderSetup()
+    {
+        if (playerId != 7)
+        {
+            playerDamage = 25 + 5 * GameController.Instance.gameModeData.GetPlayerDamageUpgrade(2);
+            bounceLimit = 5 + 1 * GameController.Instance.gameModeData.GetPlayerBounceUpgrade(2); ;
+            maxAmmo = 5 + 1 * GameController.Instance.gameModeData.GetPlayerMagazineUpgrade(2);
+            creditsGainedOverTime = 5 + 2 * GameController.Instance.gameModeData.GetPlayerCreditsGainRateUpgrade(2);
+            maxCredits = 100 + 80 * GameController.Instance.gameModeData.GetPlayerMaxCreditsUpgrade(2);
+
+            ballSkin = GameController.Instance.gameModeData.GetBallSkin(UseProfile.MultiplayerPlayer_2BallTextureChoice);
+            ballTrail = GameController.Instance.gameModeData.GetBallTrail(UseProfile.MultiplayerPlayer_2BallTrailChoice);
+        }
+        else
+        {
+            playerDamage = 25 + 5 * GameController.Instance.gameModeData.GetPlayerDamageUpgrade(1);
+            bounceLimit = 5 + 1 * GameController.Instance.gameModeData.GetPlayerBounceUpgrade(1); ;
+            maxAmmo = 5 + 1 * GameController.Instance.gameModeData.GetPlayerMagazineUpgrade(1);
+            creditsGainedOverTime = 5 + 2 * GameController.Instance.gameModeData.GetPlayerCreditsGainRateUpgrade(1);
+            maxCredits = 100 + 80 * GameController.Instance.gameModeData.GetPlayerMaxCreditsUpgrade(1);
+
+            ballSkin = GameController.Instance.gameModeData.GetBallSkin(UseProfile.MultiplayerPlayer_1BallTextureChoice);
+            ballTrail = GameController.Instance.gameModeData.GetBallTrail(UseProfile.MultiplayerPlayer_1BallTrailChoice);
+        }
+
+        currentAmmo = maxAmmo;
     }
 
     //----------Odin Functions----------

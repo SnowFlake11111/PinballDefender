@@ -6,6 +6,712 @@ using MoreMountains.NiceVibrations;
 
 public class UseProfile : MonoBehaviour
 {
+    #region Pinball Defender
+    public static int LevelProgress
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_PROGRESS, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_PROGRESS, value);
+            PlayerPrefs.Save();
+            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.LEVEL_PROGRESS_CHANGE);
+        }
+    }
+
+    public static int GameGem
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.GAME_GEM, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.GAME_GEM, value);
+            PlayerPrefs.Save();
+            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.CHANGE_GEM);
+        }
+    }
+
+    public static int CampaignDamageUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_DAMAGE_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_DAMAGE_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignBounceUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_BOUNCE_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_BOUNCE_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignMagazineUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_MAGAZINE_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_MAGAZINE_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignReloadSpeedUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_RELOAD_SPEED_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_RELOAD_SPEED_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignCreditsGainRateUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_CREDITS_GAIN_RATE_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_CREDITS_GAIN_RATE_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignMaxCreditsUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_MAX_CREDITS_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_MAX_CREDITS_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignGateHealthUpgradeCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_GATE_HEALTH_UPGRADE_COUNT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_GATE_HEALTH_UPGRADE_COUNT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignBallTextureChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_BALL_TEXTURE_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_BALL_TEXTURE_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignBallTrailChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_BALL_TRAIL_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_BALL_TRAIL_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignSlot1Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_SLOT_1_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_SLOT_1_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignSlot2Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_SLOT_2_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_SLOT_2_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignSlot3Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_SLOT_3_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_SLOT_3_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignSlot4Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_SLOT_4_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_SLOT_4_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int CampaignSlot5Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.CAMPAIGN_SLOT_5_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.CAMPAIGN_SLOT_5_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1BallTextureChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_BALL_TEXTURE_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_BALL_TEXTURE_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1BallTrailChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_BALL_TRAIL_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_BALL_TRAIL_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2BallTextureChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_BALL_TEXTURE_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_BALL_TEXTURE_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2BallTrailChoice
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_BALL_TRAIL_CHOICE, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_BALL_TRAIL_CHOICE, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1Slot1Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_1_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_1_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1Slot2Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_2_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_2_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1Slot3Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_3_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_3_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1Slot4Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_4_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_4_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_1Slot5Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_5_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_1_SLOT_5_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2Slot1Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_1_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_1_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2Slot2Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_2_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_2_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2Slot3Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_3_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_3_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2Slot4Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_4_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_4_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int MultiplayerPlayer_2Slot5Unit
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_5_UNIT, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MULTIPLAYER_PLAYER_2_SLOT_5_UNIT, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool WarriorUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.WARRIOR_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.WARRIOR_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool RangerUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.RANGER_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.RANGER_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool MageUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MAGE_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MAGE_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool EnforcerUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ENFORCER_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ENFORCER_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool DemonUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.DEMON_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.DEMON_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool MonsterUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.MONSTER_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.MONSTER_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool HealerUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.HEALER_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.HEALER_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool BerserkerUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.BERSERKER_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.BERSERKER_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool BloodMageUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.BLOODMAGE_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.BLOODMAGE_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool KingUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.KING_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.KING_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int ScoreBattleMatchesCounter
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.SCORE_BATTLE_MATCHES_COUNTER, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.SCORE_BATTLE_MATCHES_COUNTER, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static int DefenderBattleMatchesCounter
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.DEFENDER_BATTLE_MATCHES_COUNTER, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.DEFENDER_BATTLE_MATCHES_COUNTER, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FinishedAct1
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FINISHED_ACT_1, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FINISHED_ACT_1, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FinishedAct2
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FINISHED_ACT_2, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FINISHED_ACT_2, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_KillWith10thBounce
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_KILL_WITH_10TH_BOUNCE, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_KILL_WITH_10TH_BOUNCE, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_Completed3ScoreBattleMatches
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_COMPLETED_3_SCORE_BATTLE_MATCHES, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_COMPLETED_3_SCORE_BATTLE_MATCHES, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_Completed3DefenderBattleMatches
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_COMPLETED_3_DEFENDER_BATTLE_MATCHES, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_COMPLETED_3_DEFENDER_BATTLE_MATCHES, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedDamage
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_DAMAGE, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_DAMAGE, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedBounce
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_BOUNCE, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_BOUNCE, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedReloadSpeed
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_RELOAD_SPEED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_RELOAD_SPEED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedMagazine
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_MAGAZINE, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_MAGAZINE, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedCreditsGainRate
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_CREDITS_GAIN_RATE, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_CREDITS_GAIN_RATE, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedMaxCredits
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_MAX_CREDITS, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_MAX_CREDITS, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool Achievement_FullyUpgradedGateHealth
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_GATE_HEALTH, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.ACHIEVEMENT_FULLY_UPGRADED_GATE_HEALTH, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+    #endregion
+
     public static bool FirstLoading
     {
         get
@@ -56,32 +762,6 @@ public class UseProfile : MonoBehaviour
         }
     }
 
-    public static float RemainingCounterSinceLastExit
-    {
-        get
-        {
-            return PlayerPrefs.GetFloat(StringHelper.REMAINING_COUNTER_SINCE_SINCE_LAST_EXIT, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetFloat(StringHelper.REMAINING_COUNTER_SINCE_SINCE_LAST_EXIT, value);
-            PlayerPrefs.Save();
-        }
-    }
-
-    public static float CurrentCounter
-    {
-        get
-        {
-            return PlayerPrefs.GetFloat(StringHelper.CURRENT_COUNTER, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetFloat(StringHelper.CURRENT_COUNTER, value);
-            PlayerPrefs.Save();
-        }
-    }
-
     public static float RemainingTimeHeartCooldown
     {
         get
@@ -119,20 +799,6 @@ public class UseProfile : MonoBehaviour
         {
             PlayerPrefs.SetInt(StringHelper.MAX_HEART, value);
             PlayerPrefs.Save();
-        }
-    }
-
-    public static int Star
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.STAR, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.STAR, value);
-            PlayerPrefs.Save();
-            EventDispatcher.EventDispatcher.Instance.PostEvent(EventID.CHANGE_STAR);
         }
     }
 
@@ -255,102 +921,6 @@ public class UseProfile : MonoBehaviour
         }
     }
     
-
-    public static int DestroyScewBooster
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.REDO_BOOSTER, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.REDO_BOOSTER, value);
-            PlayerPrefs.Save();
-         
-        }
-    }
-    public static int DrillBooster
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.SUPORT_BOOSTER, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.SUPORT_BOOSTER, value);
-            PlayerPrefs.Save();
-
-        }
-    }
-
-
-    public static int NumberOfDisplayedInterstitialD0_D1
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.NUMBER_OF_DISPLAYED_INTERST_ITIAL_D0_D1_KEY, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.NUMBER_OF_DISPLAYED_INTERST_ITIAL_D0_D1_KEY, value);
-            PlayerPrefs.Save();
-
-        }
-    }
-
-    public static int NumberOfDisplayedInterstitialD1
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.NUMBER_OF_DISPLAYED_INTERST_ITIAL_D1_KEY, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.NUMBER_OF_DISPLAYED_INTERST_ITIAL_D1_KEY, value);
-            PlayerPrefs.Save();
-
-        }
-    }
-
-    public static int NumberRewardShowed
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.NUMBER_REWARD_SHOWED, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.NUMBER_REWARD_SHOWED, value);
-            PlayerPrefs.Save();
-
-        }
-    }
-    public static int NumberInterShowed
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.NUMBER_INTER_SHOWED, 0);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.NUMBER_INTER_SHOWED, value);
-            PlayerPrefs.Save();
-
-        }
-    }
-
-    public int LevelUnlock
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(StringHelper.CURRENT_LEVEL_PLAY, 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(StringHelper.CURRENT_LEVEL_PLAY, value);
-            PlayerPrefs.Save();
-        }
-    }
     public bool IsRemoveAds
     {
         get
@@ -535,7 +1105,18 @@ public class UseProfile : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
-    public static int NumberOfAdsInPlay;
+    public static int NumberOfAdsInPlay
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.NUMBER_OF_ADS_IN_PLAY, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.NUMBER_OF_ADS_IN_PLAY, value);
+            PlayerPrefs.Save();
+        }
+    }
     public static int NumberOfAdsInDay
     {
         get

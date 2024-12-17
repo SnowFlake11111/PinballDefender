@@ -17,6 +17,10 @@ public class GameScene : BaseScene
     public Image warningScreen;
 
     [BoxGroup("SHARED DATAS")]
+    [Header("UNIT REFERENCES")]
+    public Dictionary<int, GameUnitBase> units = new Dictionary<int, GameUnitBase>();
+
+    [BoxGroup("SHARED DATAS")]
     [Space]
     [Header("Unit image references")]
     public Dictionary<int, Sprite> unitImages = new Dictionary<int, Sprite>();
@@ -142,6 +146,11 @@ public class GameScene : BaseScene
     [BoxGroup("SCORE BATTLE/Player Control")]
     [LabelWidth(250)]
     public Button scorePlayer_2ShootBtn;
+
+    [BoxGroup("SCORE BATTLE/Player Control")]
+    [LabelWidth(250)]
+    [Space]
+    public Button scoreSetting;
 
     //***   DEFENDER BATTLE ***
     [BoxGroup("DEFENDER BATTLE", centerLabel: true)]
@@ -269,7 +278,8 @@ public class GameScene : BaseScene
 
     GameObject unitHolder;
 
-    int chosenBoosterId;
+    int defenderClockTime = 0;
+    int defenderTimeBonus = 0;
     int player_1prevCredits = 0;
     int player_2prevCredits = 0;
     int player_1prevScore = 0;
@@ -300,6 +310,7 @@ public class GameScene : BaseScene
     bool campaignMode = false;
     bool scoreBattleMode = false;
     bool defenderBattleMode = false;
+    bool clockPause = false;
 
     List<int> player_1UnitsCostList = new List<int>();
     List<int> player_2UnitsCostList = new List<int>();
@@ -323,12 +334,10 @@ public class GameScene : BaseScene
     Tween player_2Reload;
     Tween player_1GainCredits;
     Tween player_2GainCredits;
-    Tween player_1GainScore;
-    Tween player_2GainScore;
     Tween player_1LowAmmoWarning;
     Tween player_2LowAmmoWarning;
-    Tween player_1LowCreditsWarning;
-    Tween player_2LowCreditsWarning;
+
+    Coroutine defenderModeClock;
     #endregion
 
     #region Functions
@@ -370,6 +379,56 @@ public class GameScene : BaseScene
     public override void OnEscapeWhenStackBoxEmpty()
     {
         throw new NotImplementedException();
+    }
+
+    public void StopPlayer_1Entirely()
+    {
+        if (campaignMode || defenderBattleMode)
+        {
+            if (player_1Reload != null)
+            {
+                player_1Reload.Kill();
+            }
+
+            if (player_1GainCreditsAnimation != null)
+            {
+                player_1GainCreditsAnimation.Kill();
+            }
+        }
+        else
+        {
+            if (player_1Reload != null)
+            {
+                player_1Reload.Kill();
+            }
+        }
+
+        GamePlayController.Instance.gameLevelController.currentLevel.player_1.PermanentlyStopRotation();
+    }
+
+    public void StopPlayer_2Entirely()
+    {
+        if (defenderBattleMode)
+        {
+            if (player_2Reload != null)
+            {
+                player_2Reload.Kill();
+            }
+
+            if (player_2GainCreditsAnimation != null)
+            {
+                player_2GainCreditsAnimation.Kill();
+            }
+        }
+        else
+        {
+            if (player_2Reload != null)
+            {
+                player_2Reload.Kill();
+            }
+        }
+
+        GamePlayController.Instance.gameLevelController.currentLevel.player_2.PermanentlyStopRotation();
     }
 
     //*** VISUAL UPDATE***
@@ -746,14 +805,13 @@ public class GameScene : BaseScene
         }
     }
 
-    //*** BUTTONS ACTION ***
     public void Player_1StartReload()
     {
         if (player_1Reload == null)
         {
             if (campaignMode)
             {
-                player_1Reload = campaignPlayerReloadEffect.DOFillAmount(1, 5f)
+                player_1Reload = campaignPlayerReloadEffect.DOFillAmount(1, 5f - 0.5f * UseProfile.CampaignReloadSpeedUpgradeCount)
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -768,7 +826,7 @@ public class GameScene : BaseScene
             }
             else if (scoreBattleMode)
             {
-                player_1Reload = scorePlayer_1ReloadEffect.DOFillAmount(1, 5f)
+                player_1Reload = scorePlayer_1ReloadEffect.DOFillAmount(1, 5f - 0.5f * GameController.Instance.gameModeData.GetPlayerReloadSpeedUpgrade(1))
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -783,7 +841,7 @@ public class GameScene : BaseScene
             }
             else
             {
-                player_1Reload = defenderPlayer_1ReloadEffect.DOFillAmount(1, 5f)
+                player_1Reload = defenderPlayer_1ReloadEffect.DOFillAmount(1, 5f - 0.5f * GameController.Instance.gameModeData.GetPlayerReloadSpeedUpgrade(1))
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -805,7 +863,7 @@ public class GameScene : BaseScene
         {
             if (scoreBattleMode)
             {
-                player_2Reload = scorePlayer_2ReloadEffect.DOFillAmount(1, 5f)
+                player_2Reload = scorePlayer_2ReloadEffect.DOFillAmount(1, 5f - 0.5f * GameController.Instance.gameModeData.GetPlayerReloadSpeedUpgrade(2))
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -820,7 +878,7 @@ public class GameScene : BaseScene
             }
             else
             {
-                player_2Reload = defenderPlayer_2ReloadEffect.DOFillAmount(1, 5f)
+                player_2Reload = defenderPlayer_2ReloadEffect.DOFillAmount(1, 5f - 0.5f * GameController.Instance.gameModeData.GetPlayerReloadSpeedUpgrade(2))
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -862,7 +920,7 @@ public class GameScene : BaseScene
                     .OnComplete(delegate
                     {
                         defenderPlayer_1CreditsGainEffect.fillAmount = 0;
-                        GamePlayController.Instance.gameLevelController.currentLevel.player_1.CreditsGainedOverTime(2);
+                        GamePlayController.Instance.gameLevelController.currentLevel.player_1.CreditsGainedOverTime(2, defenderTimeBonus);
                         player_1GainCredits = null;
                         if (!GamePlayController.Instance.gameLevelController.currentLevel.player_1.IsCreditsMaxed())
                         {
@@ -882,7 +940,7 @@ public class GameScene : BaseScene
                     .OnComplete(delegate
                     {
                         defenderPlayer_2CreditsGainEffect.fillAmount = 0;
-                        GamePlayController.Instance.gameLevelController.currentLevel.player_2.CreditsGainedOverTime(2);
+                        GamePlayController.Instance.gameLevelController.currentLevel.player_2.CreditsGainedOverTime(2, defenderTimeBonus);
                         player_2GainCredits = null;
                         if (!GamePlayController.Instance.gameLevelController.currentLevel.player_2.IsCreditsMaxed())
                         {
@@ -892,6 +950,24 @@ public class GameScene : BaseScene
         }
     }
 
+    public void StartDefenderModeClock()
+    {
+        defenderClockTime = 0;
+        defenderTimeBonus = 0;
+        defenderModeClock = StartCoroutine(StartDefenderClockForCreditsBonus());
+    }
+
+    public void StopDefenderModeClock()
+    {
+        StopCoroutine(defenderModeClock);
+    }
+
+    public int GetDefenderClockTime()
+    {
+        return defenderClockTime;
+    }
+
+    //*** BUTTONS ACTION ***
     public void Player_1PickedUnitToSpawn(GameUnitBase pickedUnit)
     {
         if (player_1ChosenUnitToSpawn != null)
@@ -1173,6 +1249,7 @@ public class GameScene : BaseScene
 
     void Player_1SetupSpawnList()
     {
+        GetUnitList(1);
         player_1UnitsCostList.Clear();
 
         if (campaignMode)
@@ -1243,6 +1320,7 @@ public class GameScene : BaseScene
 
     void Player_2SetupSpawnList()
     {
+        GetUnitList(2);
         player_2UnitsCostList.Clear();
 
         int emptySlotCount = defenderPlayer_2UnitSpawnBtn.Count - player_2chosenUnits.Count;
@@ -1338,6 +1416,118 @@ public class GameScene : BaseScene
         
     }
 
+    void GetUnitList(int id)
+    {
+        switch (id)
+        {
+            case 1:
+                player_1chosenUnits.Clear();
+                GameUnitBase unitPlayer_1Found;
+
+                if (campaignMode)
+                {
+                    if (units.TryGetValue(UseProfile.CampaignSlot1Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.CampaignSlot2Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.CampaignSlot3Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.CampaignSlot4Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.CampaignSlot5Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+                }
+                else
+                {
+                    if (units.TryGetValue(UseProfile.MultiplayerPlayer_1Slot1Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.MultiplayerPlayer_1Slot2Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.MultiplayerPlayer_1Slot3Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.MultiplayerPlayer_1Slot4Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+
+                    if (units.TryGetValue(UseProfile.MultiplayerPlayer_1Slot5Unit, out unitPlayer_1Found))
+                    {
+                        player_1chosenUnits.Add(unitPlayer_1Found);
+                    }
+                }
+                break;
+            case 2:
+                player_2chosenUnits.Clear();
+                GameUnitBase unitPlayer_2Found;
+
+                if (units.TryGetValue(UseProfile.MultiplayerPlayer_2Slot1Unit, out unitPlayer_2Found))
+                {
+                    player_2chosenUnits.Add(unitPlayer_2Found);
+                }
+
+                if (units.TryGetValue(UseProfile.MultiplayerPlayer_2Slot2Unit, out unitPlayer_2Found))
+                {
+                    player_2chosenUnits.Add(unitPlayer_2Found);
+                }
+
+                if (units.TryGetValue(UseProfile.MultiplayerPlayer_2Slot3Unit, out unitPlayer_2Found))
+                {
+                    player_2chosenUnits.Add(unitPlayer_2Found);
+                }
+
+                if (units.TryGetValue(UseProfile.MultiplayerPlayer_2Slot4Unit, out unitPlayer_2Found))
+                {
+                    player_2chosenUnits.Add(unitPlayer_2Found);
+                }
+
+                if (units.TryGetValue(UseProfile.MultiplayerPlayer_2Slot5Unit, out unitPlayer_2Found))
+                {
+                    player_2chosenUnits.Add(unitPlayer_2Found);
+                }
+                break;
+        }
+    }
+
+    IEnumerator StartDefenderClockForCreditsBonus()
+    {
+        WaitForSeconds oneSecond = new WaitForSeconds(1);
+
+        while (!clockPause)
+        {
+            if (defenderTimeBonus < 5)
+            {
+                defenderTimeBonus = defenderClockTime % 12;
+            }
+
+            defenderClockTime++;
+
+            yield return oneSecond;
+        }
+    }
+
     //----------Mode Section----------
     //***   CAMPAIGN    ***
     void InitiateCampaignMode()
@@ -1355,6 +1545,8 @@ public class GameScene : BaseScene
         campaignPlayerMaxSpawnCredits.text = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetMaxCredits().ToString();
 
         player_1prevCredits = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetCurrentCredits();
+
+        campaignSetting.onClick.AddListener(delegate { OpenSetting(); });
 
         Player_1SetupSpawnLaneButtons();
         Player_1SetupSpawnList();
@@ -1384,6 +1576,8 @@ public class GameScene : BaseScene
         player_1prevScore = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetScore();
         player_2prevScore = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetScore();
 
+        scoreSetting.onClick.AddListener(delegate { OpenSetting(); });
+
         scorePlayer_1ShootBtn.onClick.AddListener(delegate { Player_1Shoot(); });
         scorePlayer_2ShootBtn.onClick.AddListener (delegate { Player_2Shoot(); });
     }
@@ -1412,6 +1606,8 @@ public class GameScene : BaseScene
         player_1prevCredits = GamePlayController.Instance.gameLevelController.currentLevel.player_1.GetCurrentCredits();
         player_2prevCredits = GamePlayController.Instance.gameLevelController.currentLevel.player_2.GetCurrentCredits();
 
+        defenderSetting.onClick.AddListener(delegate { OpenSetting(); });
+
         Player_1SetupSpawnLaneButtons();
         Player_1SetupSpawnList();
         Player_1UpdateSpawnBtnPriceCheck();
@@ -1420,15 +1616,17 @@ public class GameScene : BaseScene
         Player_2SetupSpawnList();
         Player_2UpdateSpawnBtnPriceCheck();
 
+        StartDefenderModeClock();
+
         defenderPlayer_1ShootBtn.onClick.AddListener(delegate { Player_1Shoot(); });
         defenderPlayer_2ShootBtn.onClick.AddListener(delegate { Player_2Shoot(); });
     }
 
     //----------Buttons----------
     void OpenSetting()
-    {
+    {      
         GameController.Instance.musicManager.PlayClickSound();
-
+        Time.timeScale = 0;
         SettingBox.Setup().Show();
     }
     

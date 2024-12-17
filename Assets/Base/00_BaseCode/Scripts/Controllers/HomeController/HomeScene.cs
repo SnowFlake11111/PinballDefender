@@ -2,6 +2,7 @@
 using DG.Tweening.Plugins.Options;
 using EventDispatcher;
 using MoreMountains.NiceVibrations;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -145,82 +146,78 @@ public class HomeScene : BaseScene
     #region Public Variables
 
     [Header("-----TOP SCREEN-----")]
-    public Text heartCounter;
-    public Text heartRecoveryCountDown;
     public Text money;
-    public Text star;
-    public Text unlimitedHeartAdsCooldown;
 
     [Space]
     [Header("-----MID AND BOTTOM SCREEN-----")]
-    public Button startGame;
-    public Text currentLevel;
+    public Button startScoreBattle;
+    public Button startDefenderBattle;
 
     [Space]
     [Header("-----BUTTONS-----")]
+    public Button openBarrack;
     public Button openSetting;
     public Button openShop;
-    public Button openBuyHeart;
-    public GameObject buyHeartIcon;
-    public Button tempUnlimitedHeartAds;
-    public Button openPackShop;
+    public Button openAchievement;
 
+    [Space]
+    [Header("Game Stages")]
+    public GameObject stagesHolder;
+    public List<Button> stageBtns = new List<Button>();
     #endregion
 
     #region Private Variables
-
-    int hour, minute, second;
-    int adsMinute, adsSecond;
-
     #endregion
 
+    #region Start, Update
+    //private void Update()
+    //{
+    //    UpdateTimer();
+    //    UpdateAdsCooldown();
+    //}
+    #endregion
+
+    #region Functions
+    //---------Public----------
     public void Init()
     {
-        startGame.onClick.AddListener(delegate { StartGame(); });
         openShop.onClick.AddListener(delegate { OpenShop(); });
         openSetting.onClick.AddListener(delegate { OpenSetting(); });
-        openBuyHeart.onClick.AddListener(delegate { OpenBuyHeart(); });
-        tempUnlimitedHeartAds.onClick.AddListener(delegate { UnlimitedHeartAds(); });
-
-        openPackShop.onClick.AddListener(delegate { OpenPackShop(); });
+        openBarrack.onClick.AddListener(delegate { OpenBarrack(); });
+        openAchievement.onClick.AddListener(delegate { OpenAchievementBox(); });
+        startScoreBattle.onClick.AddListener(delegate { OpenScoreBattlePrepare(); });
+        startDefenderBattle.onClick.AddListener (delegate { OpenDefenderBattlePrepare(); });
 
         ShowMoney();
-        ShowStar();
-        currentLevel.text = "Level " + (UseProfile.CurrentLevel + 1).ToString();
+        SetupStageButtons();
+        UpdateStageProgress();
 
-        InitState();
+        //GameController.Instance.musicManager.MusicTransition();
 
-        GameController.Instance.musicManager.MusicTransition();
+        GameController.Instance.gameAchievementController.AchievementCheckerForBattles();
 
-        this.RegisterListener(EventID.CHANGE_COIN, UpdateMoney);
-        this.RegisterListener(EventID.CHANGE_STAR, UpdateMoney);
-        this.RegisterListener(EventID.HEART_UPDATE, UpdateHeart);
+        this.RegisterListener(EventID.CHANGE_GEM, UpdateMoney);
+        this.RegisterListener(EventID.LEVEL_PROGRESS_CHANGE, UpdateStageProgress);
     }
 
-    void InitState()
+    //---------Private----------
+    void SetupStageButtons()
     {
-        //HeartChecker();
-    }
-
-    private void Update()
-    {
-        //UpdateTimer();
-        //UpdateAdsCooldown();
-    }
-
-    void StartGame()
-    {
-
+        for(int i = 0; i < stageBtns.Count; i++)
+        {
+            int temp = i;
+            stageBtns[i].onClick.AddListener(delegate { OpenCampaignPrepare(temp); });
+        }
     }
 
     void OpenShop()
     {
         //Open Shop pop-up
         GameController.Instance.musicManager.PlayClickSound();
-
+        ShopBox.Setup().Show();
     }
 
-    private void OpenSetting()
+    void OpenSetting()
     {
         GameController.Instance.musicManager.PlayClickSound();
 
@@ -228,230 +225,48 @@ public class HomeScene : BaseScene
         //MMVibrationManager.Haptic(HapticTypes.MediumImpact);
     }
 
-    void OpenBuyHeart()
+    void OpenBarrack()
     {
-        GameController.Instance.musicManager.PlayClickSound();
-
+        Barrack.Setup().Show();
     }
 
-    void OpenPackShop()
+    void OpenCampaignPrepare(int stageId)
     {
-        GameController.Instance.musicManager.PlayClickSound();
-
+        CampaignPrepare.Setup(stageId).Show();
     }
 
-    public void UpdateTimer()
+    void OpenScoreBattlePrepare()
     {
-        //Note to self: Use string.Format to reformat the timer after the countdown function is complete
-        //Example: timer.text = string.Format("{0: 00}: {1: 00}", minute, second);
-
-        #region Old timer
-        //if (UseProfile.RemainingTimeForUnlimitedHeart > 0)
-        //{
-        //    heartCounter.text = "∞";
-
-        //    if(UseProfile.RemainingTimeForUnlimitedHeart > 3600)
-        //    {
-        //        hour = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) / 3600;
-        //        minute = (Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 3600) / 60;
-        //        second = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 60;
-
-        //        heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00} : {2: 00}", hour, minute, second);
-        //    }
-        //    else
-        //    {
-        //        minute = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) / 60;
-        //        second = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 60;
-
-        //        heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00}", minute, second);
-        //    }
-        //}
-        //else
-        //{
-        //    if (heartCountdown)
-        //    {
-        //        minute = Mathf.RoundToInt(currentCountdownTime) / 60;
-        //        second = Mathf.RoundToInt(currentCountdownTime) % 60;
-
-        //        heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00}", minute, second);
-
-        //        if (Mathf.RoundToInt(currentCountdownTime) <= 0)
-        //        {
-        //            UseProfile.Heart += 1;
-        //            if (UseProfile.Heart < 5)
-        //            {
-        //                currentCountdownTime = secondsPerHeartRecovery;
-        //            }
-        //        }
-        //    }
-        //}
-        #endregion
-
-        if (UseProfile.RemainingTimeForUnlimitedHeart > 0)
-        {
-            if (UseProfile.RemainingTimeForUnlimitedHeart > 3600)
-            {
-                hour = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) / 3600;
-                minute = (Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 3600) / 60;
-                second = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 60;
-
-                heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00} : {2: 00}", hour, minute, second);
-            }
-            else
-            {
-                minute = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) / 60;
-                second = Mathf.RoundToInt(UseProfile.RemainingTimeForUnlimitedHeart) % 60;
-
-                heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00}", minute, second);
-            }
-        }
-        else
-        {
-            if (UseProfile.Heart < UseProfile.MaxHeart)
-            {
-                minute = Mathf.RoundToInt(UseProfile.RemainingTimeHeartCooldown) / 60;
-                second = Mathf.RoundToInt(UseProfile.RemainingTimeHeartCooldown) % 60;
-
-                heartRecoveryCountDown.text = string.Format(" {0: 00}: {1: 00}", minute, second);
-            }
-            else
-            {
-                heartRecoveryCountDown.text = "FULL";
-            }
-        }
+        ScoreBattlePrepare.Setup().Show();
     }
 
-    void UpdateAdsCooldown()
+    void OpenDefenderBattlePrepare()
     {
-        if (UseProfile.RemainingTimeForAdsCoolDownUnlimitedHeart > 0)
-        {
-            tempUnlimitedHeartAds.interactable = false;
-            if (!unlimitedHeartAdsCooldown.gameObject.activeSelf)
-            {
-                unlimitedHeartAdsCooldown.gameObject.SetActive(true);
-            }
-
-            adsMinute = Mathf.RoundToInt(UseProfile.RemainingTimeForAdsCoolDownUnlimitedHeart) / 60;
-            adsSecond = Mathf.RoundToInt(UseProfile.RemainingTimeForAdsCoolDownUnlimitedHeart) % 60;
-
-            unlimitedHeartAdsCooldown.text = string.Format(" {0: 00}: {1: 00}", adsMinute, adsSecond);
-        }
-        else
-        {
-            tempUnlimitedHeartAds.interactable = true;
-            if (unlimitedHeartAdsCooldown.gameObject.activeSelf)
-            {
-                unlimitedHeartAdsCooldown.gameObject.SetActive(false);
-            }
-        }
+        DefenderBattlePrepare.Setup().Show();
     }
 
-    void UnlimitedHeartAds()
+    void OpenAchievementBox()
     {
-        //Init ads
-        GameController.Instance.musicManager.PlayClickSound();
-
-        if (GameController.Instance.activateAds)
-        {
-            GameController.Instance.admobAds.ShowVideoReward(
-            delegate { GrantUnlimitedHeart(); },
-            delegate { FailedToGetReward(); },
-            delegate { },
-            ActionWatchVideo.SecondChanceAds,
-            UseProfile.CurrentLevel.ToString()
-            );
-        }
-        else
-        {
-            GrantUnlimitedHeart();
-        }
-        
-
-        void GrantUnlimitedHeart()
-        {
-            UseProfile.RemainingTimeForUnlimitedHeart += 900;
-            UseProfile.RemainingTimeForAdsCoolDownUnlimitedHeart += 3600;
-
-            UseProfile.RemainingTimeHeartCooldown = 0;
-
-            GameController.Instance.AnalyticsController.PostWatchUnlimitedHeartAds();
-            HeartChecker();
-        }
-
-        void FailedToGetReward()
-        {
-            GameController.Instance.moneyEffectController.SpawnEffectText_FlyUp
-                        (
-                        tempUnlimitedHeartAds.transform.localPosition,
-                        "No video at the moment!",
-                        Color.white,
-                        isSpawnItemPlayer: true,
-                        false,
-                        null
-                        );
-        }
-    }
-
-    void HeartChecker()
-    {
-        if (UseProfile.RemainingTimeForUnlimitedHeart <= 0)
-        {
-            heartCounter.text = UseProfile.Heart + "/" + UseProfile.MaxHeart;
-        }
-        else
-        {
-            heartCounter.text = "∞";
-        }
-
-        if (UseProfile.Heart <= 0)
-        {
-            buyHeartIcon.SetActive(true);
-            openBuyHeart.interactable = true;
-        }
-        else
-        {
-            buyHeartIcon.SetActive(false);
-            openBuyHeart.interactable = false;
-        }
+        AchievementBox.Setup().Show();
     }
 
     void ShowMoney()
     {
-        if (UseProfile.Coin >= 1000000000)
+        if (UseProfile.GameGem >= 1000000000)
         {
-            money.text = (UseProfile.Coin / 1000000000).ToString() + "b";
+            money.text = (UseProfile.GameGem / 1000000000).ToString() + "b";
         }
-        if (UseProfile.Coin >= 1000000)
+        if (UseProfile.GameGem >= 1000000)
         {
-            money.text = (UseProfile.Coin / 1000000).ToString() + "m";
+            money.text = (UseProfile.GameGem / 1000000).ToString() + "m";
         }
-        else if (UseProfile.Coin >= 1000)
+        else if (UseProfile.GameGem >= 1000)
         {
-            money.text = (UseProfile.Coin / 1000).ToString() + "k";
-        }
-        else
-        {
-            money.text = UseProfile.Coin.ToString();
-        }
-    }
-
-    void ShowStar()
-    {
-        if (UseProfile.Star >= 1000000000)
-        {
-            star.text = (UseProfile.Star / 1000000000).ToString() + "b";
-        }
-        if (UseProfile.Star >= 1000000)
-        {
-            star.text = (UseProfile.Star / 1000000).ToString() + "m";
-        }
-        else if (UseProfile.Star >= 1000)
-        {
-            star.text = (UseProfile.Star / 1000).ToString() + "k";
+            money.text = (UseProfile.GameGem / 1000).ToString() + "k";
         }
         else
         {
-            star.text = UseProfile.Star.ToString();
+            money.text = UseProfile.GameGem.ToString();
         }
     }
 
@@ -460,18 +275,72 @@ public class HomeScene : BaseScene
         //Hiển thị popup bạn có muốn thoát game ko?
     }
 
+    //---------Start Game----------
+    void StartCampaignPrepare()
+    {
+        //Open Campaign Prepare
+    }
+
+    void StartScoreBattlePrepare()
+    {
+        //Open Score Battle Prepare
+    }
+
+    void StartDefenderBattlePrepare()
+    {
+        //Open Defender Battle Prepare
+    }
+
+    //---------Odin Functions----------
+    [Button]
+    void UpdateStages()
+    {
+        stageBtns.Clear();
+        foreach(Transform children in stagesHolder.transform)
+        {
+            if (children.childCount > 0)
+            {
+                foreach(Transform stageBtn in children.transform)
+                {
+                    if (stageBtn.GetComponent<Button>() != null && stageBtn.name.Contains("Stage"))
+                    {
+                        stageBtns.Add(stageBtn.GetComponent<Button>());
+                    }
+                }
+            }
+        }
+    }
+    #endregion
+
     #region Listener Functions
     void UpdateMoney(object dam)
     {
         ShowMoney();
-        ShowStar();
     }
 
-    void UpdateHeart(object dam)
+    void UpdateStageProgress(object dam = null)
     {
-        if (UseProfile.RemainingTimeForUnlimitedHeart <= 0)
+        for (int i = 0; i < stageBtns.Count; i++)
         {
-            HeartChecker();
+            if (i <= UseProfile.LevelProgress)
+            {
+                stageBtns[i].interactable = true;
+            }
+            else
+            {
+                stageBtns[i].interactable = false;
+            }
+        }
+
+        if (UseProfile.LevelProgress < 10)
+        {
+            startScoreBattle.gameObject.SetActive(false);
+            startDefenderBattle.gameObject.SetActive(false);
+        }
+        else
+        {
+            startScoreBattle.gameObject.SetActive(true);
+            startDefenderBattle.gameObject.SetActive(true);
         }
     }
     #endregion

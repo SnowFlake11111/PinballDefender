@@ -1299,8 +1299,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   unitId: 5
-  maxHitPoint: 800
-  hitPoint: 800
+  maxHitPoint: 2000
+  hitPoint: 2000
   healthBar: {fileID: 3909744584598961982}
   healthBarDelay: {fileID: 3909744585471915428}
   animatorBase: {fileID: 5690840751002935739}
@@ -1316,7 +1316,7 @@ MonoBehaviour:
   mainBodyColor: {fileID: 1116734821046806719}
   spawnCost: 300
   moneyGainOnKill: 225
-  scoreGainOnKill: 1000
+  scoreGainOnKill: 500
   isBossOrMiniboss: 1
   stunAt66PercentHp: 0
   stunAt50PercentHp: 1
@@ -1329,8 +1329,8 @@ MonoBehaviour:
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   bounceCost: 1
-  baseDamage: 40
-  fireballDamage: 40
+  baseDamage: 100
+  fireballDamage: 100
   fireballCooldown: 4
   demonicFireball: {fileID: -7638408648507777519, guid: 624234ef09b67ba46a592de1acd0915e, type: 3}
   demonicFireballFlash: {fileID: 6312144288086844980, guid: 41eee40a204bc244997fc351863b6dd1, type: 3}

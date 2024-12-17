@@ -20,6 +20,11 @@ public class GameDirector : SerializedMonoBehaviour
     public bool act_2Units = false;
 
     [Space]
+    [Header("Unit Counter")]
+    [DictionaryDrawerSettings(KeyLabel = "Unit", ValueLabel = "Number of appearance")]
+    [SerializeField] Dictionary<GameUnitBase, int> unitCounter = new Dictionary<GameUnitBase, int>();
+
+    [Space]
     [Header("Waves Data")]
     public List<List<GameUnitBase>> waveList = new List<List<GameUnitBase>>();
     public List<List<float>> spawnDelay = new List<List<float>>();
@@ -244,8 +249,7 @@ public class GameDirector : SerializedMonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
 
-            Debug.LogError("You win");
-            //To Do: Let Player win
+            GamePlayController.Instance.gameLevelController.currentLevel.GameOutcome(0);
         }
 
         waitForNewWave = null;
@@ -266,28 +270,41 @@ public class GameDirector : SerializedMonoBehaviour
     [Button(ButtonSizes.Medium)]
     void AddChosenUnit()
     {
+        if (chosenUnit == null)
+        {
+            Debug.LogError("Are you trying to add the void to the game ??");
+            return;
+        }
+
         waveUnits.Add(chosenUnit);
     }
 
     [HorizontalGroup("Create Wave/Spawn Delay", width: 0.5f)]
+    [PropertyTooltip("Minimum number of seconds for Director to wait before beginning a new spawn procedure within the wave")]
     [SerializeField] float minSpawnDelay = 0;
 
     [HorizontalGroup("Create Wave/Spawn Delay", width: 0.5f)]
+    [PropertyTooltip("Maximum number of seconds for Director to wait before beginning a new spawn procedure within the wave")]
     [SerializeField] float maxSpawnDelay = 0;
 
     [HorizontalGroup("Create Wave/Spawn Rate", width: 0.5f)]
+    [PropertyTooltip("Minimum number of unit to spawn per spawn procedure within the wave")]
     [SerializeField] int minSpawnAtOnce = 0;
 
     [HorizontalGroup("Create Wave/Spawn Rate", width: 0.5f)]
+    [PropertyTooltip("Maximum number of unit to spawn per spawn procedure within the wave")]
     [SerializeField] int maxSpawnAtOnce = 0;
 
     [HorizontalGroup("Create Wave/Wave Transition", width: 0.5f)]
+    [PropertyTooltip("Number of enemies left for Director to proceed to next wave")]
     [SerializeField] int waitRemainingEnemies = 0;
 
     [HorizontalGroup("Create Wave/Wave Transition", width: 0.5f)]
+    [PropertyTooltip("Number of seconds before Director to proceed to next wave regardless the number of enemies left on the field (Set 0 to disable)")]
     [SerializeField] float waitSeconds = 0;
 
     [HorizontalGroup("Create Wave/Wave Warning")]
+    [PropertyTooltip("Show Warning screen before Director begin spawning")]
     [SerializeField] bool warnPlayer = false;
 
     [Space]
@@ -328,6 +345,8 @@ public class GameDirector : SerializedMonoBehaviour
         {
             LoadWave(presentingWavePosition);
             DeleteWave(presentingWavePosition);
+
+            UpdateCounter();
         }
     }
 
@@ -363,7 +382,7 @@ public class GameDirector : SerializedMonoBehaviour
             Debug.LogError("Max Spawn Rate must be higher than Min Spawn Rate");
             return;
         }
-        else if (minSpawnAtOnce >= 5 || maxSpawnAtOnce >= 5)
+        else if (minSpawnAtOnce > 5 || maxSpawnAtOnce > 5)
         {
             Debug.LogError("Can only spawn up to 5 units at once");
             return;
@@ -381,13 +400,24 @@ public class GameDirector : SerializedMonoBehaviour
 
             waveSpawnRate.Insert(pos, new List<int> { minSpawnAtOnce, maxSpawnAtOnce });
 
-            waveWaitRemainingEnemies.Insert(pos, waitRemainingEnemies);
+            if (waitRemainingEnemies < 0)
+            {
+                waveWaitRemainingEnemies.Insert(pos, 0);
+            }
+            else
+            {
+                waveWaitRemainingEnemies.Insert(pos, waitRemainingEnemies);
+            }
 
             waveWaitSeconds.Insert(pos, waitSeconds);
 
             showWarning.Insert(pos, warnPlayer);
 
             ResetWaveSettings();
+
+            UpdateCounter();
+
+            presentingWavePosition = waveList.Count;
         }
     }
 
@@ -492,7 +522,10 @@ public class GameDirector : SerializedMonoBehaviour
     {
         if (act_1Units)
         {
-            act_2Units = false;
+            if (!transform.parent.GetComponent<StageController>().modeScoreBattle)
+            {
+                act_2Units = false;
+            }
 
             foreach (GameUnitBase unit in unitsSpawnList.Keys.ToList())
             {
@@ -506,6 +539,11 @@ public class GameDirector : SerializedMonoBehaviour
                 }
                 else
                 {
+                    if (transform.parent.GetComponent<StageController>().modeScoreBattle)
+                    {
+                        continue;
+                    }
+
                     unitsSpawnList[unit] = false;
                 }
             }
@@ -526,6 +564,11 @@ public class GameDirector : SerializedMonoBehaviour
                 }
                 else
                 {
+                    if (transform.parent.GetComponent<StageController>().modeScoreBattle)
+                    {
+                        continue;
+                    }
+
                     unitsSpawnList[unit] = false;
                 }
             }
@@ -537,7 +580,10 @@ public class GameDirector : SerializedMonoBehaviour
     {
         if (act_2Units)
         {
-            act_1Units = false;
+            if (!transform.parent.GetComponent<StageController>().modeScoreBattle)
+            {
+                act_1Units = false;
+            }
 
             foreach (GameUnitBase unit in unitsSpawnList.Keys.ToList())
             {
@@ -551,6 +597,11 @@ public class GameDirector : SerializedMonoBehaviour
                 }
                 else
                 {
+                    if (transform.parent.GetComponent<StageController>().modeScoreBattle)
+                    {
+                        continue;
+                    }
+
                     unitsSpawnList[unit] = false;
                 }
             }
@@ -571,6 +622,11 @@ public class GameDirector : SerializedMonoBehaviour
                 }
                 else
                 {
+                    if (transform.parent.GetComponent<StageController>().modeScoreBattle)
+                    {
+                        continue;
+                    }
+
                     unitsSpawnList[unit] = false;
                 }
             }
@@ -599,6 +655,26 @@ public class GameDirector : SerializedMonoBehaviour
         else
         {
             spawnFromA = true;
+        }
+    }
+
+    void UpdateCounter()
+    {
+        unitCounter.Clear();
+
+        foreach(var waves in waveList)
+        {
+            foreach(GameUnitBase unit in waves)
+            {
+                if (unitCounter.ContainsKey(unit))
+                {
+                    unitCounter[unit]++;
+                }
+                else
+                {
+                    unitCounter[unit] = 1;
+                }
+            }
         }
     }
     #endregion

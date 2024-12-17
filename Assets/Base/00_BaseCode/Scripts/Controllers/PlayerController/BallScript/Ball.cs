@@ -8,26 +8,44 @@ public class Ball : MonoBehaviour
     #region Public Variables
     [Header("Self destruct timer")]
     public float selfDestructAfter = 0;
+
+    [Space]
+    [Header("Self MeshRenderer reference")]
+    public MeshRenderer selfMeshRenderer;
+
+    [Space]
+    [Header("Auto force")]
+    public bool autoForce = false;
     #endregion
 
     #region Private Variables
+    GameObject currentTrail;
+
     Vector3 lastVelocity;
     Vector3 bounceDirection;
 
     PlayerController owner;
 
-    int ownerId = 0;
-    int bounceLimit = 0;
+    int bounceLimit = 5;
     int bounceCount = 0;
     int ballDamage = 0;
 
     float velocityStrength;
-    float currentScoreMultiply = 0;
     float originalSelfDestructTimer = 0;
     #endregion
 
+    #region Start, Update
+    private void Start()
+    {
+        if (autoForce)
+        {
+            GetComponent<Rigidbody>().AddForce(transform.forward * 300);
+        }
+    }
+    #endregion
+
     #region Functions
-    public void ShootBall(Vector3 shootDirection)
+    public void ShootBall()
     {
         GetComponent<Rigidbody>().AddForce(transform.forward * 300);
         originalSelfDestructTimer = selfDestructAfter;
@@ -47,11 +65,10 @@ public class Ball : MonoBehaviour
     }
 
     //Gán id của người bắn quả bóng này vào id người sở hữu của quả bóng này, id sẽ được sử dụng để kiểm tra va chạm với quân địch và đồng đội
-    public void SetOwner(int id, PlayerController ballOwner)
+    public void SetOwner(PlayerController ballOwner)
     {
-        ownerId = id;
         owner = ballOwner;
-        gameObject.layer = id;
+        gameObject.layer = ballOwner.gameObject.layer;
     }
     #endregion
 
@@ -64,11 +81,35 @@ public class Ball : MonoBehaviour
 
     #region Functions
     //----------Public----------
+    public void StopMoving()
+    {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    public void ResumeMoving()
+    {
+        GetComponent<Rigidbody>().AddForce(transform.forward * 300);
+    }
+
+    public void AssignNewTexture(Material newTexture)
+    {
+        selfMeshRenderer.material = newTexture;
+    }
+
+    public void AssignNewTrail(GameObject newTrail)
+    {
+        if (currentTrail != null)
+        {
+            Destroy(currentTrail);
+        }
+
+        currentTrail = Instantiate(newTrail, transform);
+    }
     //----------Private----------
     #endregion
 
     #region Collision Functions
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.GetComponent<GameUnitBase>() != null)
         {
@@ -84,7 +125,7 @@ public class Ball : MonoBehaviour
         }
         else if (collision.collider.GetComponent<Ball>() != null)
         {
-            bounceCount++;
+            //bounceCount++;
             BounceBall(collision);
         }
     }
@@ -95,6 +136,8 @@ public class Ball : MonoBehaviour
         //UPDATE: Sau khi áp dụng việc sử dụng danh sách đồng đội và danh sách bóng bắn ra thì không cần phải sử dụng ownerId để kiểm tra phe nữa mà bóng sẽ tự bỏ qua va chạm đối với các unit cùng phe
         //UPDATE 2: Đã đổi sang sử dụng Collision Layer
         unit.collider.GetComponent<GameUnitBase>().TakeDamage(owner, ballDamage, ballBounceCount: bounceCount);
+
+        GamePlayController.Instance.gameLevelController.currentLevel.ActivateHitEffect(gameObject.transform.position);
 
         if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
         {
@@ -126,6 +169,8 @@ public class Ball : MonoBehaviour
     void HitProjectile(Collision projectile)
     {
         projectile.collider.GetComponent<UnitHittableProjectile>().TakeDamage(ballDamage);
+
+        GamePlayController.Instance.gameLevelController.currentLevel.ActivateHitEffect(gameObject.transform.position);
 
         if (bounceLimit - projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost() <= 0)
         {

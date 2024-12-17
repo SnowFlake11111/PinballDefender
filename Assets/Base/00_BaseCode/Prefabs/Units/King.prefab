@@ -15875,8 +15875,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   unitId: 10
-  maxHitPoint: 700
-  hitPoint: 700
+  maxHitPoint: 1750
+  hitPoint: 1750
   healthBar: {fileID: 4830152648252705009}
   healthBarDelay: {fileID: 4830152648448039248}
   animatorBase: {fileID: 7758589513131596712}
@@ -15892,7 +15892,7 @@ MonoBehaviour:
   mainBodyColor: {fileID: 8997460280209785470}
   spawnCost: 450
   moneyGainOnKill: 337
-  scoreGainOnKill: 1500
+  scoreGainOnKill: 750
   isBossOrMiniboss: 1
   stunAt66PercentHp: 1
   stunAt50PercentHp: 0
@@ -15905,7 +15905,7 @@ MonoBehaviour:
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   bounceCost: 1
-  soulballDamage: 30
+  soulballDamage: 75
   projectileSpawnPoint: {fileID: 4830152650095504319}
   shootEffect: {fileID: 8031603377267716275}
   soulball: {fileID: -1176766597493790640, guid: c416c6dba3467114a9473e4283762c64, type: 3}

@@ -45558,8 +45558,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   unitId: 7
-  maxHitPoint: 100
-  hitPoint: 100
+  maxHitPoint: 250
+  hitPoint: 250
   healthBar: {fileID: 7849817077220708655}
   healthBarDelay: {fileID: 7849817077236292649}
   animatorBase: {fileID: 1893308105246151434}
@@ -45575,7 +45575,7 @@ MonoBehaviour:
   mainBodyColor: {fileID: 8383058736842253698}
   spawnCost: 70
   moneyGainOnKill: 35
-  scoreGainOnKill: 80
+  scoreGainOnKill: 100
   isBossOrMiniboss: 0
   stunAt66PercentHp: 0
   stunAt50PercentHp: 0
@@ -45588,7 +45588,7 @@ MonoBehaviour:
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   bounceCost: 1
-  energyballDamage: 15
+  energyballDamage: 25
   shootEffect: {fileID: 6608494300793414762}
   energyball: {fileID: 8423305850207168026, guid: c859c7ca313f4a64d8e4e43776cc019a, type: 3}
   projectileSpawnPoint: {fileID: 7849817078114653491}

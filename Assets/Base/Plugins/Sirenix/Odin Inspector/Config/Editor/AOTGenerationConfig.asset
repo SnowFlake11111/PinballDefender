@@ -16,46 +16,85 @@ MonoBehaviour:
   deleteDllAfterBuilds: 1
   AutomateForAllAOTPlatforms: 1
   automateForPlatforms: 0900000014000000
-  lastScan: 638561231830551074
+  lastScan: 638700344021505339
   supportSerializedTypes:
+  - TypeName: UnityEngine.UI.Button, UnityEngine.UI
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[GameUnitBase, Assembly-CSharp],[System.Boolean,
+      mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[GameUnitBase, Assembly-CSharp],[System.Int32,
+      mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[UnityEngine.UI.Button,
+      UnityEngine.UI]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[UnityEngine.GameObject,
+      UnityEngine.CoreModule]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[GameUnitBase,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[UnityEngine.UI.Image,
+      UnityEngine.UI]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[UnityEngine.Sprite,
+      UnityEngine.CoreModule]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: GameUnitBase, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.IEqualityComparer`1[[GameUnitBase, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.UI.Image, UnityEngine.UI
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[GameUnitBase, Assembly-CSharp]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Collections.Generic.List`1[[System.Single,
+      mscorlib]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Collections.Generic.List`1[[GameUnitBase,
+      Assembly-CSharp]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Collections.Generic.List`1[[System.Int32,
+      mscorlib]], mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[GameUnitBase,
+      Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Events.UnityAction, UnityEngine.CoreModule
+    IsCustom: 0
+    Emit: 1
+  - TypeName: UnityEngine.Events.UnityAction`1[[System.Int32, mscorlib]], UnityEngine.CoreModule
+    IsCustom: 0
+    Emit: 1
   - TypeName: UnityEngine.AudioClip, UnityEngine.AudioModule
     IsCustom: 0
     Emit: 1
   - TypeName: System.Boolean, mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: CakeLayerController, Assembly-CSharp
-    IsCustom: 0
-    Emit: 1
-  - TypeName: Customer, Assembly-CSharp
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[Customer, Assembly-CSharp],[System.Collections.Generic.Dictionary`2[[System.Int32,
-      mscorlib],[System.Boolean, mscorlib]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[Customer, Assembly-CSharp],[System.Collections.Generic.Dictionary`2[[System.Int32,
-      mscorlib],[System.Int32, mscorlib]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.GameObject, UnityEngine.CoreModule],[System.Collections.Generic.Dictionary`2[[System.Int32,
-      mscorlib],[System.Single, mscorlib]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.GameObject, UnityEngine.CoreModule],[System.Collections.Generic.Dictionary`2[[System.Int32,
-      mscorlib],[System.Int32, mscorlib]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.GameObject, UnityEngine.CoreModule],[System.Int32,
-      mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.GameObject, UnityEngine.CoreModule],[System.Collections.Generic.List`1[[CakeLayerController,
-      Assembly-CSharp]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.GameObject, UnityEngine.CoreModule],[System.Collections.Generic.List`1[[UnityEngine.GameObject,
-      UnityEngine.CoreModule]], mscorlib]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: System.Collections.Generic.Dictionary`2[[GiftType, Assembly-CSharp],[Gift,
@@ -66,40 +105,8 @@ MonoBehaviour:
       mscorlib]], mscorlib
     IsCustom: 0
     Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Boolean,
-      mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Single,
-      mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
-      mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[UnityEngine.Texture,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.Material, UnityEngine.CoreModule],[System.Boolean,
-      mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.Material, UnityEngine.CoreModule],[UnityEngine.Material,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.Material, UnityEngine.CoreModule],[UnityEngine.Texture,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
   - TypeName: System.Collections.Generic.Dictionary`2[[NameMusic, Assembly-CSharp],[MusicData,
       Assembly-CSharp]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.Dictionary`2[[UnityEngine.Texture, UnityEngine.CoreModule],[System.Int32,
-      mscorlib]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: System.Collections.Generic.EnumEqualityComparer`1[[GiftType, Assembly-CSharp]],
@@ -129,14 +136,6 @@ MonoBehaviour:
   - TypeName: IAPPack, Assembly-CSharp
     IsCustom: 0
     Emit: 1
-  - TypeName: System.Collections.Generic.IEqualityComparer`1[[Customer, Assembly-CSharp]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.IEqualityComparer`1[[UnityEngine.GameObject,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
   - TypeName: System.Collections.Generic.IEqualityComparer`1[[GiftType, Assembly-CSharp]],
       mscorlib
     IsCustom: 0
@@ -145,59 +144,20 @@ MonoBehaviour:
       mscorlib
     IsCustom: 0
     Emit: 1
-  - TypeName: System.Collections.Generic.IEqualityComparer`1[[UnityEngine.Material,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
   - TypeName: System.Collections.Generic.IEqualityComparer`1[[NameMusic, Assembly-CSharp]],
       mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.IEqualityComparer`1[[UnityEngine.Texture,
-      UnityEngine.CoreModule]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: System.Int32, mscorlib
     IsCustom: 0
     Emit: 1
-  - TypeName: System.Collections.Generic.List`1[[CakeLayerController, Assembly-CSharp]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
   - TypeName: System.Collections.Generic.List`1[[IAPPack, Assembly-CSharp]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.List`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject,
-      UnityEngine.CoreModule]], mscorlib]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: UnityEngine.Material, UnityEngine.CoreModule
     IsCustom: 0
     Emit: 1
   - TypeName: MusicData, Assembly-CSharp
     IsCustom: 0
     Emit: 1
   - TypeName: NameMusic, Assembly-CSharp
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[Customer, Assembly-CSharp]],
-      mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[UnityEngine.GameObject,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[UnityEngine.Material,
-      UnityEngine.CoreModule]], mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: System.Collections.Generic.ObjectEqualityComparer`1[[UnityEngine.Texture,
-      UnityEngine.CoreModule]], mscorlib
     IsCustom: 0
     Emit: 1
   - TypeName: UnityEngine.Purchasing.ProductType, UnityEngine.Purchasing
@@ -207,9 +167,6 @@ MonoBehaviour:
     IsCustom: 0
     Emit: 1
   - TypeName: System.String, mscorlib
-    IsCustom: 0
-    Emit: 1
-  - TypeName: UnityEngine.Texture, UnityEngine.CoreModule
     IsCustom: 0
     Emit: 1
   - TypeName: TypeBuy, Assembly-CSharp

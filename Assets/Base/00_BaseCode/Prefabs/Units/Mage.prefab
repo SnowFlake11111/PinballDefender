@@ -11080,8 +11080,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   unitId: 3
-  maxHitPoint: 50
-  hitPoint: 50
+  maxHitPoint: 125
+  hitPoint: 125
   healthBar: {fileID: 5704373026850798283}
   healthBarDelay: {fileID: 5112570112972269511}
   animatorBase: {fileID: 2555628606801211100}
@@ -11110,7 +11110,7 @@ MonoBehaviour:
   rallyIcon: {fileID: 5716124786760318584, guid: db1e2ee8ce4fef7439835f084332d39f, type: 3}
   rageIcon: {fileID: 7615759018855980429, guid: 147ba0aa1dde2ab4ca8c37ce893caffd, type: 3}
   bounceCost: 1
-  explosionDamage: 20
+  explosionDamage: 50
   shootEffect: {fileID: 5745270354398248042}
   fireball: {fileID: 3937649144085794789, guid: d70408ca7534ebf488cf4e0dca02e217, type: 3}
   projectileSpawnPoint: {fileID: 2075723360731208005}

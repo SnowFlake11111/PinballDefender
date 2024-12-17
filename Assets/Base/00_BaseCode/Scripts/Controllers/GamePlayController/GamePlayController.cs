@@ -3,6 +3,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,13 +19,17 @@ public enum StateGame
 
 public class GamePlayController : Singleton<GamePlayController>
 {
-    public PlayerContain playerContain;
     public GameScene gameScene;
     public GameLevelController gameLevelController;
 
     bool modeCampaign = false;
     bool modeScoreBattle = false;
     bool modeDefenderBattle = false;
+
+    [BoxGroup("Stage Editor")]
+    public StageController campaignBase, scoreBase, defenderBase;
+
+    [SerializeField] StageController tempRef;
 
     protected override void OnAwake()
     {
@@ -52,6 +57,7 @@ public class GamePlayController : Singleton<GamePlayController>
         }
 
         gameLevelController.PlayersCreditsCheck();
+        GameController.Instance.FinishSceneTransition();
     }
 
     public void ChangeUILoadout(int id)
@@ -97,5 +103,55 @@ public class GamePlayController : Singleton<GamePlayController>
             GameController.Instance.admobAds.DestroyBanner();
         }
        
+    }
+
+    [Button]
+    void SpawnCampaignBase()
+    {
+        string[] temp = AssetDatabase.FindAssets("t: Prefab", new[] { PathPrefabs.CAMPAIGN_LEVELS_FOLDER });
+        int numberOfCampaignLevel = temp.Length;
+
+        tempRef = Instantiate(campaignBase);
+        tempRef.name = "Campaign_Level_" + (numberOfCampaignLevel + 1);
+        tempRef.stageId = numberOfCampaignLevel + 1;
+    }
+
+    [Button]
+    void SpawnScoreBattleBase()
+    {
+        string[] temp = AssetDatabase.FindAssets("t: Prefab", new[] { PathPrefabs.SCORE_LEVELS_FOLDER });
+        int numberOfScoreLevel = temp.Length;
+
+        tempRef = Instantiate(scoreBase);
+        tempRef.name = "ScoreBattle_Level_" + (numberOfScoreLevel + 1);
+    }
+
+    [Button]
+    void SpawnDefenderBattleBase()
+    {
+        string[] temp = AssetDatabase.FindAssets("t: Prefab", new[] { PathPrefabs.DEFENDER_LEVELS_FOLDER });
+        int numberOfDefenderLevel = temp.Length;
+
+        tempRef = Instantiate(defenderBase);
+        tempRef.name = "DefenderBattle_Level_" + (numberOfDefenderLevel + 1);
+    }
+
+    [Button]
+    void SaveSpawnedStage()
+    {
+        if (tempRef.modeCampaign)
+        {
+            PrefabUtility.SaveAsPrefabAsset(tempRef.gameObject, PathPrefabs.CAMPAIGN_LEVELS_FOLDER + tempRef.name + ".prefab");
+        }
+        else if (tempRef.modeScoreBattle)
+        {
+            PrefabUtility.SaveAsPrefabAsset(tempRef.gameObject, PathPrefabs.SCORE_LEVELS_FOLDER + tempRef.name + ".prefab");
+        }
+        else
+        {
+            PrefabUtility.SaveAsPrefabAsset(tempRef.gameObject, PathPrefabs.DEFENDER_LEVELS_FOLDER + tempRef.name + ".prefab");
+        }
+
+        DestroyImmediate(tempRef.gameObject);
     }
 }

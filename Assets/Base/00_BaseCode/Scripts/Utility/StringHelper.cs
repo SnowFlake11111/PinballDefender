@@ -4,8 +4,13 @@ using UnityEngine;
 
 public static class StringHelper
 {
+    public const string SCENE_HOME = "HomeScene";
+    public const string SCENE_GAMEPLAY = "GamePlay";
+
+    public const string GAME_GEM = "game_gem";
     public const string CAMPAIGN_PROGRESS = "campaign_progress";
     public const string CAMPAIGN_DAMAGE_UPGRADE_COUNT = "campaign_damage_upgrade_count";
+    public const string CAMPAIGN_BOUNCE_UPGRADE_COUNT = "campaign_bounce_upgrade_count";
     public const string CAMPAIGN_MAGAZINE_UPGRADE_COUNT = "campaign_magazine_upgrade_count";
     public const string CAMPAIGN_RELOAD_SPEED_UPGRADE_COUNT = "campaign_reload_speed_upgrade_count";
     public const string CAMPAIGN_CREDITS_GAIN_RATE_UPGRADE_COUNT = "campaign_credits_gain_rate_upgrade_count";
@@ -42,6 +47,20 @@ public static class StringHelper
     public const string BERSERKER_UNLOCKED = "berserker_unlocked";
     public const string BLOODMAGE_UNLOCKED = "bloodmage_unlocked";
     public const string KING_UNLOCKED = "king_unlocked";
+    public const string SCORE_BATTLE_MATCHES_COUNTER = "score_battle_matches_counter";
+    public const string DEFENDER_BATTLE_MATCHES_COUNTER = "defender_battle_matches_counter";
+    public const string ACHIEVEMENT_FINISHED_ACT_1 = "finished_act_1";
+    public const string ACHIEVEMENT_FINISHED_ACT_2 = "finished_act_2";
+    public const string ACHIEVEMENT_KILL_WITH_10TH_BOUNCE = "kill_with_10th_bounce";
+    public const string ACHIEVEMENT_COMPLETED_3_SCORE_BATTLE_MATCHES = "completed_3_score_battle_matches";
+    public const string ACHIEVEMENT_COMPLETED_3_DEFENDER_BATTLE_MATCHES = "completed_3_defender_battle_matches";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_DAMAGE = "fully_upgraded_damage";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_BOUNCE = "fully_upgraded_bounce";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_RELOAD_SPEED = "fully_upgraded_reload_speed";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_MAGAZINE = "fully_upgraded_magazine";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_CREDITS_GAIN_RATE = "fully_upgraded_credits_gain_rate";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_MAX_CREDITS = "fully_upgraded_max_credits";
+    public const string ACHIEVEMENT_FULLY_UPGRADED_GATE_HEALTH = "fully_upgraded_gate_health";
 
     public const string TIME_SINCE_LAST_EXIT = "time_since_last_exit";
     public const string REMAINING_COUNTER_SINCE_SINCE_LAST_EXIT = "remaining_counter_since_last_exit";
@@ -113,14 +132,23 @@ public static class StringHelper
 
 public class PathPrefabs
 {
-    public const string END_GAME_BOX = "UI/Popups/EndGameBox";
-    public const string ADS_REVIVE_BOX = "UI/Popups/AdsReviveBox";
-    public const string BUY_HEART_BOX = "UI/Popups/BuyHeartBox";
-    public const string TO_MENU_WARNING_BOX = "UI/Popups/ToMenuWarningBox";
+    public const string STAGE_SELECT = "UI/Popups/StageSelect";
+    public const string CAMPAIGN_PREPARE = "UI/Popups/CampaignPrepare";
+    public const string CAMPAIGN_ENDGAME = "UI/Popups/CampaignEndGame";
+    public const string SCORE_BATTLE_PREPARE = "UI/Popups/ScoreBattlePrepare";
+    public const string SCORE_BATTLE_ENDGAME = "UI/Popups/ScoreBattleEndGame";
+    public const string DEFENDER_BATTLE_PREPARE = "UI/Popups/DefenderBattlePrepare";
+    public const string DEFENDER_BATTLE_ENDGAME = "UI/Popups/DefenderBattleEndGame";
+    public const string BARRACK = "UI/Popups/Barrack";
+    public const string SHOP = "UI/Popups/Shop";
+    public const string ACHIEVEMENT_BOX = "UI/Popups/AchievementBox";
+    public const string UNLOCK_BOX = "UI/Popups/UnlockBox";
+
+    public const string CAMPAIGN_LEVELS_FOLDER = "Assets/Base/00_BaseCode/Prefabs/Levels/CampaignLevels/";
+    public const string SCORE_LEVELS_FOLDER = "Assets/Base/00_BaseCode/Prefabs/Levels/ScoreBattleLevels/";
+    public const string DEFENDER_LEVELS_FOLDER = "Assets/Base/00_BaseCode/Prefabs/Levels/DefenderBattleLevels/";
+
     public const string SHOP_BOX = "UI/Popups/ShopBox";
-    public const string MINI_SHOP_BOX = "UI/Popups/MiniShopBox";
-    public const string BUY_DECORATION_BOX = "UI/Popups/BuyDecorationBox";
-    public const string LEVEL_SELECTOR_BOX = "UI/Popups/LevelSelectorBox";
 
     public const string POPUP_REWARD_BASE = "UI/Popups/PopupRewardBase";
     public const string CONFIRM_POPUP = "UI/Popups/ConfirmBox";

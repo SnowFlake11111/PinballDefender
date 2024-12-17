@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class BaseBox : MonoBehaviour
+public abstract class BaseBox : SerializedMonoBehaviour
 {
     [SerializeField] protected RectTransform mainPanel;
 
@@ -87,7 +87,7 @@ public abstract class BaseBox : MonoBehaviour
             BoxController.Instance.AddNewBackObj(this);
         }
         SetIDPopup();
-        DoAppear();
+        //DoAppear();
         OnStart();
     }
 
@@ -111,7 +111,16 @@ public abstract class BaseBox : MonoBehaviour
 
     public virtual void Show()
     {
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
+        if (isAnim)
+        {
+            if (mainPanel != null)
+            {
+                mainPanel.localScale = Vector3.zero;
+                gameObject.SetActive(true);
+                mainPanel.DOScale(1, 0.5f).SetUpdate(true).SetEase(Ease.OutBack);
+            }
+        }
     }
 
     /// <summary>
@@ -147,28 +156,26 @@ public abstract class BaseBox : MonoBehaviour
 
     protected virtual void DoClose()
     {
-        //if (isAnim)
-        //{
-        //    if (mainPanel != null)
-        //    {
-        //        mainPanel.localScale = Vector3.one;
-        //        mainPanel.DOScale(0, 0.5f).SetUpdate(true).SetEase(Ease.InBack).OnComplete(() =>
-        //        {
+        if (isAnim)
+        {
+            if (mainPanel != null)
+            {
+                mainPanel.localScale = Vector3.one;
+                mainPanel.DOScale(0, 0.5f).SetUpdate(true).SetEase(Ease.InBack).OnComplete(() =>
+                {
 
-        //            this.gameObject.SetActive(false);
-        //        });
-        //    }
-        //    else
-        //    {
-
-        //        this.gameObject.SetActive(false);
-        //    }
-        //}
-        //else
-        //{
-
+                    this.gameObject.SetActive(false);
+                });
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
             this.gameObject.SetActive(false);
-        //}
+        }
 
         if (!isPopup)
         {
