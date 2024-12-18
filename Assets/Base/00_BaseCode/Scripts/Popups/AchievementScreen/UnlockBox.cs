@@ -48,6 +48,7 @@ public class UnlockBox : BaseBox
 
     public void InitState(List<int> rewardIds)
     {
+        GameController.Instance.musicManager.PlaySoundEffect(8);
         RegisterRewardsToShow(rewardIds);
     }
     #endregion

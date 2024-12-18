@@ -127,7 +127,7 @@ public class GameController : MonoBehaviour
 
     public void StartSceneTransition(string nextSceneName)
     {
-        sceneTransitionAnimation = sceneTransitionScreen.transform.DOMoveY(0, 0.75f)
+        sceneTransitionAnimation = sceneTransitionScreen.transform.DOLocalMoveY(0, 0.75f)
             .OnComplete(delegate
             {
                 SceneManager.LoadScene(nextSceneName);
@@ -138,7 +138,7 @@ public class GameController : MonoBehaviour
     {
         if (sceneTransitionAnimation != null)
         {
-            sceneTransitionScreen.transform.DOMoveY(sceneTransitionScreenOgPos.y, 0.75f);
+            sceneTransitionScreen.transform.DOLocalMoveY(sceneTransitionScreenOgPos.y, 0.75f);
             sceneTransitionAnimation = null;
         }
     }

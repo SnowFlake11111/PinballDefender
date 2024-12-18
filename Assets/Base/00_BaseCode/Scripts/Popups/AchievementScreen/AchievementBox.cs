@@ -43,7 +43,7 @@ public class AchievementBox : BaseBox
     #region Start, Update
     public void Init()
     {
-        closeBtn.onClick.AddListener(Close);
+        closeBtn.onClick.AddListener(delegate { GameController.Instance.musicManager.PlayClickSound(); Close(); });
     }
 
     public void InitState()

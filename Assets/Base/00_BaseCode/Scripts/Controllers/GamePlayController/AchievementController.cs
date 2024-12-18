@@ -23,7 +23,7 @@ public class AchievementController : MonoBehaviour
             if (UseProfile.LevelProgress >= 10)
             {
                 //Open pop-up reward
-                tempRewardList.Add(1);
+                tempRewardList.AddRange(new List<int>() { 1, 1001, 1002 });
                 UseProfile.Achievement_FinishedAct1 = true;
             }
         }

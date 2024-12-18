@@ -129,7 +129,7 @@ public class ShopBox : BaseBox
     #region Start, Update
     private void Init()
     {
-        closeBtn.onClick.AddListener(Close);
+        closeBtn.onClick.AddListener(delegate { GameController.Instance.musicManager.PlayClickSound(); Close(); });
 
         buyDamageBtn.onClick.AddListener(delegate { BuyDamageUpgrade(); });
         buyBounceUpgradeBtn.onClick.AddListener(delegate { BuyBounceUpgrade(); });
@@ -532,6 +532,8 @@ public class ShopBox : BaseBox
 
     void BuyDamageUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= damageUpgradePrice;
         UseProfile.CampaignDamageUpgradeCount++;
         PricesUpdate(1);
@@ -546,6 +548,8 @@ public class ShopBox : BaseBox
 
     void BuyBounceUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= bounceUpgradePrice;
         UseProfile.CampaignBounceUpgradeCount++;
         PricesUpdate(2);
@@ -560,6 +564,8 @@ public class ShopBox : BaseBox
 
     void BuyReloadSpeedUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= reloadSpeedUpgradePrice;
         UseProfile.CampaignReloadSpeedUpgradeCount++;
         PricesUpdate(3);
@@ -574,6 +580,8 @@ public class ShopBox : BaseBox
 
     void BuyMagazineUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= magazineUpgradePrice;
         UseProfile.CampaignMagazineUpgradeCount++;
         PricesUpdate(4);
@@ -588,6 +596,8 @@ public class ShopBox : BaseBox
 
     void BuyCreditsGainRateUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= creditsGainRateUpgradePrice;
         UseProfile.CampaignCreditsGainRateUpgradeCount++;
         PricesUpdate(5);
@@ -602,6 +612,8 @@ public class ShopBox : BaseBox
 
     void BuyMaxCreditsUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= maxCreditsUpgradePrice;
         UseProfile.CampaignMaxCreditsUpgradeCount++;
         PricesUpdate(6);
@@ -616,6 +628,8 @@ public class ShopBox : BaseBox
 
     void BuyGateHealthUpgrade()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(3);
+
         UseProfile.GameGem -= gateHealthUpgradePrice;
         UseProfile.CampaignGateHealthUpgradeCount++;
         PricesUpdate(7);
@@ -631,6 +645,8 @@ public class ShopBox : BaseBox
     //----------Developer Functions----------
     void ResetUpgrades()
     {
+        GameController.Instance.musicManager.PlayClickSound();
+
         UseProfile.CampaignDamageUpgradeCount = 0;
         UseProfile.CampaignBounceUpgradeCount = 0;
         UseProfile.CampaignMagazineUpgradeCount = 0;
@@ -654,6 +670,7 @@ public class ShopBox : BaseBox
 
     void ModifyGem(int amount)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (amount == 0)
         {
             UseProfile.GameGem = 0;
@@ -674,6 +691,7 @@ public class ShopBox : BaseBox
 
     void ChangeAllBallTexturesState(int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (id)
         {
             case 0:
@@ -703,6 +721,7 @@ public class ShopBox : BaseBox
 
     void ChangeAllBallTrailsState(int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (id)
         {
             case 0:
@@ -728,6 +747,7 @@ public class ShopBox : BaseBox
 
     void ChangeLevelProgress(int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (id)
         {
             case 0:

@@ -1000,7 +1000,8 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChoosingSkin(int playerId, int choiceId)
     {
-        switch(playerId)
+        GameController.Instance.musicManager.PlayClickSound();
+        switch (playerId)
         {
             case 1:
                 if (player_1SkinChoice == choiceId)
@@ -1037,6 +1038,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChoosingTrail(int playerId, int choiceId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1114,6 +1116,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChangeDamageUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1148,6 +1151,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChangeBounceUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1182,6 +1186,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChangeReloadSpeedUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1215,6 +1220,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ChangeMagazineUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1258,6 +1264,7 @@ public class ScoreBattlePrepare : BaseBox
                 }
                 else
                 {
+                    GameController.Instance.musicManager.PlayClickSound();
                     act_1ModeChosen = true;
                     UpdateModeChoice(1, true);
                 }
@@ -1275,6 +1282,7 @@ public class ScoreBattlePrepare : BaseBox
                 }
                 else
                 {
+                    GameController.Instance.musicManager.PlayClickSound();
                     act_2ModeChosen = true;
                     UpdateModeChoice(2, true);
                 }
@@ -1289,6 +1297,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void ReadyUp(int playerId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1340,6 +1349,7 @@ public class ScoreBattlePrepare : BaseBox
 
     void CancelScoreModePrepare()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (player_1IsReady)
         {
             ReadyUp(1);

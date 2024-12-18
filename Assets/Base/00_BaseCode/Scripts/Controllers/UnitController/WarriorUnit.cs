@@ -123,6 +123,8 @@ public class WarriorUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(101);
         }
         else if (enemyFound && currentTarget != null)
         {
@@ -140,7 +142,8 @@ public class WarriorUnit : GameUnitBase
             {
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
             }
-            
+
+            GameController.Instance.musicManager.PlaySoundEffect(101);
         }
 
         ContinueAttackingOrNot();

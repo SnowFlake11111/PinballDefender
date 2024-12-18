@@ -120,6 +120,7 @@ public class PlayerController : SerializedMonoBehaviour
 
         tempBallRef.SetBounceLimit(bounceLimit);
 
+        GameController.Instance.musicManager.PlaySoundEffect(1);
         ShootEffect();
 
         //Việc giữ các quả bóng trong một list là để đảm bảo việc giữ cho các va chạm giữa các quả bóng của người chơi sẽ bỏ qua va chạm đối với quân cùng phe
@@ -184,6 +185,7 @@ public class PlayerController : SerializedMonoBehaviour
 
         currentCredits -= tempSpawnedUnitReference.spawnCost;
 
+        GameController.Instance.musicManager.PlaySoundEffect(10);
         RequestCreditsGain();
         RequestUpdateCreditsNumber();
     }
@@ -227,6 +229,7 @@ public class PlayerController : SerializedMonoBehaviour
     public void AmmoReloaded()
     {
         currentAmmo = maxAmmo;
+        GameController.Instance.musicManager.PlaySoundEffect(4);
         RequestUpdateAmmoNumber();
     }
 
@@ -241,6 +244,7 @@ public class PlayerController : SerializedMonoBehaviour
             currentCredits += amount;
         }
 
+        GameController.Instance.musicManager.PlaySoundEffect(5);
         RequestUpdateCreditsNumber();
     }
 
@@ -270,6 +274,7 @@ public class PlayerController : SerializedMonoBehaviour
                 break;
         }
 
+        GameController.Instance.musicManager.PlaySoundEffect(5);
         RequestUpdateCreditsNumber();
     }
 

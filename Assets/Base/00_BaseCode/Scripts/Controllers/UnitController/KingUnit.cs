@@ -220,12 +220,14 @@ public class KingUnit : GameUnitBase
         yield return new WaitForSeconds(rallyzoneCooldown);
         rallyzone.ActivateBuffZone(zoneLingerTime);
         buffZoneHandler = StartCoroutine(AutoRally());
+        GameController.Instance.musicManager.PlaySoundEffect(193);
     }
 
     IEnumerator SummonMinionSkill()
     {
         yield return new WaitForSeconds(summonMinionCooldown);
         InitiateSummoningAnimation();
+        GameController.Instance.musicManager.PlaySoundEffect(194);
         summoningSequence = null;
     }
 
@@ -253,6 +255,8 @@ public class KingUnit : GameUnitBase
             tempSoulball = Instantiate(soulball, projectileSpawnPoint.transform.position, Quaternion.identity);
             tempSoulball.transform.rotation = projectileSpawnPoint.transform.rotation;
             tempSoulball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
+
+            GameController.Instance.musicManager.PlaySoundEffect(191);
         }
 
         if (!summoning)

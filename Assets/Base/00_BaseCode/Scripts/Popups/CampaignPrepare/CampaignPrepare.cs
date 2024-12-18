@@ -88,8 +88,8 @@ public class CampaignPrepare : BaseBox
     public void Init()
     {
         closeBtn.onClick.AddListener(delegate { CancelCampaignPrepare(); });
-        statsChangeBtn.onClick.AddListener(delegate { OpenBarrack(); });
-        unitsChangeBtn.onClick.AddListener(delegate { OpenShop(); });
+        statsChangeBtn.onClick.AddListener(delegate { OpenShop(); });
+        unitsChangeBtn.onClick.AddListener(delegate { OpenBarrack(); });
         proceedToCampaignMode.onClick.AddListener(delegate { ProceedToCampaignMode(); });
     }
 
@@ -239,52 +239,60 @@ public class CampaignPrepare : BaseBox
         {
             case 0:
                 unitIconsForUnlock[1].SetActive(true);
-                previousUnitUnlockId = 0;
+                previousUnitUnlockId = 1;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 2:
                 unitIconsForUnlock[2].SetActive(true);
-                previousUnitUnlockId = 1;
+                previousUnitUnlockId = 2;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 4:
                 unitIconsForUnlock[4].SetActive(true);
-                previousUnitUnlockId = 3;
+                previousUnitUnlockId = 4;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 6:
                 unitIconsForUnlock[3].SetActive(true);
-                previousUnitUnlockId = 2;
+                previousUnitUnlockId = 3;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 9:
                 unitIconsForUnlock[5].SetActive(true);
-                previousUnitUnlockId = 4;
+                previousUnitUnlockId = 5;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 10:
                 unitIconsForUnlock[6].SetActive(true);
-                previousUnitUnlockId = 5;
+                previousUnitUnlockId = 6;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 12:
                 unitIconsForUnlock[7].SetActive(true);
-                previousUnitUnlockId = 6;
+                previousUnitUnlockId = 7;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 14:
                 unitIconsForUnlock[9].SetActive(true);
-                previousUnitUnlockId = 8;
+                previousUnitUnlockId = 9;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 16:
                 unitIconsForUnlock[8].SetActive(true);
-                previousUnitUnlockId = 7;
+                previousUnitUnlockId = 8;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
             case 19:
                 unitIconsForUnlock[10].SetActive(true);
-                previousUnitUnlockId = 9;
+                previousUnitUnlockId = 10;
+                UnitUnlockShow(chosenCampaignStage);
                 break;
         }
-
-        UnitUnlockShow();
     }
 
-    void UnitUnlockShow()
+    void UnitUnlockShow(int id)
     {
-        if (UseProfile.LevelProgress > chosenCampaignStage)
+        if (UseProfile.LevelProgress > id)
         {
             unitUnlockCheck.SetActive(true);
         }
@@ -312,6 +320,7 @@ public class CampaignPrepare : BaseBox
 
     void CancelCampaignPrepare()
     {
+        unitUnlockCheck.SetActive(false);
         Close();
     }
     #endregion

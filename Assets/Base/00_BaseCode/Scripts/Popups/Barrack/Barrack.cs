@@ -492,6 +492,7 @@ public class Barrack : BaseBox
 
     void PickedAnUnit(int unitId, bool skipInfoUpdate = false)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (chosenUnitIdList.Count >= 5)
         {
             return;
@@ -521,6 +522,7 @@ public class Barrack : BaseBox
 
     void DeselectAnUnit(int chosenUnitPosition)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (chosenUnitPosition >= chosenUnitIdList.Count)
         {
             Debug.LogError("This slot doesn't have any unit");
@@ -532,6 +534,7 @@ public class Barrack : BaseBox
 
     void SelectASkin(int buttonId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (buttonId == chosenSkin)
         {
             return;
@@ -550,6 +553,7 @@ public class Barrack : BaseBox
 
     void SelectATrail(int buttonId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (buttonId == chosenTrail)
         {
             return;
@@ -567,6 +571,7 @@ public class Barrack : BaseBox
 
     void ConfirmChoices()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (chosenUnitIdList.Count)
         {
             case 0:

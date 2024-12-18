@@ -1505,6 +1505,7 @@ MonoBehaviour:
   modeScoreBattle: 0
   modeDefenderBattle: 0
   prizeGem: 200
+  musicId: 5
   laneList:
   - {fileID: 5087091759164309819}
   - {fileID: 633138596743971213}

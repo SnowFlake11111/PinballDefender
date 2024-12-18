@@ -26,6 +26,7 @@ public class HomeController : Singleton<HomeController>
     {
         homeScene.Init();
         GameController.Instance.FinishSceneTransition();
+        GameController.Instance.musicManager.ChangeMusic(0, 1);
     }
 
     public void ActivatePreviewRoom_1()

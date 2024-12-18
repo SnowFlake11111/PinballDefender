@@ -399,6 +399,32 @@ public class UseProfile : MonoBehaviour
         }
     }
 
+    public static bool ScoreBattleModeUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.SCORE_BATTLE_MODE_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.SCORE_BATTLE_MODE_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    public static bool DefenderBattleModeUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(StringHelper.DEFENDER_BATTLE_MODE_UNLOCKED, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(StringHelper.DEFENDER_BATTLE_MODE_UNLOCKED, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
     public static bool WarriorUnlocked
     {
         get

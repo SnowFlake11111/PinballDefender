@@ -584,6 +584,8 @@ public class GameUnitBase : SerializedMonoBehaviour
             return;
         }
 
+        GameController.Instance.musicManager.PlaySoundEffect(9);
+
         if (unitColliderBox != null)
         {
             unitColliderBox.enabled = false;
@@ -696,6 +698,8 @@ public class GameUnitBase : SerializedMonoBehaviour
 
     public void ActivateRage()
     {
+        GameController.Instance.musicManager.PlaySoundEffect(172);
+
         rage = true;
         rageActive = Instantiate(rageIcon, buffsHolder.transform);
         if (unitMovement != null)

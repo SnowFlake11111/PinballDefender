@@ -92,6 +92,8 @@ public class DefenderBattleEndGame : BaseBox
     //----------Private----------
     void MatchResult(int loserId)
     {
+        GameController.Instance.musicManager.PlaySoundEffect(6);
+
         switch (loserId)
         {
             case 1:
@@ -126,8 +128,8 @@ public class DefenderBattleEndGame : BaseBox
         player_1MatchTimeHolder.SetActive(true);
         player_2MatchTimeHolder.SetActive(true);
 
-        matchTime_player_1Side.text = string.Format("{0: 00}, {1: 00}, {2: 00}", hour, minute, second);
-        matchTime_player_2Side.text = string.Format("{0: 00}, {1: 00}, {2: 00}", hour, minute, second);
+        matchTime_player_1Side.text = string.Format("{0: 00}:{1: 00}:{2: 00}", hour, minute, second);
+        matchTime_player_2Side.text = string.Format("{0: 00}:{1: 00}:{2: 00}", hour, minute, second);
     }
 
     void AnimateRewardValue()
@@ -138,12 +140,12 @@ public class DefenderBattleEndGame : BaseBox
         player_2RewardHolder.SetActive(true);
 
 
-        rewardHolderAnimation = player_1RewardHolder.transform.DOScale(Vector3.one * 1.5f, 0.5f)
+        rewardHolderAnimation = player_1RewardHolder.transform.DOScale(Vector3.one * 1.5f, 0.25f)
             .SetDelay(0.5f)
             .SetEase(Ease.Linear)
             .OnComplete(delegate
             {
-                rewardHolderAnimation = player_1RewardHolder.transform.DOScale(Vector3.one, 0.5f)
+                rewardHolderAnimation = player_1RewardHolder.transform.DOScale(Vector3.one, 0.25f)
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -198,6 +200,11 @@ public class DefenderBattleEndGame : BaseBox
                             .OnComplete(delegate
                             {
                                 rewardValueAnimation = null;
+
+                                player_1ReturnMenuBtn.gameObject.SetActive(true);
+                                player_1RematchBtn.gameObject.SetActive(true);
+                                player_2ReturnMenuBtn.gameObject.SetActive(true);
+                                player_2RematchBtn.gameObject.SetActive(true);
                             });
                     });
             });

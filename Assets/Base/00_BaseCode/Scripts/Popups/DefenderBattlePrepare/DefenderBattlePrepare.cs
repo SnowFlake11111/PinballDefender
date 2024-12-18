@@ -1736,6 +1736,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void PickedAnUnit(int playerId, int unitId, bool skipInfoUpdate = false)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1795,6 +1796,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void DeselectAnUnit(int playerId, int chosenUnitPosition)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1820,6 +1822,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChoosingSkin(int playerId, int choiceId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1857,6 +1860,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChoosingTrail(int playerId, int choiceId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1894,6 +1898,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeDamageUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1920,7 +1925,6 @@ public class DefenderBattlePrepare : BaseBox
                 break;
         }
 
-
         UpdateButtons(playerId, 1);
         UpdateCurrentUpgradeCount(playerId, 1);
         UpdateUpgradesPreview(playerId, 1);
@@ -1928,6 +1932,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeBounceUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1954,7 +1959,6 @@ public class DefenderBattlePrepare : BaseBox
                 break;
         }
 
-
         UpdateButtons(playerId, 2);
         UpdateCurrentUpgradeCount(playerId, 2);
         UpdateUpgradesPreview(playerId, 2);
@@ -1962,6 +1966,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeReloadSpeedUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -1995,6 +2000,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeMagazineUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -2028,6 +2034,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeCreditsGainRateUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -2062,6 +2069,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeMaxCreditsUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -2096,6 +2104,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ChangeGateHealthUpgradeCount(int playerId, int id)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -2130,6 +2139,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void ReadyUp(int playerId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         switch (playerId)
         {
             case 1:
@@ -2179,6 +2189,7 @@ public class DefenderBattlePrepare : BaseBox
 
     void CancelDefenderModePrepare()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (player_1IsReady)
         {
             ReadyUp(1);

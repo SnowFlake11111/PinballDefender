@@ -292,6 +292,7 @@ MonoBehaviour:
   modeScoreBattle: 0
   modeDefenderBattle: 0
   prizeGem: 250
+  musicId: 7
   laneList:
   - {fileID: 8761164861995697513}
   - {fileID: 442519193942685357}

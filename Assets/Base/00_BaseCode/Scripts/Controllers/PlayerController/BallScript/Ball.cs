@@ -35,11 +35,11 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region Start, Update
-    private void Start()
+    private void OnEnable()
     {
         if (autoForce)
         {
-            GetComponent<Rigidbody>().AddForce(transform.forward * 300);
+            GetComponent<Rigidbody>().velocity = transform.forward * 5f;
         }
     }
     #endregion
@@ -126,6 +126,7 @@ public class Ball : MonoBehaviour
         else if (collision.collider.GetComponent<Ball>() != null)
         {
             //bounceCount++;
+            GameController.Instance.musicManager.PlaySoundEffect(2);
             BounceBall(collision);
         }
     }
@@ -138,6 +139,7 @@ public class Ball : MonoBehaviour
         unit.collider.GetComponent<GameUnitBase>().TakeDamage(owner, ballDamage, ballBounceCount: bounceCount);
 
         GamePlayController.Instance.gameLevelController.currentLevel.ActivateHitEffect(gameObject.transform.position);
+        GameController.Instance.musicManager.PlaySoundEffect(2);
 
         if (bounceLimit - unit.collider.GetComponent<GameUnitBase>().GetBounceCost() <= 0)
         {
@@ -154,6 +156,8 @@ public class Ball : MonoBehaviour
     void HitWall(Collision wall)
     {
         //Đối với các chướng ngại vật thì bản thân chúng không thuộc về ai cả, nên va chạm sẽ luôn được xử lý
+        GameController.Instance.musicManager.PlaySoundEffect(2);
+
         if (bounceLimit - wall.collider.GetComponent<GameWall>().GetBounceCost() <= 0)
         {
             Destroy(gameObject);
@@ -171,6 +175,7 @@ public class Ball : MonoBehaviour
         projectile.collider.GetComponent<UnitHittableProjectile>().TakeDamage(ballDamage);
 
         GamePlayController.Instance.gameLevelController.currentLevel.ActivateHitEffect(gameObject.transform.position);
+        GameController.Instance.musicManager.PlaySoundEffect(2);
 
         if (bounceLimit - projectile.collider.GetComponent<UnitHittableProjectile>().GetBounceCost() <= 0)
         {

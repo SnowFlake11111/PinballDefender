@@ -14,6 +14,9 @@ public class UnitProjectile : SerializedMonoBehaviour
     public float projectileSpeed = 0;
 
     [Space]
+    public int soundEffectId = 0;
+
+    [Space]
     [Header("Has additional effect for caster ? (Currently Bloodmage only)")]
     public bool additionalEffects = false;
 
@@ -71,6 +74,7 @@ public class UnitProjectile : SerializedMonoBehaviour
         tempExplosionReference.InitiateExplosion(projectileOwner, gameObject.layer, damage);
 
         StopCoroutine(selfDestructSequence);
+        GameController.Instance.musicManager.PlaySoundEffect(soundEffectId);
         Destroy(gameObject);
     }
 
@@ -80,6 +84,7 @@ public class UnitProjectile : SerializedMonoBehaviour
         tempExplosionReference.InitiateHarmlessExplosion();
 
         StopCoroutine(selfDestructSequence);
+        GameController.Instance.musicManager.PlaySoundEffect(soundEffectId);
         Destroy(gameObject);
     }
 

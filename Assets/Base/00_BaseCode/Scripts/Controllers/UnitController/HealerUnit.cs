@@ -137,6 +137,7 @@ public class HealerUnit : GameUnitBase
         yield return new WaitForSeconds(healzoneCooldown);
         healzone.ActivateBuffZone(healzoneLingerTime);
         healZoneHandler = StartCoroutine(AutoHealzone());
+        GameController.Instance.musicManager.PlaySoundEffect(163);
     }
     //----------Animation Functions----------
     public void CastEnergyBall()
@@ -148,6 +149,8 @@ public class HealerUnit : GameUnitBase
             tempEnergyball = Instantiate(energyball, projectileSpawnPoint.transform.position, Quaternion.identity);
             tempEnergyball.transform.rotation = projectileSpawnPoint.transform.rotation;
             tempEnergyball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
+
+            GameController.Instance.musicManager.PlaySoundEffect(161);
         }
 
         ContinueAttackingOrNot();

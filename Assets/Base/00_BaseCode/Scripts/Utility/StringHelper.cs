@@ -47,6 +47,8 @@ public static class StringHelper
     public const string BERSERKER_UNLOCKED = "berserker_unlocked";
     public const string BLOODMAGE_UNLOCKED = "bloodmage_unlocked";
     public const string KING_UNLOCKED = "king_unlocked";
+    public const string SCORE_BATTLE_MODE_UNLOCKED = "score_battle_mode_unlocked";
+    public const string DEFENDER_BATTLE_MODE_UNLOCKED = "defender_battle_mode_unlocked";
     public const string SCORE_BATTLE_MATCHES_COUNTER = "score_battle_matches_counter";
     public const string DEFENDER_BATTLE_MATCHES_COUNTER = "defender_battle_matches_counter";
     public const string ACHIEVEMENT_FINISHED_ACT_1 = "finished_act_1";

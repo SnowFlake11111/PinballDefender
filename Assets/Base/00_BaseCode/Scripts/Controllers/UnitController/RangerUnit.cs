@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class RangerUnit : GameUnitBase
@@ -128,6 +127,7 @@ public class RangerUnit : GameUnitBase
             }
 
             shootEffect.Play();
+            GameController.Instance.musicManager.PlaySoundEffect(111);
         }
         else if (enemyFound && currentTarget != null)
         {
@@ -141,6 +141,7 @@ public class RangerUnit : GameUnitBase
             }
 
             shootEffect.Play();
+            GameController.Instance.musicManager.PlaySoundEffect(111);
         }
 
         ContinueAttackingOrNot();

@@ -227,26 +227,31 @@ public class HomeScene : BaseScene
 
     void OpenBarrack()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         Barrack.Setup().Show();
     }
 
     void OpenCampaignPrepare(int stageId)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         CampaignPrepare.Setup(stageId).Show();
     }
 
     void OpenScoreBattlePrepare()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         ScoreBattlePrepare.Setup().Show();
     }
 
     void OpenDefenderBattlePrepare()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         DefenderBattlePrepare.Setup().Show();
     }
 
     void OpenAchievementBox()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         AchievementBox.Setup().Show();
     }
 

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
+using System.Linq;
 public enum NameMusic
 {
     None = 0,
@@ -46,34 +47,38 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
     public const float MIN_VALUE = -80f;
     public const float MAX_VALUE = 0f;
 
-    [Space]
-    [Header("-----MUSIC-----")]
-    [SerializeField] private AudioClip winMusic;
-    [SerializeField] private AudioClip BGMusic;
-    [SerializeField] private AudioClip BGMusicGamePlay;
+    [BoxGroup("Home music", centerLabel: true)]
+    [SerializeField] private Dictionary<int, AudioClip> home_musicListBeginning = new Dictionary<int, AudioClip>();
+    [BoxGroup("Home music")]
+    [SerializeField] private Dictionary<int, AudioClip> home_musicListLooping = new Dictionary<int, AudioClip>();
+
+    [BoxGroup("Campaign music", centerLabel: true)]
+    [SerializeField] private Dictionary<int, AudioClip> campaign_musicListBeginning = new Dictionary<int, AudioClip>();
+    [BoxGroup("Campaign music")]
+    [SerializeField] private Dictionary<int, AudioClip> campaign_musicListLooping = new Dictionary<int, AudioClip>();
+
+    [BoxGroup("ScoreBattle music", centerLabel: true)]
+    [SerializeField] private Dictionary<int, AudioClip> score_musicListBeginning = new Dictionary<int, AudioClip>();
+    [BoxGroup("ScoreBattle music")]
+    [SerializeField] private Dictionary<int, AudioClip> score_musicListLooping = new Dictionary<int, AudioClip>();
+
+    [BoxGroup("DefenderBattle music", centerLabel: true)]
+    [SerializeField] private Dictionary<int, AudioClip> defender_musicListBeginning = new Dictionary<int, AudioClip>();
+    [BoxGroup("DefenderBattle music")]
+    [SerializeField] private Dictionary<int, AudioClip> defender_musicListLooping = new Dictionary<int, AudioClip>();
+
+    [BoxGroup("Sound Effects")]
+    [SerializeField] private Dictionary<int, AudioClip> soundEffects = new Dictionary<int, AudioClip>();
 
     [Space]
     [Header("-----SOUND EFFECTS-----")]
     [SerializeField] private AudioClip clickSound;
-    [SerializeField] private AudioClip makeAPurchase;
-    [SerializeField] private AudioClip purchaseSuccessful;
-    [SerializeField] private AudioClip pickingCake;
-    [SerializeField] private AudioClip orderUp;
-    [SerializeField] private AudioClip orderFinished;
-    [SerializeField] private AudioClip conveyor;
-    [SerializeField] private AudioClip victory;
-    [SerializeField] private AudioClip defeat;
-    [SerializeField] private AudioClip booster_1;
-    [SerializeField] private AudioClip booster_2;
-    [SerializeField] private AudioClip booster_3;
 
-    [Space]
-    [Header("-----MUSIC LOOP CUE-----")]
-    [SerializeField] private float loopTimingStart;
-    [SerializeField] private float loopTimingEnd;
-
-    Coroutine loopChecker;
+    Coroutine loopTransition;
+    Coroutine musicTransition;
     private AudioClip _currentMusic;
+    int previousModeId = 0;
+    int currentlyPlayingMusicId = 0;
 
     public float MasterVolume
     {
@@ -248,12 +253,16 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
     public void SetMusicVolume(float volume)
     {
         musicSource.volume = volume;
-        if(volume <= 0)
+        if (volume <= 0)
         {
-            musicSource.time = 0;
+            musicSource.Stop();
+        }
+        else
+        {
+            ChangeMusic(previousModeId, currentlyPlayingMusicId);
         }
 
-        loopChecker = StartCoroutine(CheckMusicForLooping());
+        //loopChecker = StartCoroutine(CheckMusicForLooping());
         //PlayerPrefs.SetFloat(MUSIC_KEY, volume);
     }
     public void SetSoundVolume(float volume)
@@ -262,207 +271,223 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         // PlayerPrefs.SetFloat(SOUND_KEY, volume);
     }
 
-    #region === Play Sound ===
-    public void PlayWinSound()
-    {
-        if (!GameController.Instance.useProfile.OnMusic)
-            return;
-        // musicSource.clip = winMusic;
-        //musicSource.Play();
-        PlaySingle(winMusic, SourceAudio.Effect);
-    }
-
-    public void PlayBGMusic()
-    {
-        //if (SceneManager.GetActiveScene().name == "GamePlay")
-        //{
-        //    musicSource.clip = BGMusicGamePlay;
-        //}
-        //else
-        //{
-        //    musicSource.clip = BGMusic;
-        //}
-        
-        musicSource.Play();
-    }
-
-    IEnumerator CheckMusicForLooping()
-    {
-        while (musicSource.volume > 0)
-        {
-            MusicLoop();
-            //yield return new WaitForSeconds(0.001f);
-            yield return null;
-        }
-    }
-
-    public void MusicLoop()
-    {
-        if (musicSource.clip != null && musicSource.isPlaying)
-        {
-            if (musicSource.time >= loopTimingEnd)
-            {
-                musicSource.time = loopTimingStart;
-            }
-        }
-    }
-
-    public void MusicTransition()
-    {
-        if (CheckCurrentMusic())
-        {
-            if (loopChecker != null)
-            {
-                StopCoroutine(loopChecker);
-            }
-
-            musicSource.DOFade(0, 0.25f).SetEase(Ease.Linear)
-                        .OnComplete(delegate
-                        {
-                            SwapMusic();
-                            musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear)
-                                .OnComplete(delegate
-                                {
-                                    musicSource.Play();
-                                    loopChecker = StartCoroutine(CheckMusicForLooping());
-                                });
-                        });
-        }
-        
-
-        bool CheckCurrentMusic()
-        {
-            if (SceneManager.GetActiveScene().name == "HomeScene")
-            {
-                if (musicSource.clip != BGMusic)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            if (SceneManager.GetActiveScene().name == "GamePlay")
-            {
-                if (musicSource.clip != BGMusicGamePlay)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return false;
-        }
-
-        void SwapMusic(bool autoPlay = false)
-        {
-            float currentTime = 0;
-
-            if (musicSource.clip != null)
-            {
-                if (musicSource.time > 0)
-                {
-                    currentTime = musicSource.time;
-                }
-            }
-
-            if (SceneManager.GetActiveScene().name == "GamePlay")
-            {
-                musicSource.clip = BGMusicGamePlay;
-                musicSource.time = currentTime;
-            }
-            else
-            {
-                musicSource.clip = BGMusic;
-                musicSource.time = currentTime;
-            }
-
-            if (autoPlay)
-            {
-                musicSource.Play();
-            }
-        }
-    }
-
-    public void PlaySound(bool cakePicking = false, bool orderFinished = false, bool victory = false, bool defeat = false, bool booster_1 = false, bool booster_2 = false, bool booster_3 = false, bool makeAPurchase = false, bool purchaseSuccessful = false, bool orderUp = false)
+    #region Custom Functions
+    public void PlaySoundEffect(int id)
     {
         if (SoundVolume == 0) return;
+        effectSource.PlayOneShot(soundEffects[id]);
+    }
 
-        if (cakePicking)
+    public void ChangeMusic(int modeId, int specifiedSongId = 0)
+    {
+        if (MusicVolume == 0)
         {
-            effectSource.PlayOneShot(pickingCake);
-            //effectSource.Play();
+            previousModeId = modeId;
+            currentlyPlayingMusicId = specifiedSongId;
             return;
         }
 
-        if (orderFinished)
+        if (musicTransition != null)
         {
-            effectSource.PlayOneShot(this.orderFinished);
-            //effectSource.Play();
-            return;
+            StopCoroutine(musicTransition);
         }
 
-        if (victory)
+        int randomId = 0;
+
+        switch (modeId)
         {
-            effectSource.PlayOneShot(this.victory);
-            //effectSource.Play();
-            return;
+            case 0:
+                //Home
+                if (specifiedSongId > 0)
+                {
+                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
+                }
+                else
+                {
+                    List<int> availableCampaignSongs = new List<int>(home_musicListBeginning.Keys.ToList());
+                    randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
+
+                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                }
+                break;
+            case 1:
+                //Campaign
+                if (specifiedSongId > 0)
+                {
+                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
+                }
+                else
+                {
+                    List<int> availableCampaignSongs = new List<int>(campaign_musicListBeginning.Keys.ToList());
+                    randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
+
+                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                }
+                break;
+            case 2:
+                //ScoreBattle
+                if (specifiedSongId > 0)
+                {
+                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
+                }
+                else
+                {
+                    List<int> availableCampaignSongs = new List<int>(score_musicListBeginning.Keys.ToList());
+                    randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
+
+                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                }
+                break;
+            case 3:
+                //DefenderBattle
+                if (specifiedSongId > 0)
+                {
+                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
+                }
+                else
+                {
+                    List<int> availableCampaignSongs = new List<int>(defender_musicListBeginning.Keys.ToList());
+                    randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
+
+                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    {
+                        return;
+                    }
+
+                    currentlyPlayingMusicId = specifiedSongId;
+                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                }
+                break;
         }
 
-        if (defeat)
+        previousModeId = modeId;
+    }
+
+    IEnumerator MusicTransition(int modeId, int songId)
+    {
+        if (musicSource.isPlaying)
         {
-            effectSource.PlayOneShot(this.defeat);
-            //effectSource.Play();
-            return;
+            if (loopTransition != null)
+            {
+                StopCoroutine(loopTransition);
+            }
+            var temp = musicSource.DOFade(0, 0.25f).SetEase(Ease.Linear).WaitForCompletion();
+            yield return temp;
         }
 
-        if (booster_1)
+        switch (modeId)
         {
-            effectSource.PlayOneShot(this.booster_1);
-            //effectSource.Play();
-            return;
-        }
+            case 0:
+                musicSource.clip = home_musicListBeginning[songId];
+                musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-        if (booster_2)
-        {
-            effectSource.PlayOneShot(this.booster_2);
-            //effectSource.Play();
-            return;
-        }
+                if (home_musicListBeginning.ContainsKey(songId))
+                {
+                    loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
+                }
+                break;
+            case 1:
+                musicSource.clip = campaign_musicListBeginning[songId];
+                musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-        if (booster_3)
-        {
-            effectSource.PlayOneShot(this.booster_3);
-            //effectSource.Play();
-            return;
-        }
+                if (campaign_musicListLooping.ContainsKey(songId))
+                {
+                    loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
+                }
+                break;
+            case 2:
+                musicSource.clip = score_musicListBeginning[songId];
+                musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-        if (makeAPurchase)
-        {
-            effectSource.PlayOneShot(this.makeAPurchase);
-            //effectSource.Play();
-            return;
-        }
+                if (score_musicListBeginning.ContainsKey(songId))
+                {
+                    loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
+                }
+                break;
+            case 3:
+                musicSource.clip = defender_musicListBeginning[songId];
+                musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-        if (purchaseSuccessful)
-        {
-            effectSource.PlayOneShot(this.purchaseSuccessful);
-            //effectSource.Play();
-            return;
-        }
-
-        if (orderUp)
-        {
-            effectSource.PlayOneShot(this.orderUp);
-            //effectSource.Play();
-            return;
+                if (defender_musicListBeginning.ContainsKey(songId))
+                {
+                    loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
+                }
+                break;
         }
     }
+
+    IEnumerator SetupAutoLoop(float waitTime, int modeId, int songId)
+    {
+        yield return new WaitForSeconds(waitTime);
+        switch (modeId)
+        {
+            case 1:
+                //Home
+                musicSource.clip = home_musicListLooping[songId];
+                musicSource.Play();
+                break;
+            case 2:
+                //Campaign
+                musicSource.clip = campaign_musicListLooping[songId];
+                musicSource.Play();
+                break;
+            case 3:
+                //ScoreBattle
+                musicSource.clip = score_musicListLooping[songId];
+                musicSource.Play();
+                break;
+            case 4:
+                //DefenderBattle
+                musicSource.clip = defender_musicListLooping[songId];
+                musicSource.Play();
+                break;
+        }
+
+        loopTransition = null;
+    }
+    #endregion
 
     public void PlayClickSound()
     {
@@ -476,27 +501,6 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
 
         soundUISource.Play();
     }
-
-    public void PlayConveyorSound()
-    {
-        if (SoundVolume == 0) return;
-
-        if (conveyorSource.clip == null)
-        {
-            conveyorSource.clip = conveyor;
-        }
-
-        conveyorSource.time = 0;
-        conveyorSource.Play();
-    }
-
-    public void StopConveyorSound()
-    {
-        if (conveyorSource.clip == null || SoundVolume == 0) return;
-
-        conveyorSource.Stop();
-    }
-    #endregion
 
     public void PlayOneShot(NameMusic name)
     {

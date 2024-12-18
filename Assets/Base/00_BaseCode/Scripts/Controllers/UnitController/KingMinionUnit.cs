@@ -130,6 +130,8 @@ public class KingMinionUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(201);
         }
         else if (enemyFound)
         {
@@ -142,6 +144,7 @@ public class KingMinionUnit : GameUnitBase
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
             }
 
+            GameController.Instance.musicManager.PlaySoundEffect(201);
         }
 
         ContinueAttackingOrNot();

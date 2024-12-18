@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MonsterUnit : GameUnitBase
@@ -198,6 +197,8 @@ public class MonsterUnit : GameUnitBase
                     enemyGate.TakeDamage(this, baseAttackDamage * 2);
                 }
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(151);
         }
         else if (enemyFound)
         {
@@ -234,6 +235,7 @@ public class MonsterUnit : GameUnitBase
                 }
             }
 
+            GameController.Instance.musicManager.PlaySoundEffect(151);
         }
 
         firstTarget = null;

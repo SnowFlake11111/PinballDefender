@@ -970,6 +970,7 @@ public class GameScene : BaseScene
     //*** BUTTONS ACTION ***
     public void Player_1PickedUnitToSpawn(GameUnitBase pickedUnit)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (player_1ChosenUnitToSpawn != null)
         {
             if (player_1ChosenUnitToSpawn == pickedUnit)
@@ -1052,6 +1053,7 @@ public class GameScene : BaseScene
 
     public void Player_2PickedUnitToSpawn(GameUnitBase pickedUnit)
     {
+        GameController.Instance.musicManager.PlayClickSound();
         if (player_2ChosenUnitToSpawn != null)
         {
             if (player_2ChosenUnitToSpawn == pickedUnit)

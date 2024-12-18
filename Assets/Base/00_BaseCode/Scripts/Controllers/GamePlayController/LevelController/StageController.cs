@@ -24,6 +24,10 @@ public class StageController : SerializedMonoBehaviour
     public int prizeGem = 0;
 
     [Space]
+    [Header("Music for this stage (mode dependant)")]
+    public int musicId = 0;
+
+    [Space]
     [Header("Map Lanes")]
     public List<FieldLane> laneList = new List<FieldLane>();
 
@@ -101,6 +105,7 @@ public class StageController : SerializedMonoBehaviour
             player_1Gate.Init();
             gameDirector.InitGameDirector();
             GamePlayController.Instance.ChangeUILoadout(1);
+            GameController.Instance.musicManager.ChangeMusic(1, musicId);
         }
         else if (modeScoreBattle)
         {
@@ -108,6 +113,7 @@ public class StageController : SerializedMonoBehaviour
             player_2.Init(2);
             gameDirector.InitGameDirector();
             GamePlayController.Instance.ChangeUILoadout(2);
+            GameController.Instance.musicManager.ChangeMusic(2, musicId);
         }
         else
         {
@@ -116,6 +122,7 @@ public class StageController : SerializedMonoBehaviour
             player_2.Init(3);
             player_2Gate.Init();
             GamePlayController.Instance.ChangeUILoadout(3);
+            GameController.Instance.musicManager.ChangeMusic(3, musicId);
         }
 
         DeathWallSetup();

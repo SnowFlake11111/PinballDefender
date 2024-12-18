@@ -45,7 +45,7 @@ public class PopupRewardBase : BaseBox
 
     private void OnEnable()
     {
-        GameController.Instance.musicManager.PlaySound(purchaseSuccessful: true);
+        //GameController.Instance.musicManager.PlaySound(purchaseSuccessful: true);
     }
 
     public void Init()

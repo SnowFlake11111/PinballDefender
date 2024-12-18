@@ -166,6 +166,8 @@ public class DemonUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseDamage + Mathf.FloorToInt(baseDamage * 0.2f));
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(141);
         }
         else
         {
@@ -181,6 +183,8 @@ public class DemonUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseDamage);
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(141);
         }
 
         if (!shootFireball)
@@ -222,6 +226,7 @@ public class DemonUnit : GameUnitBase
         tempSecondFireball.transform.localRotation = transform.localRotation;
         tempSecondFireball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
 
+        GameController.Instance.musicManager.PlaySoundEffect(142);
         StopCastingAnimation();
     }
 

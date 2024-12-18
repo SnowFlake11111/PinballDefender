@@ -125,6 +125,8 @@ public class BerserkerUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(171);
         }
         else if (enemyFound && currentTarget != null)
         {
@@ -137,6 +139,7 @@ public class BerserkerUnit : GameUnitBase
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
             }
 
+            GameController.Instance.musicManager.PlaySoundEffect(171);
         }
 
         ContinueAttackingOrNot();

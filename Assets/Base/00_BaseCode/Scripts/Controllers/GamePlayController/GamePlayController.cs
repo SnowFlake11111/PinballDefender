@@ -1,5 +1,4 @@
-﻿using Crystal;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -105,6 +104,7 @@ public class GamePlayController : Singleton<GamePlayController>
        
     }
 
+#if UNITY_EDITOR
     [Button]
     void SpawnCampaignBase()
     {
@@ -154,4 +154,5 @@ public class GamePlayController : Singleton<GamePlayController>
 
         DestroyImmediate(tempRef.gameObject);
     }
+#endif
 }

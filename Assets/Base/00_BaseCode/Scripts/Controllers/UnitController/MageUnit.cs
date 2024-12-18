@@ -104,6 +104,7 @@ public class MageUnit : GameUnitBase
         if (enemyFound || gateFound)
         {
             shootEffect.Play();
+            GameController.Instance.musicManager.PlaySoundEffect(121);
 
             tempFireball = Instantiate(fireball, projectileSpawnPoint.transform.position, Quaternion.identity);
             tempFireball.transform.rotation = projectileSpawnPoint.transform.rotation;

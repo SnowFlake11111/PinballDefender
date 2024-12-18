@@ -69,12 +69,14 @@ public class CampaignEndGame : BaseBox
     {
         if (playerWon)
         {
+            GameController.Instance.musicManager.PlaySoundEffect(6);
             winTextHolder.SetActive(true);
             loseTextHolder.SetActive(false);
             AnimateRewardValue();
         }
         else
         {
+            GameController.Instance.musicManager.PlaySoundEffect(7);
             winTextHolder.SetActive(false);
             loseTextHolder.SetActive(true);
             ShowTip();
@@ -131,11 +133,13 @@ public class CampaignEndGame : BaseBox
 
     void BackToMenu()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         GameController.Instance.StartSceneTransition("HomeScene");
     }
 
     void NextStage()
     {
+        GameController.Instance.musicManager.PlayClickSound();
         //Small explaination: Reason why the stage id is sent directly to the function rather than increase it by 1 even though the stage system is run on a List, is because the id is already like index + 1 by itself, thus if player want to proceed to the next stage just need to assign the current stageId into the field and the player will go to the next stage. This is of course will be wrong if the stageId on the stages are following the rule of using the same number of the stages position in the List
         GameController.Instance.gameModeData.StartCampaign(currentStageId);
         GameController.Instance.StartSceneTransition("GamePlay");

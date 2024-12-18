@@ -6,7 +6,7 @@ public class PlayMusic : MonoBehaviour {
 
 	private void Start()
 	{
-		GameController.Instance.musicManager.PlayMusic(musicClip);
+		//GameController.Instance.musicManager.PlayMusic(musicClip);
 	}
 
 }

@@ -90,6 +90,8 @@ public class BloodMageUnit : GameUnitBase
         {
             GainHealthPercent(healAmount);
             sharepowerZone.ActivateBuffZone(zoneLingerTime);
+
+            GameController.Instance.musicManager.PlaySoundEffect(183);
         }
     }
 
@@ -134,6 +136,8 @@ public class BloodMageUnit : GameUnitBase
             tempDarkFireball = Instantiate(darkFireball, projectileSpawnPoint.transform.position, Quaternion.identity);
             tempDarkFireball.transform.rotation = projectileSpawnPoint.transform.rotation;
             tempDarkFireball.InitiateProjectile(GetComponent<GameUnitBase>(), gameObject.layer);
+
+            GameController.Instance.musicManager.PlaySoundEffect(181);
         }
 
         ContinueAttackingOrNot();

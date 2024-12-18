@@ -157,6 +157,8 @@ public class ScoreBattleEndGame : BaseBox
         switch (playerId)
         {
             case 1:
+                GameController.Instance.musicManager.PlaySoundEffect(11);
+
                 player_1WinTextHolder.transform.localScale = Vector3.zero;
                 player_1WinTextHolder.SetActive(true);
                 winTextAnimation = player_1WinTextHolder.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f)
@@ -167,11 +169,15 @@ public class ScoreBattleEndGame : BaseBox
                            .SetEase(Ease.Linear)
                            .OnComplete(delegate
                            {
+                               backToMenuBtn.gameObject.SetActive(true);
+                               playAgainBtn.gameObject.SetActive(true);
                                AnimateRewardValue();
                            });
                     });
                 break;
             case 2:
+                GameController.Instance.musicManager.PlaySoundEffect(11);
+
                 player_2WinTextHolder.transform.localScale = Vector3.zero;
                 player_2WinTextHolder.SetActive(true);
                 winTextAnimation = player_2WinTextHolder.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f)
@@ -182,11 +188,15 @@ public class ScoreBattleEndGame : BaseBox
                            .SetEase(Ease.Linear)
                            .OnComplete(delegate
                            {
+                               backToMenuBtn.gameObject.SetActive(true);
+                               playAgainBtn.gameObject.SetActive(true);
                                AnimateRewardValue();
                            });
                     });
                 break;
             case 3:
+                GameController.Instance.musicManager.PlaySoundEffect(7);
+
                 matchDrawTextHolder.transform.localScale = Vector3.zero;
                 matchDrawTextHolder.SetActive(true);
                 drawTextAnimation = matchDrawTextHolder.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f)
@@ -197,6 +207,8 @@ public class ScoreBattleEndGame : BaseBox
                            .SetEase(Ease.Linear)
                            .OnComplete(delegate
                            {
+                               backToMenuBtn.gameObject.SetActive(true);
+                               playAgainBtn.gameObject.SetActive(true);
                                AnimateRewardValue();
                            });
                     });
@@ -208,11 +220,11 @@ public class ScoreBattleEndGame : BaseBox
     {
         rewardHolder.transform.localScale = Vector3.zero;
         rewardHolder.SetActive(true);
-        rewardHolderAnimation = rewardHolder.transform.DOScale(Vector3.one * 1.5f, 0.5f)
+        rewardHolderAnimation = rewardHolder.transform.DOScale(Vector3.one * 1.5f, 0.25f)
             .SetEase(Ease.Linear)
             .OnComplete(delegate
             {
-                rewardHolderAnimation = rewardHolder.transform.DOScale(Vector3.one, 0.5f)
+                rewardHolderAnimation = rewardHolder.transform.DOScale(Vector3.one, 0.25f)
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
@@ -234,7 +246,7 @@ public class ScoreBattleEndGame : BaseBox
                             })
                             .OnComplete(delegate
                             {
-                                rewardValueAnimation = null;
+                                rewardValueAnimation = null;                              
                             });
                     });
             });

@@ -148,6 +148,7 @@ public class EnforcerUnit : GameUnitBase
         yield return new WaitForSeconds(defenseUpCooldown);
         buffZone.ActivateBuffZone(zoneLingerTime);
         buffZoneHandler = StartCoroutine(AutoDefenseUpZone());
+        GameController.Instance.musicManager.PlaySoundEffect(132);
     }
     //----------Animation Functions----------
     public void SlashEnemy()
@@ -162,6 +163,8 @@ public class EnforcerUnit : GameUnitBase
             {
                 enemyGate.TakeDamage(this, baseAttackDamage);
             }
+
+            GameController.Instance.musicManager.PlaySoundEffect(131);
         }
         else if (enemyFound && currentTarget != null)
         {
@@ -174,6 +177,7 @@ public class EnforcerUnit : GameUnitBase
                 currentTarget.TakeDamageFromUnit(this, baseAttackDamage);
             }
 
+            GameController.Instance.musicManager.PlaySoundEffect(131);
         }
 
         ContinueAttackingOrNot();

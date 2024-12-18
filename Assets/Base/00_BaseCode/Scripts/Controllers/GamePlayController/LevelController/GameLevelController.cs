@@ -81,6 +81,7 @@ public class GameLevelController : MonoBehaviour
         currentLevel.Init();
     }
 
+#if UNITY_EDITOR
     [Button]
     void LoadLevelsFromPrefab()
     {
@@ -121,5 +122,7 @@ public class GameLevelController : MonoBehaviour
             }
         }
     }
+#endif
+
     #endregion
 }
