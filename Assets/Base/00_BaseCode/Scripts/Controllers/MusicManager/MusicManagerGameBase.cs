@@ -362,16 +362,16 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 }
                 else
                 {
-                    List<int> availableCampaignSongs = new List<int>(score_musicListBeginning.Keys.ToList());
-                    randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
+                    List<int> availableScoreSongs = new List<int>(score_musicListBeginning.Keys.ToList());
+                    randomId = UnityEngine.Random.Range(0, availableScoreSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    if (modeId == previousModeId && currentlyPlayingMusicId == availableScoreSongs[randomId])
                     {
                         return;
                     }
 
                     currentlyPlayingMusicId = specifiedSongId;
-                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                    musicTransition = StartCoroutine(MusicTransition(modeId, availableScoreSongs[randomId]));
                 }
                 break;
             case 3:
@@ -391,13 +391,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                     List<int> availableCampaignSongs = new List<int>(defender_musicListBeginning.Keys.ToList());
                     randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    if (modeId == previousModeId && currentlyPlayingMusicId == availableCampaignSongs[randomId])
                     {
                         return;
                     }
 
                     currentlyPlayingMusicId = specifiedSongId;
-                    musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
+                    musicTransition = StartCoroutine(MusicTransition(modeId, availableCampaignSongs[randomId]));
                 }
                 break;
         }
@@ -463,22 +463,22 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         yield return new WaitForSeconds(waitTime);
         switch (modeId)
         {
-            case 1:
+            case 0:
                 //Home
                 musicSource.clip = home_musicListLooping[songId];
                 musicSource.Play();
                 break;
-            case 2:
+            case 1:
                 //Campaign
                 musicSource.clip = campaign_musicListLooping[songId];
                 musicSource.Play();
                 break;
-            case 3:
+            case 2:
                 //ScoreBattle
                 musicSource.clip = score_musicListLooping[songId];
                 musicSource.Play();
                 break;
-            case 4:
+            case 3:
                 //DefenderBattle
                 musicSource.clip = defender_musicListLooping[songId];
                 musicSource.Play();

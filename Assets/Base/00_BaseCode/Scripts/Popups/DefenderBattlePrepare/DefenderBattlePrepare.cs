@@ -486,27 +486,27 @@ public class DefenderBattlePrepare : BaseBox
         //Player 2 multiplayer units
         if (UseProfile.MultiplayerPlayer_2Slot1Unit > 0)
         {
-            PickedAnUnit(1, UseProfile.MultiplayerPlayer_2Slot1Unit, true);
+            PickedAnUnit(2, UseProfile.MultiplayerPlayer_2Slot1Unit, true);
         }
 
         if (UseProfile.MultiplayerPlayer_2Slot2Unit > 0)
         {
-            PickedAnUnit(1, UseProfile.MultiplayerPlayer_2Slot2Unit, true);
+            PickedAnUnit(2, UseProfile.MultiplayerPlayer_2Slot2Unit, true);
         }
 
         if (UseProfile.MultiplayerPlayer_2Slot3Unit > 0)
         {
-            PickedAnUnit(1, UseProfile.MultiplayerPlayer_2Slot3Unit, true);
+            PickedAnUnit(2, UseProfile.MultiplayerPlayer_2Slot3Unit, true);
         }
 
         if (UseProfile.MultiplayerPlayer_2Slot4Unit > 0)
         {
-            PickedAnUnit(1, UseProfile.MultiplayerPlayer_2Slot4Unit, true);
+            PickedAnUnit(2, UseProfile.MultiplayerPlayer_2Slot4Unit, true);
         }
 
         if (UseProfile.MultiplayerPlayer_2Slot5Unit > 0)
         {
-            PickedAnUnit(1, UseProfile.MultiplayerPlayer_2Slot5Unit, true);
+            PickedAnUnit(2, UseProfile.MultiplayerPlayer_2Slot5Unit, true);
         }
     }
 

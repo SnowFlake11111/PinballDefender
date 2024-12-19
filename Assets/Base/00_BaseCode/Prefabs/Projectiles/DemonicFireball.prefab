@@ -19040,6 +19040,7 @@ MonoBehaviour:
     SerializationNodes: []
   projectileLifeTime: 20
   projectileSpeed: 0.75
+  soundEffectId: 142
   additionalEffects: 0
   projectileOwner: {fileID: 0}
   mage: {fileID: 0}
