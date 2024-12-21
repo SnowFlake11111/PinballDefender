@@ -423,7 +423,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 musicSource.clip = home_musicListBeginning[songId];
                 musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-                if (home_musicListBeginning.ContainsKey(songId))
+                if (home_musicListLooping.ContainsKey(songId))
                 {
                     loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
                 }
@@ -441,7 +441,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 musicSource.clip = score_musicListBeginning[songId];
                 musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-                if (score_musicListBeginning.ContainsKey(songId))
+                if (score_musicListLooping.ContainsKey(songId))
                 {
                     loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
                 }
@@ -450,7 +450,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 musicSource.clip = defender_musicListBeginning[songId];
                 musicSource.DOFade(0.7f, 0.1f).SetEase(Ease.Linear).OnStart(delegate { musicSource.Play(); });
 
-                if (defender_musicListBeginning.ContainsKey(songId))
+                if (defender_musicListLooping.ContainsKey(songId))
                 {
                     loopTransition = StartCoroutine(SetupAutoLoop(musicSource.clip.length, modeId, songId));
                 }

@@ -45,6 +45,7 @@ public class GamePlayController : Singleton<GamePlayController>
         if (modeCampaign)
         {
             gameScene.Init(1);
+            gameLevelController.PlayersCreditsCheck();
         }
         else if (modeScoreBattle)
         {
@@ -53,9 +54,9 @@ public class GamePlayController : Singleton<GamePlayController>
         else
         {
             gameScene.Init(3);
+            gameLevelController.PlayersCreditsCheck();
         }
 
-        gameLevelController.PlayersCreditsCheck();
         GameController.Instance.FinishSceneTransition();
     }
 
