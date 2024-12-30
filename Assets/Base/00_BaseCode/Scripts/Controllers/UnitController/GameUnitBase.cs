@@ -176,6 +176,16 @@ public class GameUnitBase : SerializedMonoBehaviour
         spawnedByDirector = true;
     }
 
+    public GameDirector GetDirector()
+    {
+        return gameDirector;
+    }
+
+    public bool IsSpawnedByDirector()
+    {
+        return spawnedByDirector;
+    }
+
     public void SpawnedByPlayer(PlayerController player)
     {
         //To Do: Let player register unit's layer so unity can handle the physics interaction [done]
@@ -452,7 +462,7 @@ public class GameUnitBase : SerializedMonoBehaviour
 
     public void TakeDamageFromUnit(GameUnitBase attacker, int damage)
     {
-        RegisterAttacker(attacker);
+        //RegisterAttacker(attacker);
 
         if (defenseUp > 0)
         {

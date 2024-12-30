@@ -186,6 +186,7 @@ public class AttackZone : SerializedMonoBehaviour
     {
         if (other.GetComponent<GameUnitBase>() != null)
         {
+            other.GetComponent<GameUnitBase>().RegisterAttacker(unitBase);
             unitBase.RegisterTarget(other.GetComponent<GameUnitBase>());
             SendAttackMessage();
         }

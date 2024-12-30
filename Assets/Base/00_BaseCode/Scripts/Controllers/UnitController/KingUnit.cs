@@ -293,6 +293,10 @@ public class KingUnit : GameUnitBase
                 tempMinionReference = Instantiate(kingMinion, new Vector3(laneList[minionLane].transform.position.x, transform.position.y, distanceFromCaster), Quaternion.identity);
                 tempMinionReference.transform.localRotation = transform.localRotation;
                 tempMinionReference.RegisterSummoner(this, gameObject.layer, laneList[minionLane]);
+                if (IsSpawnedByDirector())
+                {
+                    tempMinionReference.SpawnedByDirector(GetDirector());
+                }
 
                 pickedLanes.Add(minionLane);
                 currentMinionCount++;
@@ -313,6 +317,11 @@ public class KingUnit : GameUnitBase
                 tempMinionReference = Instantiate(kingMinion, new Vector3(laneList[minionLane].transform.position.x, transform.position.y, distanceFromCaster), Quaternion.identity);
                 tempMinionReference.transform.localRotation = transform.localRotation;
                 tempMinionReference.RegisterSummoner(this, gameObject.layer, laneList[minionLane]);
+
+                if (IsSpawnedByDirector())
+                {
+                    tempMinionReference.SpawnedByDirector(GetDirector());
+                }
 
                 pickedLanes.Add(minionLane);
                 currentMinionCount++;

@@ -495,6 +495,9 @@ public class Barrack : BaseBox
         GameController.Instance.musicManager.PlayClickSound();
         if (chosenUnitIdList.Count >= 5)
         {
+            pickUnitBtnHighlight[unitId].SetActive(true);
+            newInfoIndex = unitId;
+            UpdateUnitInfo();
             return;
         }
 
