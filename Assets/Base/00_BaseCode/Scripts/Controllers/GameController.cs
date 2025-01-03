@@ -128,6 +128,7 @@ public class GameController : MonoBehaviour
     public void StartSceneTransition(string nextSceneName)
     {
         sceneTransitionAnimation = sceneTransitionScreen.transform.DOLocalMoveY(0, 0.75f)
+            .SetUpdate(true)
             .OnComplete(delegate
             {
                 SceneManager.LoadScene(nextSceneName);
@@ -138,9 +139,11 @@ public class GameController : MonoBehaviour
     {
         if (sceneTransitionAnimation != null)
         {
-            sceneTransitionScreen.transform.DOLocalMoveY(sceneTransitionScreenOgPos.y, 0.75f);
+            sceneTransitionScreen.transform.DOLocalMoveY(sceneTransitionScreenOgPos.y, 0.75f).SetUpdate(true);
             sceneTransitionAnimation = null;
         }
+
+        Time.timeScale = 1;
     }
 
     void RescaleCamSize()

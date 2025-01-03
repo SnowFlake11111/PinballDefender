@@ -151,18 +151,7 @@ public class SettingBox : BaseBox
     {
         GameController.Instance.musicManager.PlayClickSound();
 
-        var temp = SceneManager.LoadSceneAsync("HomeScene");
-        StartCoroutine(WaitForSceneTransition(temp));
-    }
-
-    IEnumerator WaitForSceneTransition(AsyncOperation sceneTransitionOperation)
-    {
-        while (!sceneTransitionOperation.isDone)
-        {
-            yield return null;
-        }
-
-        Time.timeScale = 1;
+        GameController.Instance.StartSceneTransition("HomeScene");
     }
 
     private void OnClickButtonClose()

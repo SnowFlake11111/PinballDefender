@@ -79,6 +79,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
     private AudioClip _currentMusic;
     int previousModeId = 0;
     int currentlyPlayingMusicId = 0;
+    int soundEffectPlayedCount = 0;
 
     public float MasterVolume
     {
@@ -275,6 +276,20 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
     public void PlaySoundEffect(int id)
     {
         if (SoundVolume == 0) return;
+
+        if (id == 2)
+        {
+            if (soundEffectPlayedCount < 10)
+            {
+                soundEffectPlayedCount++;
+                StartCoroutine(HitEffectDonePlaying(soundEffects[2].length));
+            }
+            else
+            {
+                return;
+            }
+        }       
+
         effectSource.PlayOneShot(soundEffects[id]);
     }
 
@@ -486,6 +501,12 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         }
 
         loopTransition = null;
+    }
+
+    IEnumerator HitEffectDonePlaying(float time)
+    {
+        yield return new WaitForSeconds(time);
+        soundEffectPlayedCount--;
     }
     #endregion
 
