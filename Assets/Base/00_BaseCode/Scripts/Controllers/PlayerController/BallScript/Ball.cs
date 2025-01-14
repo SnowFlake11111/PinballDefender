@@ -195,7 +195,10 @@ public class Ball : MonoBehaviour
         bounceDirection = Vector3.Reflect(lastVelocity.normalized, collision.GetContact(0).normal);
 
         GetComponent<Rigidbody>().velocity = bounceDirection * Mathf.Max(velocityStrength, 0);
-        selfDestructAfter = originalSelfDestructTimer;
+        if (GetComponent<Rigidbody>().velocity.magnitude > 0.5f)
+        {
+            selfDestructAfter = originalSelfDestructTimer;
+        }
     }
 
     IEnumerator SelfDestructSequence()
