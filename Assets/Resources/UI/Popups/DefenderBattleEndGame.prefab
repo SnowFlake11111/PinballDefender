@@ -743,7 +743,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: To Menu
+  m_Text: Rematch
 --- !u!114 &7573748926606382665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2072,7 +2072,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: To Menu
+  m_Text: Rematch
 --- !u!114 &553607731061746946
 MonoBehaviour:
   m_ObjectHideFlags: 0

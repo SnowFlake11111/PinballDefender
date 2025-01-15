@@ -60,7 +60,8 @@ public class DefenderBattleEndGame : BaseBox
             return GamePlayController.Instance.gameLevelController.currentLevel.prizeGem + Mathf.RoundToInt(GamePlayController.Instance.gameLevelController.currentLevel.prizeGem * 0.25f * (GamePlayController.Instance.gameScene.GetDefenderClockTime() % 30));
         }
     }
-    int rewardValue = 0;
+    int player_1rewardValue = 0;
+    int player_2rewardValue = 0;
 
     bool player_1HasTakenAction = false;
     bool player_2HasTakenAction = false;
@@ -152,18 +153,18 @@ public class DefenderBattleEndGame : BaseBox
                         rewardValueAnimation = DOTween.To
                             (delegate
                             {
-                                return rewardValue;
+                                return player_1rewardValue;
                             },
                             delegate (int x)
                             {
-                                rewardValue = x;
+                                player_1rewardValue = x;
                             },
                             gemReward,
                             0.5f
                             )
                             .OnUpdate(delegate
                             {
-                                player_1rewardText.text = rewardValue.ToString();
+                                player_1rewardText.text = player_1rewardValue.ToString();
                             })
                             .OnComplete(delegate
                             {
@@ -184,18 +185,18 @@ public class DefenderBattleEndGame : BaseBox
                         rewardValueAnimation = DOTween.To
                             (delegate
                             {
-                                return rewardValue;
+                                return player_2rewardValue;
                             },
                             delegate (int x)
                             {
-                                rewardValue = x;
+                                player_2rewardValue = x;
                             },
                             gemReward,
                             0.5f
                             )
                             .OnUpdate(delegate
                             {
-                                player_2rewardText.text = rewardValue.ToString();
+                                player_2rewardText.text = player_2rewardValue.ToString();
                             })
                             .OnComplete(delegate
                             {

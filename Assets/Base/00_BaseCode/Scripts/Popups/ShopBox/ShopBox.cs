@@ -754,8 +754,8 @@ public class ShopBox : BaseBox
                 //Set level progress to 0
                 UseProfile.LevelProgress = 0;
 
-                UseProfile.Achievement_FinishedAct1 = true;
-                UseProfile.Achievement_FinishedAct2 = true;
+                UseProfile.Achievement_FinishedAct1 = false;
+                UseProfile.Achievement_FinishedAct2 = false;
 
                 UseProfile.WarriorUnlocked = false;
                 UseProfile.RangerUnlocked = false;
@@ -772,8 +772,8 @@ public class ShopBox : BaseBox
                 //Set level progress to 20
                 UseProfile.LevelProgress = 20;
 
-                UseProfile.Achievement_FinishedAct1 = false;
-                UseProfile.Achievement_FinishedAct2 = false;
+                UseProfile.Achievement_FinishedAct1 = true;
+                UseProfile.Achievement_FinishedAct2 = true;
 
                 UseProfile.WarriorUnlocked = true;
                 UseProfile.RangerUnlocked = true;

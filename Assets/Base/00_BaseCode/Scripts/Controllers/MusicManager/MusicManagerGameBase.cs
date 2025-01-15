@@ -260,7 +260,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         }
         else
         {
-            ChangeMusic(previousModeId, currentlyPlayingMusicId);
+            ChangeMusic(previousModeId, currentlyPlayingMusicId, true);
         }
 
         //loopChecker = StartCoroutine(CheckMusicForLooping());
@@ -293,9 +293,9 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         effectSource.PlayOneShot(soundEffects[id]);
     }
 
-    public void ChangeMusic(int modeId, int specifiedSongId = 0)
+    public void ChangeMusic(int modeId, int specifiedSongId = 0, bool skipSameSongCheck = false)
     {
-        if (MusicVolume == 0)
+        if (musicSource.volume == 0)
         {
             previousModeId = modeId;
             currentlyPlayingMusicId = specifiedSongId;
@@ -308,6 +308,7 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
         }
 
         int randomId = 0;
+        previousModeId = modeId;
 
         switch (modeId)
         {
@@ -315,9 +316,12 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 //Home
                 if (specifiedSongId > 0)
                 {
-                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
+                        if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                        {
+                            return;
+                        }
                     }
 
                     currentlyPlayingMusicId = specifiedSongId;
@@ -328,9 +332,12 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                     List<int> availableCampaignSongs = new List<int>(home_musicListBeginning.Keys.ToList());
                     randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
+                        if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                        {
+                            return;
+                        }
                     }
 
                     currentlyPlayingMusicId = specifiedSongId;
@@ -341,10 +348,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 //Campaign
                 if (specifiedSongId > 0)
                 {
-                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                        {
+                            return;
+                        }
+                    }                   
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
@@ -354,10 +364,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                     List<int> availableCampaignSongs = new List<int>(campaign_musicListBeginning.Keys.ToList());
                     randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == randomId)
+                        {
+                            return;
+                        }
+                    }                  
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, randomId));
@@ -367,10 +380,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 //ScoreBattle
                 if (specifiedSongId > 0)
                 {
-                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                        {
+                            return;
+                        }
+                    }                   
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
@@ -380,10 +396,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                     List<int> availableScoreSongs = new List<int>(score_musicListBeginning.Keys.ToList());
                     randomId = UnityEngine.Random.Range(0, availableScoreSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == availableScoreSongs[randomId])
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == availableScoreSongs[randomId])
+                        {
+                            return;
+                        }
+                    }                   
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, availableScoreSongs[randomId]));
@@ -393,10 +412,13 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                 //DefenderBattle
                 if (specifiedSongId > 0)
                 {
-                    if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == specifiedSongId)
+                        {
+                            return;
+                        }
+                    }     
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, specifiedSongId));
@@ -406,18 +428,19 @@ public class MusicManagerGameBase : SerializedMonoBehaviour
                     List<int> availableCampaignSongs = new List<int>(defender_musicListBeginning.Keys.ToList());
                     randomId = UnityEngine.Random.Range(0, availableCampaignSongs.Count);
 
-                    if (modeId == previousModeId && currentlyPlayingMusicId == availableCampaignSongs[randomId])
+                    if (!skipSameSongCheck)
                     {
-                        return;
-                    }
+                        if (modeId == previousModeId && currentlyPlayingMusicId == availableCampaignSongs[randomId])
+                        {
+                            return;
+                        }
+                    }                   
 
                     currentlyPlayingMusicId = specifiedSongId;
                     musicTransition = StartCoroutine(MusicTransition(modeId, availableCampaignSongs[randomId]));
                 }
                 break;
         }
-
-        previousModeId = modeId;
     }
 
     IEnumerator MusicTransition(int modeId, int songId)
